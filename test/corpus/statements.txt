@@ -1,0 +1,18 @@
+==================
+rule statements
+==================
+
+head :-  body.
+
+---
+
+(source_file
+  (statement
+    (head
+      (literal
+        (atom
+          (identifier))))
+    (bodydot
+      (literal
+        (atom
+          (identifier))))))
