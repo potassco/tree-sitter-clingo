@@ -1,55 +1,14 @@
 module.exports = grammar({
   name: 'clingo',
+  extras: $ => [$.comment,/\s/],
 
   rules: {
+
     source_file: $ => repeat($.statement),
 
-
-
-
-    rule: $ => choice(
-      $.fact1,
-      $.fact2,
-      $.rule_with_body,
-      $.integrity_constraint1,
-      $.integrity_constraint2,
+    comment: $ => token(
+      seq('%', /.*/)
     ),
-
-    fact1: $ => seq(
-      $.head,
-      '.'
-    ),
-    fact2: $ => seq(
-      $.head,
-      ':-',
-      '.'
-    ),
-
-    rule_with_body: $ => seq(
-      $.head,
-      ':-',
-      $.body,
-      '.'
-    ),
-
-    integrity_constraint1: $ => seq(
-      ':-',
-      $.body,
-      '.'
-    ),
-    integrity_constraint2: $ => seq(
-      ':-',
-      '.'
-    ),
-
-    body: $ => seq(
-      $.atom,
-      repeat(seq(',', $.atom)),
-    ),
-
-
-
-
     //     constterm
     //     : constterm[a] XOR constterm[b]                    { $$ = BUILDER.term(@$, BinOp::XOR, $a, $b); }
     //     | constterm[a] QUESTION constterm[b]               { $$ = BUILDER.term(@$, BinOp::OR, $a, $b); }
@@ -678,69 +637,21 @@ module.exports = grammar({
     //     | IF bodydot[bd]          { BUILDER.rule(@$, BUILDER.headlit(BUILDER.boollit(@$, false)), $bd); }
     //     | IF DOT                  { BUILDER.rule(@$, BUILDER.headlit(BUILDER.boollit(@$, false)), BUILDER.body()); }
     //     ;
-    statement: $ => choice(
-      seq($.head, '.'),
-      seq($.head, ':-', '.'),
-      seq($.head, ':-', $.bodydot),
-      seq(':-', $.bodydot),
-      seq(':-', '.'),
-    ),
-
-    // // {{{2 CSP
-
     // statement
     //     : disjoint[hd] IF bodydot[body] { BUILDER.rule(@$, BUILDER.headlit(BUILDER.boollit(@hd, false)), BUILDER.disjoint($body, @hd, inv($hd.first), $hd.second)); }
     //     | disjoint[hd] IF DOT           { BUILDER.rule(@$, BUILDER.headlit(BUILDER.boollit(@hd, false)), BUILDER.disjoint(BUILDER.body(), @hd, inv($hd.first), $hd.second)); }
     //     | disjoint[hd] DOT              { BUILDER.rule(@$, BUILDER.headlit(BUILDER.boollit(@hd, false)), BUILDER.disjoint(BUILDER.body(), @hd, inv($hd.first), $hd.second)); }
     //     ;
-
-    // // {{{2 optimization
-
-    // optimizetuple
-    //     : COMMA ntermvec[vec] { $$ = $vec; }
-    //     |                     { $$ = BUILDER.termvec(); }
-    //     ;
-
-    // optimizeweight
-    //     : term[w] AT term[p] { $$ = {$w, $p}; }
-    //     | term[w]            { $$ = {$w, BUILDER.term(@$, Symbol::createNum(0))}; }
-    //     ;
-
-    // optimizelitvec
-    //     : literal[lit]                          { $$ = BUILDER.bodylit(BUILDER.body(), $lit); }
-    //     | optimizelitvec[bd] COMMA literal[lit] { $$ = BUILDER.bodylit($bd, $lit); }
-    //     ;
-
-    // optimizecond
-    //     : COLON optimizelitvec[bd] { $$ = $bd; }
-    //     | COLON                    { $$ = BUILDER.body(); }
-    //     |                          { $$ = BUILDER.body(); }
-    //     ;
-
     // statement
     //     : WIF bodydot[bd] LBRACK optimizeweight[w] optimizetuple[t] RBRACK { BUILDER.optimize(@$, $w.first, $w.second, $t, $bd); }
     //     | WIF         DOT LBRACK optimizeweight[w] optimizetuple[t] RBRACK { BUILDER.optimize(@$, $w.first, $w.second, $t, BUILDER.body()); }
     //     ;
-
-    // maxelemlist
-    //     :                 optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, BUILDER.term(@w, UnOp::NEG, $w.first), $w.second, $t, $bd); }
-    //     | maxelemlist SEM optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, BUILDER.term(@w, UnOp::NEG, $w.first), $w.second, $t, $bd); }
-    //     ;
-
-    // minelemlist
-    //     :                 optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, $w.first, $w.second, $t, $bd); }
-    //     | minelemlist SEM optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, $w.first, $w.second, $t, $bd); }
-    //     ;
-
     // statement
     //     : MINIMIZE LBRACE RBRACE DOT
     //     | MAXIMIZE LBRACE RBRACE DOT
     //     | MINIMIZE LBRACE minelemlist RBRACE DOT
     //     | MAXIMIZE LBRACE maxelemlist RBRACE DOT
     //     ;
-
-    // // {{{2 visibility
-
     // statement
     //     : SHOWSIG identifier[id] SLASH NUMBER[num] DOT     { BUILDER.showsig(@$, Sig(String::fromRep($id), $num, false), false); }
     //     | SHOWSIG SUB identifier[id] SLASH NUMBER[num] DOT { BUILDER.showsig(@$, Sig(String::fromRep($id), $num, true), false); }
@@ -751,8 +662,97 @@ module.exports = grammar({
     //     | SHOW CSP term[t] COLON bodydot[bd]               { BUILDER.show(@$, $t, $bd, true); }
     //     | SHOW CSP term[t] DOT                             { BUILDER.show(@$, $t, BUILDER.body(), true); }
     //     ;
+    statement: $ => choice(
+      seq($.head, '.'),
+      seq($.head, ':-', '.'),
+      seq($.head, ':-', $.bodydot),
+      seq(':-', $.bodydot),
+      seq(':-', '.'),
+      seq($.disjoint, ':-', $.bodydot),
+      seq($.disjoint, ':-', '.'),
+      seq($.disjoint, '.'),
+      seq(':~', $.bodydot, '[', $.optimizeweight,                   ']'),
+      seq(':~', $.bodydot, '[', $.optimizeweight, $.noptimizetuple, ']'),
+      seq('#minimize','{','}', '.'),
+      seq('#maximize','{','}', '.'),
+      seq('#minimize','{', $.minelemlist, '}', '.'),
+      seq('#maximize','{', $.maxelemlist, '}', '.'),
+      seq('#showsig', $.identifier, '/', $.number ,'.'),
+      seq('#showsig', '-', $.identifier, '/', $.number ,'.'),
+      seq('#show','.'),
+      seq('#show', $.term, ':', $.bodydot),
+      seq('#show', $.term, '.'),
+      seq('#showsig', '$', $.identifier, '/', $.number ,'.'),
+      seq('#show', '$', $.term, ':', $.bodydot),
+      seq('#show', '$', $.term, '.'),
+      // TODO
+    ),
 
-    // // {{{2 warnings
+    // optimizetuple
+    //     : COMMA ntermvec[vec] { $$ = $vec; }
+    //     |                     { $$ = BUILDER.termvec(); }
+    //     ;
+    noptimizetuple: $ =>
+      seq(',', $.ntermvec),
+
+    // optimizeweight
+    //     : term[w] AT term[p] { $$ = {$w, $p}; }
+    //     | term[w]            { $$ = {$w, BUILDER.term(@$, Symbol::createNum(0))}; }
+    //     ;
+    optimizeweight: $ => choice(
+      seq($.term, '@', $.term),
+      $.term
+    ),
+
+    // optimizelitvec
+    //     : literal[lit]                          { $$ = BUILDER.bodylit(BUILDER.body(), $lit); }
+    //     | optimizelitvec[bd] COMMA literal[lit] { $$ = BUILDER.bodylit($bd, $lit); }
+    //     ;
+    optimizelitvec: $ => choice(
+      $.literal,
+      seq($.optimizelitvec, ',', $.literal),
+    ),
+
+    // optimizecond
+    //     : COLON optimizelitvec[bd] { $$ = $bd; }
+    //     | COLON                    { $$ = BUILDER.body(); }
+    //     |                          { $$ = BUILDER.body(); }
+    //     ;
+    noptimizecond: $ => choice(
+      seq(':', $.optimizelitvec),
+      ':',
+    ),
+
+    // maxelemlist
+    //     :                 optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, BUILDER.term(@w, UnOp::NEG, $w.first), $w.second, $t, $bd); }
+    //     | maxelemlist SEM optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, BUILDER.term(@w, UnOp::NEG, $w.first), $w.second, $t, $bd); }
+    //     ;
+    maxelemlist: $ => choice(
+      seq($.optimizeweight,                                  ),
+      seq($.optimizeweight,                   $.noptimizecond),
+      seq($.optimizeweight, $.noptimizetuple,                ),
+      seq($.optimizeweight, $.noptimizetuple, $.noptimizecond),
+      seq($.maxelemlist, ';', $.optimizeweight,                                  ),
+      seq($.maxelemlist, ';', $.optimizeweight,                   $.noptimizecond),
+      seq($.maxelemlist, ';', $.optimizeweight, $.noptimizetuple,                ),
+      seq($.maxelemlist, ';', $.optimizeweight, $.noptimizetuple, $.noptimizecond),
+    ),
+
+    // minelemlist
+    //     :                 optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, $w.first, $w.second, $t, $bd); }
+    //     | minelemlist SEM optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, $w.first, $w.second, $t, $bd); }
+    //     ;
+    minelemlist: $ => choice(
+      seq($.optimizeweight,                                  ),
+      seq($.optimizeweight,                   $.noptimizecond),
+      seq($.optimizeweight, $.noptimizetuple,                ),
+      seq($.optimizeweight, $.noptimizetuple, $.noptimizecond),
+      seq($.minelemlist, ';', $.optimizeweight,                                  ),
+      seq($.minelemlist, ';', $.optimizeweight,                   $.noptimizecond),
+      seq($.minelemlist, ';', $.optimizeweight, $.noptimizetuple,                ),
+      seq($.minelemlist, ';', $.optimizeweight, $.noptimizetuple, $.noptimizecond),
+    ),
+
 
     // statement
     //     : DEFINED identifier[id] SLASH NUMBER[num] DOT     { BUILDER.defined(@$, Sig(String::fromRep($id), $num, false)); }
