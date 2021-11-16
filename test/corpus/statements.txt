@@ -16,3 +16,36 @@ head :-  body.
       (literal
         (atom
           (identifier))))))
+
+==================
+true as identifier
+==================
+
+true(A).
+
+---
+
+(source_file
+  (statement
+    (head
+      (literal
+        (atom
+          (widentifier)
+          (argvec
+            (ntermvec
+              (term
+                (variable)))))))))
+
+==================
+constant declaration
+==================
+
+#const n=1.
+
+---
+(source_file
+  (statement
+    (identifier)
+    (constterm
+      (number
+        (dec)))))

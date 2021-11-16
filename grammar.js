@@ -1,7 +1,7 @@
 module.exports = grammar({
   name: 'clingo',
   extras: $ => [$.comment,/\s/],
-
+  
   rules: {
 
     source_file: $ => repeat($.statement),
@@ -35,18 +35,49 @@ module.exports = grammar({
     //     | INFIMUM[a]                                       { $$ = BUILDER.term(@$, Symbol::createInf()); }
     //     | SUPREMUM[a]                                      { $$ = BUILDER.term(@$, Symbol::createSup()); }
     //     ;
-
-    // // {{{2 arguments lists for functions in constant terms
+    constterm: $ => choice(
+      prec.left(7, seq( $.constterm, '^', $.constterm)),
+      prec.left(6, seq( $.constterm, '?', $.constterm)),
+      prec.left(5, seq( $.constterm, '&', $.constterm)),
+      prec.left(4, seq( $.constterm, '+', $.constterm)),
+      prec.left(4, seq( $.constterm, '-', $.constterm)),
+      prec.left(3, seq( $.constterm, '*', $.constterm)),
+      prec.left(3, seq( $.constterm, '/', $.constterm)),
+      prec.left(3, seq( $.constterm, '\\', $.constterm)),
+      prec.right(2, seq( $.constterm, '**', $.constterm)),
+      prec.left(1, seq('-', $.constterm)),
+      prec.left(1, seq('~', $.constterm)),
+      seq('(',              ')'),
+      seq('(', $.consttermvec, ')'),
+      seq('(', $.consttermvec, ',', ')'),
+      seq($.widentifier,                 ')'),
+      seq($.widentifier, $.nconstargvec, ')'),
+      seq('@', $.widentifier,                 ')'),
+      seq('@', $.widentifier, $.nconstargvec, ')'),
+      seq('|', $.constterm, '|'),
+      $.identifier,
+      seq('@', $.identifier,),
+      $.number,
+      $.string,
+      $.infimum,
+      $.supremum,
+    ),
 
     // consttermvec
     //     : constterm[a]                       { $$ = BUILDER.termvec(BUILDER.termvec(), $a);  }
     //     | consttermvec[a] COMMA constterm[b] { $$ = BUILDER.termvec($a, $b);  }
     //     ;
+    consttermvec: $ => choice(
+      $.constterm,
+      seq($.consttermvec, ',', $.constterm),
+    ),
 
     // constargvec
     //     : consttermvec[a] { $$ = BUILDER.termvecvec(BUILDER.termvecvec(), $a);  }
     //     |                 { $$ = BUILDER.termvecvec(BUILDER.termvecvec(), BUILDER.termvec());  }
     //     ;
+    nconstargvec: $ =>
+      $.consttermvec,
 
     // // {{{2 terms including variables
 
@@ -91,8 +122,8 @@ module.exports = grammar({
       prec.left(1, seq('~', $.term)),
       seq('(',              ')'),
       seq('(', $.ntuplevec, ')'),
-      seq($.identifier, '(', $.argvec, ')'),
-      seq('@', $.identifier, '(', $.argvec, ')'),
+      seq($.widentifier, $.argvec, ')'),
+      seq('@', $.widentifier, $.argvec, ')'),
       seq('|', $.unaryargvec, '|'),
       $.identifier,
       seq('@', $.identifier,),
@@ -103,7 +134,8 @@ module.exports = grammar({
       $.variable,
       $.anonymus,
     ),
-    // // {{{2 argument lists for unary operations
+    
+ 
 
     // unaryargvec
     //     : term[a]                    { $$ = BUILDER.termvec(BUILDER.termvec(), $a); }
@@ -161,10 +193,15 @@ module.exports = grammar({
       $.ntermvec,
       seq($.argvec, ';', $.ntermvec,),
     ),
+
     // binaryargvec
     //     :                       term[a] COMMA term[b] { $$ = BUILDER.termvecvec(BUILDER.termvecvec(), BUILDER.termvec(BUILDER.termvec(BUILDER.termvec(), $a), $b)); }
     //     | binaryargvec[vec] SEM term[a] COMMA term[b] { $$ = BUILDER.termvecvec($vec, BUILDER.termvec(BUILDER.termvec(BUILDER.termvec(), $a), $b)); }
     //     ;
+    binaryargvec: $ => choice(
+      seq($.term, ',', $.term),
+      seq($.binaryargvec, ';', $.term, ',', $.term),
+    ),
 
     // // TODO: I might have to create tuples differently
     // //       parse a tuple as a list of terms
@@ -185,7 +222,8 @@ module.exports = grammar({
       '<',
       '>=',
       '<=',
-      '=',
+      '==',//EQ
+      '=', //EQ
       '!='
     ),
 
@@ -197,11 +235,11 @@ module.exports = grammar({
     // ;
     atom: $ => choice(
       $.identifier,
-      seq($.identifier, '(', ')'),
-      seq($.identifier, '(', $.argvec, ')'),
+      seq($.widentifier, ')'),
+      seq($.widentifier, $.argvec, ')'),
       seq('-', $.identifier),
-      seq('-', $.identifier, '(', ')'),
-      seq('-', $.identifier, '(', $.argvec, ')'),
+      seq('-', $.widentifier, ')'),
+      seq('-', $.widentifier, $.argvec, ')'),
     ),
 
     // literal
@@ -234,6 +272,7 @@ module.exports = grammar({
       seq('not', 'not', $.term, $.cmp, $.term),
       $.csp_literal
     ),
+
     // csp_mul_term
     //     : CSP term[var] CSP_MUL term[coe] { $$ = BUILDER.cspmulterm(@$, $coe,                     $var); }
     //     | term[coe] CSP_MUL CSP term[var] { $$ = BUILDER.cspmulterm(@$, $coe,                     $var); }
@@ -284,10 +323,6 @@ module.exports = grammar({
       seq($.csp_add_term, $.csp_rel, $.csp_add_term),
     ),
 
-    // // {{{1 aggregates
-
-    // // {{{2 auxiliary rules
-
     // nlitvec
     //     : literal[lit]                    { $$ = BUILDER.litvec(BUILDER.litvec(), $lit); }
     //     | nlitvec[vec] COMMA literal[lit] { $$ = BUILDER.litvec($vec, $lit); }
@@ -325,8 +360,6 @@ module.exports = grammar({
       '#max',
       '#count'
     ),
-
-    // // {{{2 body aggregate elements
 
     // bodyaggrelem
     //     : COLON litvec[cond]                { $$ = { BUILDER.termvec(), $cond }; }
@@ -368,8 +401,6 @@ module.exports = grammar({
       seq($.altbodyaggrelemvec, ';', $.altbodyaggrelem),
     ),
 
-    // // {{{2 body aggregates
-
     // bodyaggregate
     //     : LBRACE RBRACE                                               { $$ = { AggregateFunction::COUNT, true, BUILDER.condlitvec() }; }
     //     | LBRACE altbodyaggrelemvec[elems] RBRACE                     { $$ = { AggregateFunction::COUNT, true, $elems }; }
@@ -409,8 +440,6 @@ module.exports = grammar({
       $.theory_atom
     ),
 
-    // // {{{2 head aggregate elements
-
     // headaggrelemvec
     //     : headaggrelemvec[vec] SEM termvec[tuple] COLON literal[head] optcondition[cond] { $$ = BUILDER.headaggrelemvec($vec, $tuple, $head, $cond); }
     //     | termvec[tuple] COLON literal[head] optcondition[cond]                          { $$ = BUILDER.headaggrelemvec(BUILDER.headaggrelemvec(), $tuple, $head, $cond); }
@@ -436,8 +465,6 @@ module.exports = grammar({
       seq($.altheadaggrelemvec, ';', $.literal,                ),
       seq($.altheadaggrelemvec, ';', $.literal, $.noptcondition),
     ),
-
-    // // {{{2 head aggregates
 
     // headaggregate
     //     : aggregatefunction[fun] LBRACE RBRACE                        { $$ = { $fun, false, BUILDER.headaggrelemvec() }; }
@@ -618,6 +645,11 @@ module.exports = grammar({
     //     : DOT             { $$ = BUILDER.body(); }
     //     | COLON DOT       { $$ = BUILDER.body(); }
     //     | COLON bodydot[body]   { $$ = $body; }
+    bodyconddot: $ => choice(
+      '.',
+      seq(':', '.'),
+      seq(':', $.bodydot),
+    ),
 
     // head
     //     : literal[lit]            { $$ = BUILDER.headlit($lit); }
@@ -662,6 +694,45 @@ module.exports = grammar({
     //     | SHOW CSP term[t] COLON bodydot[bd]               { BUILDER.show(@$, $t, $bd, true); }
     //     | SHOW CSP term[t] DOT                             { BUILDER.show(@$, $t, BUILDER.body(), true); }
     //     ;
+    // statement
+    //     : DEFINED identifier[id] SLASH NUMBER[num] DOT     { BUILDER.defined(@$, Sig(String::fromRep($id), $num, false)); }
+    //     | DEFINED SUB identifier[id] SLASH NUMBER[num] DOT { BUILDER.defined(@$, Sig(String::fromRep($id), $num, true)); }
+    // statement
+    //     : EDGE LPAREN binaryargvec[args] RPAREN bodyconddot[body] { BUILDER.edge(@$, $args, $body); }
+    //     ;
+    // statement
+    //     : HEURISTIC atom[a] bodyconddot[body] LBRACK term[t] AT term[p] COMMA term[mod] RBRACK { BUILDER.heuristic(@$, $a, $body, $t, $p, $mod); }
+    //     | HEURISTIC atom[a] bodyconddot[body] LBRACK term[t]            COMMA term[mod] RBRACK { BUILDER.heuristic(@$, $a, $body, $t, BUILDER.term(@$, Symbol::createNum(0)), $mod); }
+    //     ;
+    // statement
+    //     : PROJECT identifier[name] SLASH NUMBER[arity] DOT     { BUILDER.project(@$, Sig(String::fromRep($name), $arity, false)); }
+    //     | PROJECT SUB identifier[name] SLASH NUMBER[arity] DOT { BUILDER.project(@$, Sig(String::fromRep($name), $arity, true)); }
+    //     | PROJECT atom[a] bodyconddot[body]                    { BUILDER.project(@$, $a, $body); }
+    //     ;
+    // statement
+    //     : CONST identifier[uid] EQ constterm[rhs] DOT                        { BUILDER.define(@$, String::fromRep($uid), $rhs, true, LOGGER); }
+    //     | CONST identifier[uid] EQ constterm[rhs] DOT LBRACK DEFAULT  RBRACK { BUILDER.define(@$, String::fromRep($uid), $rhs, true, LOGGER); }
+    //     | CONST identifier[uid] EQ constterm[rhs] DOT LBRACK OVERRIDE RBRACK { BUILDER.define(@$, String::fromRep($uid), $rhs, false, LOGGER); }
+    //     ;
+    // statement
+    //     : SCRIPT LPAREN IDENTIFIER[type] RPAREN CODE[code] DOT { BUILDER.script(@$, String::fromRep($type), String::fromRep($code)); }
+    //     ;
+    // statement
+    //     : INCLUDE    STRING[file]        DOT { lexer->include(String::fromRep($file), @$, false, LOGGER); }
+    //     | INCLUDE LT identifier[file] GT DOT { lexer->include(String::fromRep($file), @$, true, LOGGER); }
+    //     ;
+    // statement
+    //     : BLOCK identifier[name] LPAREN idlist[args] RPAREN DOT { BUILDER.block(@$, String::fromRep($name), $args); }
+    //     | BLOCK identifier[name] DOT                            { BUILDER.block(@$, String::fromRep($name), BUILDER.idvec()); }
+    //     ;
+    // statement
+    //     : EXTERNAL atom[hd] COLON bodydot[bd]                       { BUILDER.external(@$, $hd, $bd, BUILDER.term(@$, Symbol::createId("false"))); }
+    //     | EXTERNAL atom[hd] COLON DOT                               { BUILDER.external(@$, $hd, BUILDER.body(), BUILDER.term(@$, Symbol::createId("false"))); }
+    //     | EXTERNAL atom[hd] DOT                                     { BUILDER.external(@$, $hd, BUILDER.body(), BUILDER.term(@$, Symbol::createId("false"))); }
+    //     | EXTERNAL atom[hd] COLON bodydot[bd] LBRACK term[t] RBRACK { BUILDER.external(@$, $hd, $bd, $t); }
+    //     | EXTERNAL atom[hd] COLON DOT         LBRACK term[t] RBRACK { BUILDER.external(@$, $hd, BUILDER.body(), $t); }
+    //     | EXTERNAL atom[hd] DOT               LBRACK term[t] RBRACK { BUILDER.external(@$, $hd, BUILDER.body(), $t); }
+    //     ;
     statement: $ => choice(
       seq($.head, '.'),
       seq($.head, ':-', '.'),
@@ -685,7 +756,29 @@ module.exports = grammar({
       seq('#showsig', '$', $.identifier, '/', $.number ,'.'),
       seq('#show', '$', $.term, ':', $.bodydot),
       seq('#show', '$', $.term, '.'),
-      // TODO
+      seq('#defined', $.identifier, '/', $.number, '.'),
+      seq('#defined', '-', $.identifier, '/', $.number, '.'),
+      seq('#edge', '(', $.binaryargvec, ')', $.bodyconddot),
+      seq('#heuristic', $.atom, $.bodyconddot, '[', $.term, '@', $.term, ',', $.term, ']'),
+      seq('#heuristic', $.atom, $.bodyconddot, '[', $.term, ',', $.term, ']'),
+      seq('#project', $.identifier, '/', $.number, '.'),
+      seq('#project', '-', $.identifier, '/', $.number, '.'),
+      seq('#project', $.atom, $.bodyconddot),
+      seq('#const', $.identifier, '=', $.constterm, '.'),
+      seq('#const', $.identifier, '=', $.constterm, '.', '[', 'default', ']'),
+      seq('#const', $.identifier, '=', $.constterm, '.', '[', 'override', ']'),
+      seq('<SCRIPT>', '(', $.identifier, ')', '<CODE>', '.'),
+      seq('#include', '<STRING>', '.'),
+      seq('#include', '<', $.identifier, '>', '.'),
+      seq('#program', $.identifier, '(',            ')', '.'),
+      seq('#program', $.identifier, '(', $.nidlist, ')', '.'),
+      seq('#program', $.identifier, '.'),
+      seq('#external', $.atom, ':', $.bodydot),
+      seq('#external', $.atom, ':', '.'),
+      seq('#external', $.atom, '.'),
+      seq('#external', $.atom, ':', $.bodydot, '[', $.term, ']'),
+      seq('#external', $.atom, ':', '.', '[', $.term, ']'),
+      seq('#external', $.atom, '.', '[', $.term, ']'),
     ),
 
     // optimizetuple
@@ -753,84 +846,24 @@ module.exports = grammar({
       seq($.minelemlist, ';', $.optimizeweight, $.noptimizetuple, $.noptimizecond),
     ),
 
-
-    // statement
-    //     : DEFINED identifier[id] SLASH NUMBER[num] DOT     { BUILDER.defined(@$, Sig(String::fromRep($id), $num, false)); }
-    //     | DEFINED SUB identifier[id] SLASH NUMBER[num] DOT { BUILDER.defined(@$, Sig(String::fromRep($id), $num, true)); }
-
-    // // {{{2 acyclicity
-
-    // statement
-    //     : EDGE LPAREN binaryargvec[args] RPAREN bodyconddot[body] { BUILDER.edge(@$, $args, $body); }
-    //     ;
-
-    // // {{{2 heuristic
-
-    // statement
-    //     : HEURISTIC atom[a] bodyconddot[body] LBRACK term[t] AT term[p] COMMA term[mod] RBRACK { BUILDER.heuristic(@$, $a, $body, $t, $p, $mod); }
-    //     | HEURISTIC atom[a] bodyconddot[body] LBRACK term[t]            COMMA term[mod] RBRACK { BUILDER.heuristic(@$, $a, $body, $t, BUILDER.term(@$, Symbol::createNum(0)), $mod); }
-    //     ;
-
-    // // {{{2 project
-
-    // statement
-    //     : PROJECT identifier[name] SLASH NUMBER[arity] DOT     { BUILDER.project(@$, Sig(String::fromRep($name), $arity, false)); }
-    //     | PROJECT SUB identifier[name] SLASH NUMBER[arity] DOT { BUILDER.project(@$, Sig(String::fromRep($name), $arity, true)); }
-    //     | PROJECT atom[a] bodyconddot[body]                    { BUILDER.project(@$, $a, $body); }
-    //     ;
-
-    // // {{{2 constants
-
     // define
     //     : identifier[uid] EQ constterm[rhs] {  BUILDER.define(@$, String::fromRep($uid), $rhs, false, LOGGER); }
     //     ;
-
-    // statement
-    //     : CONST identifier[uid] EQ constterm[rhs] DOT                        { BUILDER.define(@$, String::fromRep($uid), $rhs, true, LOGGER); }
-    //     | CONST identifier[uid] EQ constterm[rhs] DOT LBRACK DEFAULT  RBRACK { BUILDER.define(@$, String::fromRep($uid), $rhs, true, LOGGER); }
-    //     | CONST identifier[uid] EQ constterm[rhs] DOT LBRACK OVERRIDE RBRACK { BUILDER.define(@$, String::fromRep($uid), $rhs, false, LOGGER); }
-    //     ;
-
-    // // {{{2 scripts
-
-    // statement
-    //     : SCRIPT LPAREN IDENTIFIER[type] RPAREN CODE[code] DOT { BUILDER.script(@$, String::fromRep($type), String::fromRep($code)); }
-    //     ;
-
-    // // {{{2 include
-
-    // statement
-    //     : INCLUDE    STRING[file]        DOT { lexer->include(String::fromRep($file), @$, false, LOGGER); }
-    //     | INCLUDE LT identifier[file] GT DOT { lexer->include(String::fromRep($file), @$, true, LOGGER); }
-    //     ;
-
-    // // {{{2 blocks
 
     // nidlist 
     //     : nidlist[list] COMMA identifier[id] { $$ = BUILDER.idvec($list, @id, String::fromRep($id)); }
     //     | identifier[id]                     { $$ = BUILDER.idvec(BUILDER.idvec(), @id, String::fromRep($id)); }
     //     ;
+    nidlist: $ => choice(
+      seq($.nidlist, ',', $.identifier),
+      $.identifier,
+    ),
 
     // idlist 
     //     :               { $$ = BUILDER.idvec(); }
     //     | nidlist[list] { $$ = $list; }
     //     ;
 
-    // statement
-    //     : BLOCK identifier[name] LPAREN idlist[args] RPAREN DOT { BUILDER.block(@$, String::fromRep($name), $args); }
-    //     | BLOCK identifier[name] DOT                            { BUILDER.block(@$, String::fromRep($name), BUILDER.idvec()); }
-    //     ;
-
-    // // {{{2 external
-
-    // statement
-    //     : EXTERNAL atom[hd] COLON bodydot[bd]                       { BUILDER.external(@$, $hd, $bd, BUILDER.term(@$, Symbol::createId("false"))); }
-    //     | EXTERNAL atom[hd] COLON DOT                               { BUILDER.external(@$, $hd, BUILDER.body(), BUILDER.term(@$, Symbol::createId("false"))); }
-    //     | EXTERNAL atom[hd] DOT                                     { BUILDER.external(@$, $hd, BUILDER.body(), BUILDER.term(@$, Symbol::createId("false"))); }
-    //     | EXTERNAL atom[hd] COLON bodydot[bd] LBRACK term[t] RBRACK { BUILDER.external(@$, $hd, $bd, $t); }
-    //     | EXTERNAL atom[hd] COLON DOT         LBRACK term[t] RBRACK { BUILDER.external(@$, $hd, BUILDER.body(), $t); }
-    //     | EXTERNAL atom[hd] DOT               LBRACK term[t] RBRACK { BUILDER.external(@$, $hd, BUILDER.body(), $t); }
-    //     ;
 
     // // {{{1 theory
 
@@ -898,8 +931,8 @@ module.exports = grammar({
     //     | identifier[id] LPAREN argvec[tvv] RPAREN[r]     { $$ = BUILDER.term(@$, String::fromRep($id), $tvv, false); }
     theory_atom_name: $ => choice(
       $.identifier,
-      seq($.identifier, '(', ')'),
-      seq($.identifier, '(', $.argvec, ')'),
+      seq($.widentifier, ')'),
+      seq($.widentifier, $.argvec, ')'),
     ),
 
     // theory_atom
@@ -1005,8 +1038,10 @@ module.exports = grammar({
     infimum: $ => token(seq('#inf', optional('imum'))),
     supremum: $ => token(seq('#sup', optional('remum'))),
     anonymus: $ => '_',
-    variable: $ => token(seq(repeat('_'), /[A-Z]/, repeat(/[A-Za-z0-9]/))),
-    identifier: $ => token(seq(repeat('_'), /[a-z]/, repeat(/[A-Za-z0-9]/))),
+    variable: $ => token(seq(repeat('_'), /[A-Z]/, repeat(/[A-Za-z0-9_]/))),
+    identifier: $ => token(seq(repeat('_'), /[a-z]/, repeat(/[A-Za-z0-9_]/))),
+    //Introduced to disallow white space after identifier followed by a bracket ie. not 'bla ()' but 'bla()'
+    widentifier: $ => token(seq(repeat('_'), /[a-z]/, repeat(/[A-Za-z0-9_]/),'(')),
 
 
     number: $ => choice(
