@@ -1,8 +1,80 @@
 [
   {
+    "type": "NUMBER",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "bin",
+          "named": true
+        },
+        {
+          "type": "dec",
+          "named": true
+        },
+        {
+          "type": "hex",
+          "named": true
+        },
+        {
+          "type": "oct",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "STRING",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "escape_sequence",
+          "named": true
+        },
+        {
+          "type": "string_fragment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "aggregatefunction",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "COUNT",
+          "named": true
+        },
+        {
+          "type": "MAX",
+          "named": true
+        },
+        {
+          "type": "MIN",
+          "named": true
+        },
+        {
+          "type": "SUM",
+          "named": true
+        },
+        {
+          "type": "SUMP",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "altbodyaggrelem",
@@ -32,6 +104,10 @@
       "required": true,
       "types": [
         {
+          "type": "SEM",
+          "named": true
+        },
+        {
           "type": "altbodyaggrelem",
           "named": true
         },
@@ -50,6 +126,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "SEM",
+          "named": true
+        },
         {
           "type": "altheadaggrelemvec",
           "named": true
@@ -74,6 +154,10 @@
       "required": true,
       "types": [
         {
+          "type": "SEM",
+          "named": true
+        },
+        {
           "type": "argvec",
           "named": true
         },
@@ -92,6 +176,14 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "RPAREN",
+          "named": true
+        },
+        {
+          "type": "SUB",
+          "named": true
+        },
         {
           "type": "argvec",
           "named": true
@@ -116,6 +208,14 @@
       "required": true,
       "types": [
         {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "SEM",
+          "named": true
+        },
+        {
           "type": "binaryargvec",
           "named": true
         },
@@ -132,8 +232,16 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
+        {
+          "type": "LBRACE",
+          "named": true
+        },
+        {
+          "type": "RBRACE",
+          "named": true
+        },
         {
           "type": "aggregatefunction",
           "named": true
@@ -155,8 +263,12 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
+        {
+          "type": "COLON",
+          "named": true
+        },
         {
           "type": "nlitvec",
           "named": true
@@ -181,6 +293,10 @@
       "required": true,
       "types": [
         {
+          "type": "SEM",
+          "named": true
+        },
+        {
           "type": "bodyaggrelem",
           "named": true
         },
@@ -196,9 +312,17 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
+        {
+          "type": "COLON",
+          "named": true
+        },
+        {
+          "type": "DOT",
+          "named": true
+        },
         {
           "type": "bodydot",
           "named": true
@@ -214,6 +338,14 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "DOT",
+          "named": true
+        },
+        {
+          "type": "NOT",
+          "named": true
+        },
         {
           "type": "conjunction",
           "named": true
@@ -240,7 +372,37 @@
   {
     "type": "cmp",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "EQ",
+          "named": true
+        },
+        {
+          "type": "GEQ",
+          "named": true
+        },
+        {
+          "type": "GT",
+          "named": true
+        },
+        {
+          "type": "LEQ",
+          "named": true
+        },
+        {
+          "type": "LT",
+          "named": true
+        },
+        {
+          "type": "NEQ",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "conjunction",
@@ -250,6 +412,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "COLON",
+          "named": true
+        },
         {
           "type": "literal",
           "named": true
@@ -267,8 +433,84 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
+        {
+          "type": "ADD",
+          "named": true
+        },
+        {
+          "type": "AND",
+          "named": true
+        },
+        {
+          "type": "AT",
+          "named": true
+        },
+        {
+          "type": "BNOT",
+          "named": true
+        },
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "INFIMUM",
+          "named": true
+        },
+        {
+          "type": "LPAREN",
+          "named": true
+        },
+        {
+          "type": "MOD",
+          "named": true
+        },
+        {
+          "type": "MUL",
+          "named": true
+        },
+        {
+          "type": "NUMBER",
+          "named": true
+        },
+        {
+          "type": "POW",
+          "named": true
+        },
+        {
+          "type": "QUESTION",
+          "named": true
+        },
+        {
+          "type": "RPAREN",
+          "named": true
+        },
+        {
+          "type": "SLASH",
+          "named": true
+        },
+        {
+          "type": "STRING",
+          "named": true
+        },
+        {
+          "type": "SUB",
+          "named": true
+        },
+        {
+          "type": "SUPREMUM",
+          "named": true
+        },
+        {
+          "type": "VBAR",
+          "named": true
+        },
+        {
+          "type": "XOR",
+          "named": true
+        },
         {
           "type": "constterm",
           "named": true
@@ -282,23 +524,7 @@
           "named": true
         },
         {
-          "type": "infimum",
-          "named": true
-        },
-        {
           "type": "nconstargvec",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "supremum",
           "named": true
         },
         {
@@ -316,6 +542,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
         {
           "type": "constterm",
           "named": true
@@ -335,6 +565,14 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "CSP_ADD",
+          "named": true
+        },
+        {
+          "type": "CSP_SUB",
+          "named": true
+        },
         {
           "type": "csp_add_term",
           "named": true
@@ -378,6 +616,14 @@
       "required": true,
       "types": [
         {
+          "type": "CSP",
+          "named": true
+        },
+        {
+          "type": "CSP_MUL",
+          "named": true
+        },
+        {
           "type": "term",
           "named": true
         }
@@ -387,7 +633,37 @@
   {
     "type": "csp_rel",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "CSP_EQ",
+          "named": true
+        },
+        {
+          "type": "CSP_GEQ",
+          "named": true
+        },
+        {
+          "type": "CSP_GT",
+          "named": true
+        },
+        {
+          "type": "CSP_LEQ",
+          "named": true
+        },
+        {
+          "type": "CSP_LT",
+          "named": true
+        },
+        {
+          "type": "CSP_NEQ",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "dec",
@@ -399,9 +675,25 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
+        {
+          "type": "DISJOINT",
+          "named": true
+        },
+        {
+          "type": "LBRACE",
+          "named": true
+        },
+        {
+          "type": "NOT",
+          "named": true
+        },
+        {
+          "type": "RBRACE",
+          "named": true
+        },
         {
           "type": "ncspelemvec",
           "named": true
@@ -417,6 +709,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "COLON",
+          "named": true
+        },
         {
           "type": "disjunctionsep",
           "named": true
@@ -445,6 +741,18 @@
       "required": true,
       "types": [
         {
+          "type": "COLON",
+          "named": true
+        },
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "SEM",
+          "named": true
+        },
+        {
           "type": "disjunctionsep",
           "named": true
         },
@@ -466,7 +774,21 @@
   {
     "type": "dsym",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "SEM",
+          "named": true
+        },
+        {
+          "type": "VBAR",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "head",
@@ -497,8 +819,16 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
+        {
+          "type": "LBRACE",
+          "named": true
+        },
+        {
+          "type": "RBRACE",
+          "named": true
+        },
         {
           "type": "aggregatefunction",
           "named": true
@@ -522,6 +852,14 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "COLON",
+          "named": true
+        },
+        {
+          "type": "SEM",
+          "named": true
+        },
         {
           "type": "headaggrelemvec",
           "named": true
@@ -547,8 +885,20 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
+        {
+          "type": "FALSE",
+          "named": true
+        },
+        {
+          "type": "NOT",
+          "named": true
+        },
+        {
+          "type": "TRUE",
+          "named": true
+        },
         {
           "type": "atom",
           "named": true
@@ -639,6 +989,10 @@
       "required": true,
       "types": [
         {
+          "type": "SEM",
+          "named": true
+        },
+        {
           "type": "maxelemlist",
           "named": true
         },
@@ -666,6 +1020,10 @@
       "required": true,
       "types": [
         {
+          "type": "SEM",
+          "named": true
+        },
+        {
           "type": "minelemlist",
           "named": true
         },
@@ -692,6 +1050,18 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "NOT",
+          "named": true
+        },
+        {
+          "type": "SEM",
+          "named": true
+        },
         {
           "type": "conjunction",
           "named": true
@@ -739,6 +1109,14 @@
       "required": true,
       "types": [
         {
+          "type": "COLON",
+          "named": true
+        },
+        {
+          "type": "SEM",
+          "named": true
+        },
+        {
           "type": "csp_add_term",
           "named": true
         },
@@ -766,6 +1144,10 @@
       "required": true,
       "types": [
         {
+          "type": "COMMA",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
@@ -785,6 +1167,10 @@
       "required": true,
       "types": [
         {
+          "type": "COMMA",
+          "named": true
+        },
+        {
           "type": "literal",
           "named": true
         },
@@ -800,9 +1186,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
+        {
+          "type": "COLON",
+          "named": true
+        },
         {
           "type": "nlitvec",
           "named": true
@@ -815,9 +1205,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
+        {
+          "type": "COLON",
+          "named": true
+        },
         {
           "type": "optimizelitvec",
           "named": true
@@ -830,9 +1224,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
         {
           "type": "ntermvec",
           "named": true
@@ -849,6 +1247,10 @@
       "required": true,
       "types": [
         {
+          "type": "COMMA",
+          "named": true
+        },
+        {
           "type": "ntermvec",
           "named": true
         },
@@ -864,9 +1266,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
         {
           "type": "ntermvec",
           "named": true
@@ -888,33 +1294,6 @@
         },
         {
           "type": "tuplevec_sem",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "number",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "bin",
-          "named": true
-        },
-        {
-          "type": "dec",
-          "named": true
-        },
-        {
-          "type": "hex",
-          "named": true
-        },
-        {
-          "type": "oct",
           "named": true
         }
       ]
@@ -948,6 +1327,10 @@
       "required": true,
       "types": [
         {
+          "type": "COMMA",
+          "named": true
+        },
+        {
           "type": "literal",
           "named": true
         },
@@ -966,6 +1349,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "AT",
+          "named": true
+        },
         {
           "type": "term",
           "named": true
@@ -994,8 +1381,152 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
+        {
+          "type": "AT",
+          "named": true
+        },
+        {
+          "type": "BLOCK",
+          "named": true
+        },
+        {
+          "type": "CODE",
+          "named": true
+        },
+        {
+          "type": "COLON",
+          "named": true
+        },
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "CONST",
+          "named": true
+        },
+        {
+          "type": "CSP",
+          "named": true
+        },
+        {
+          "type": "DEFAULT",
+          "named": true
+        },
+        {
+          "type": "DEFINED",
+          "named": true
+        },
+        {
+          "type": "DOT",
+          "named": true
+        },
+        {
+          "type": "EDGE",
+          "named": true
+        },
+        {
+          "type": "EQ",
+          "named": true
+        },
+        {
+          "type": "EXTERNAL",
+          "named": true
+        },
+        {
+          "type": "GT",
+          "named": true
+        },
+        {
+          "type": "HEURISTIC",
+          "named": true
+        },
+        {
+          "type": "IF",
+          "named": true
+        },
+        {
+          "type": "INCLUDE",
+          "named": true
+        },
+        {
+          "type": "LBRACE",
+          "named": true
+        },
+        {
+          "type": "LBRACK",
+          "named": true
+        },
+        {
+          "type": "LPAREN",
+          "named": true
+        },
+        {
+          "type": "LT",
+          "named": true
+        },
+        {
+          "type": "MAXIMIZE",
+          "named": true
+        },
+        {
+          "type": "MINIMIZE",
+          "named": true
+        },
+        {
+          "type": "NUMBER",
+          "named": true
+        },
+        {
+          "type": "OVERRIDE",
+          "named": true
+        },
+        {
+          "type": "PROJECT",
+          "named": true
+        },
+        {
+          "type": "RBRACE",
+          "named": true
+        },
+        {
+          "type": "RBRACK",
+          "named": true
+        },
+        {
+          "type": "RPAREN",
+          "named": true
+        },
+        {
+          "type": "SCRIPT",
+          "named": true
+        },
+        {
+          "type": "SHOW",
+          "named": true
+        },
+        {
+          "type": "SHOWSIG",
+          "named": true
+        },
+        {
+          "type": "SLASH",
+          "named": true
+        },
+        {
+          "type": "STRING",
+          "named": true
+        },
+        {
+          "type": "SUB",
+          "named": true
+        },
+        {
+          "type": "WIF",
+          "named": true
+        },
         {
           "type": "atom",
           "named": true
@@ -1045,10 +1576,6 @@
           "named": true
         },
         {
-          "type": "number",
-          "named": true
-        },
-        {
           "type": "optimizeweight",
           "named": true
         },
@@ -1060,34 +1587,91 @@
     }
   },
   {
-    "type": "string",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "escape_sequence",
-          "named": true
-        },
-        {
-          "type": "string_fragment",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "term",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "anonymus",
+          "type": "ADD",
+          "named": true
+        },
+        {
+          "type": "AND",
+          "named": true
+        },
+        {
+          "type": "ANONYMOUS",
+          "named": true
+        },
+        {
+          "type": "AT",
+          "named": true
+        },
+        {
+          "type": "BNOT",
+          "named": true
+        },
+        {
+          "type": "DOTS",
+          "named": true
+        },
+        {
+          "type": "INFIMUM",
+          "named": true
+        },
+        {
+          "type": "LPAREN",
+          "named": true
+        },
+        {
+          "type": "MUL",
+          "named": true
+        },
+        {
+          "type": "NUMBER",
+          "named": true
+        },
+        {
+          "type": "POW",
+          "named": true
+        },
+        {
+          "type": "QUESTION",
+          "named": true
+        },
+        {
+          "type": "RPAREN",
+          "named": true
+        },
+        {
+          "type": "SLASH",
+          "named": true
+        },
+        {
+          "type": "STRING",
+          "named": true
+        },
+        {
+          "type": "SUB",
+          "named": true
+        },
+        {
+          "type": "SUPREMUM",
+          "named": true
+        },
+        {
+          "type": "VARIABLE",
+          "named": true
+        },
+        {
+          "type": "VBAR",
+          "named": true
+        },
+        {
+          "type": "XOR",
           "named": true
         },
         {
@@ -1099,23 +1683,7 @@
           "named": true
         },
         {
-          "type": "infimum",
-          "named": true
-        },
-        {
           "type": "ntuplevec",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "supremum",
           "named": true
         },
         {
@@ -1124,10 +1692,6 @@
         },
         {
           "type": "unaryargvec",
-          "named": true
-        },
-        {
-          "type": "variable",
           "named": true
         },
         {
@@ -1142,9 +1706,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "AND",
+          "named": true
+        },
         {
           "type": "theory_atom_name",
           "named": true
@@ -1160,6 +1728,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "RPAREN",
+          "named": true
+        },
         {
           "type": "argvec",
           "named": true
@@ -1181,8 +1753,12 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
+        {
+          "type": "SEM",
+          "named": true
+        },
         {
           "type": "ntuple",
           "named": true
@@ -1203,6 +1779,10 @@
       "required": true,
       "types": [
         {
+          "type": "SEM",
+          "named": true
+        },
+        {
           "type": "term",
           "named": true
         },
@@ -1214,127 +1794,7 @@
     }
   },
   {
-    "type": "!=",
-    "named": false
-  },
-  {
     "type": "\"",
-    "named": false
-  },
-  {
-    "type": "#const",
-    "named": false
-  },
-  {
-    "type": "#count",
-    "named": false
-  },
-  {
-    "type": "#defined",
-    "named": false
-  },
-  {
-    "type": "#disjoint",
-    "named": false
-  },
-  {
-    "type": "#edge",
-    "named": false
-  },
-  {
-    "type": "#external",
-    "named": false
-  },
-  {
-    "type": "#heuristic",
-    "named": false
-  },
-  {
-    "type": "#include",
-    "named": false
-  },
-  {
-    "type": "#max",
-    "named": false
-  },
-  {
-    "type": "#maximize",
-    "named": false
-  },
-  {
-    "type": "#min",
-    "named": false
-  },
-  {
-    "type": "#minimize",
-    "named": false
-  },
-  {
-    "type": "#program",
-    "named": false
-  },
-  {
-    "type": "#project",
-    "named": false
-  },
-  {
-    "type": "#show",
-    "named": false
-  },
-  {
-    "type": "#showsig",
-    "named": false
-  },
-  {
-    "type": "#sum",
-    "named": false
-  },
-  {
-    "type": "#sum+",
-    "named": false
-  },
-  {
-    "type": "$",
-    "named": false
-  },
-  {
-    "type": "$!=",
-    "named": false
-  },
-  {
-    "type": "$*",
-    "named": false
-  },
-  {
-    "type": "$+",
-    "named": false
-  },
-  {
-    "type": "$-",
-    "named": false
-  },
-  {
-    "type": "$<",
-    "named": false
-  },
-  {
-    "type": "$<=",
-    "named": false
-  },
-  {
-    "type": "$=",
-    "named": false
-  },
-  {
-    "type": "$>",
-    "named": false
-  },
-  {
-    "type": "$>=",
-    "named": false
-  },
-  {
-    "type": "&",
     "named": false
   },
   {
@@ -1342,87 +1802,7 @@
     "named": false
   },
   {
-    "type": "(",
-    "named": false
-  },
-  {
-    "type": ")",
-    "named": false
-  },
-  {
-    "type": "*",
-    "named": false
-  },
-  {
-    "type": "**",
-    "named": false
-  },
-  {
-    "type": "+",
-    "named": false
-  },
-  {
-    "type": ",",
-    "named": false
-  },
-  {
-    "type": "-",
-    "named": false
-  },
-  {
-    "type": ".",
-    "named": false
-  },
-  {
-    "type": "..",
-    "named": false
-  },
-  {
-    "type": "/",
-    "named": false
-  },
-  {
     "type": "0",
-    "named": false
-  },
-  {
-    "type": ":",
-    "named": false
-  },
-  {
-    "type": ":-",
-    "named": false
-  },
-  {
-    "type": ":~",
-    "named": false
-  },
-  {
-    "type": ";",
-    "named": false
-  },
-  {
-    "type": "<",
-    "named": false
-  },
-  {
-    "type": "<=",
-    "named": false
-  },
-  {
-    "type": "<CODE>",
-    "named": false
-  },
-  {
-    "type": "<SCRIPT>",
-    "named": false
-  },
-  {
-    "type": "<STRING>",
-    "named": false
-  },
-  {
-    "type": "=",
     "named": false
   },
   {
@@ -1430,44 +1810,288 @@
     "named": false
   },
   {
-    "type": ">",
-    "named": false
+    "type": "ADD",
+    "named": true
   },
   {
-    "type": ">=",
-    "named": false
+    "type": "AND",
+    "named": true
   },
   {
-    "type": "?",
-    "named": false
+    "type": "ANONYMOUS",
+    "named": true
   },
   {
-    "type": "@",
-    "named": false
+    "type": "AT",
+    "named": true
   },
   {
-    "type": "[",
-    "named": false
+    "type": "BLOCK",
+    "named": true
   },
   {
-    "type": "\\",
-    "named": false
+    "type": "BNOT",
+    "named": true
+  },
+  {
+    "type": "CODE",
+    "named": true
+  },
+  {
+    "type": "COLON",
+    "named": true
+  },
+  {
+    "type": "COMMA",
+    "named": true
+  },
+  {
+    "type": "CONST",
+    "named": true
+  },
+  {
+    "type": "COUNT",
+    "named": true
+  },
+  {
+    "type": "CSP",
+    "named": true
+  },
+  {
+    "type": "CSP_ADD",
+    "named": true
+  },
+  {
+    "type": "CSP_EQ",
+    "named": true
+  },
+  {
+    "type": "CSP_GEQ",
+    "named": true
+  },
+  {
+    "type": "CSP_GT",
+    "named": true
+  },
+  {
+    "type": "CSP_LEQ",
+    "named": true
+  },
+  {
+    "type": "CSP_LT",
+    "named": true
+  },
+  {
+    "type": "CSP_MUL",
+    "named": true
+  },
+  {
+    "type": "CSP_NEQ",
+    "named": true
+  },
+  {
+    "type": "CSP_SUB",
+    "named": true
+  },
+  {
+    "type": "DEFAULT",
+    "named": true
+  },
+  {
+    "type": "DEFINED",
+    "named": true
+  },
+  {
+    "type": "DISJOINT",
+    "named": true
+  },
+  {
+    "type": "DOT",
+    "named": true
+  },
+  {
+    "type": "DOTS",
+    "named": true
+  },
+  {
+    "type": "EDGE",
+    "named": true
+  },
+  {
+    "type": "EQ",
+    "named": true
+  },
+  {
+    "type": "EXTERNAL",
+    "named": true
+  },
+  {
+    "type": "FALSE",
+    "named": true
+  },
+  {
+    "type": "GEQ",
+    "named": true
+  },
+  {
+    "type": "GT",
+    "named": true
+  },
+  {
+    "type": "HEURISTIC",
+    "named": true
+  },
+  {
+    "type": "IF",
+    "named": true
+  },
+  {
+    "type": "INCLUDE",
+    "named": true
+  },
+  {
+    "type": "INFIMUM",
+    "named": true
+  },
+  {
+    "type": "LBRACE",
+    "named": true
+  },
+  {
+    "type": "LBRACK",
+    "named": true
+  },
+  {
+    "type": "LEQ",
+    "named": true
+  },
+  {
+    "type": "LPAREN",
+    "named": true
+  },
+  {
+    "type": "LT",
+    "named": true
+  },
+  {
+    "type": "MAX",
+    "named": true
+  },
+  {
+    "type": "MAXIMIZE",
+    "named": true
+  },
+  {
+    "type": "MIN",
+    "named": true
+  },
+  {
+    "type": "MINIMIZE",
+    "named": true
+  },
+  {
+    "type": "MOD",
+    "named": true
+  },
+  {
+    "type": "MUL",
+    "named": true
+  },
+  {
+    "type": "NEQ",
+    "named": true
+  },
+  {
+    "type": "NOT",
+    "named": true
+  },
+  {
+    "type": "OVERRIDE",
+    "named": true
+  },
+  {
+    "type": "POW",
+    "named": true
+  },
+  {
+    "type": "PROJECT",
+    "named": true
+  },
+  {
+    "type": "QUESTION",
+    "named": true
+  },
+  {
+    "type": "RBRACE",
+    "named": true
+  },
+  {
+    "type": "RBRACK",
+    "named": true
+  },
+  {
+    "type": "RPAREN",
+    "named": true
+  },
+  {
+    "type": "SCRIPT",
+    "named": true
+  },
+  {
+    "type": "SEM",
+    "named": true
+  },
+  {
+    "type": "SHOW",
+    "named": true
+  },
+  {
+    "type": "SHOWSIG",
+    "named": true
+  },
+  {
+    "type": "SLASH",
+    "named": true
+  },
+  {
+    "type": "SUB",
+    "named": true
+  },
+  {
+    "type": "SUM",
+    "named": true
+  },
+  {
+    "type": "SUMP",
+    "named": true
+  },
+  {
+    "type": "SUPREMUM",
+    "named": true
+  },
+  {
+    "type": "TRUE",
+    "named": true
+  },
+  {
+    "type": "VARIABLE",
+    "named": true
+  },
+  {
+    "type": "VBAR",
+    "named": true
+  },
+  {
+    "type": "WIF",
+    "named": true
+  },
+  {
+    "type": "XOR",
+    "named": true
   },
   {
     "type": "\\\\",
     "named": false
-  },
-  {
-    "type": "]",
-    "named": false
-  },
-  {
-    "type": "^",
-    "named": false
-  },
-  {
-    "type": "anonymus",
-    "named": true
   },
   {
     "type": "bin",
@@ -1478,16 +2102,8 @@
     "named": true
   },
   {
-    "type": "default",
-    "named": false
-  },
-  {
     "type": "escape_sequence",
     "named": true
-  },
-  {
-    "type": "false",
-    "named": false
   },
   {
     "type": "hex",
@@ -1498,55 +2114,15 @@
     "named": true
   },
   {
-    "type": "infimum",
-    "named": true
-  },
-  {
-    "type": "not",
-    "named": false
-  },
-  {
     "type": "oct",
     "named": true
-  },
-  {
-    "type": "override",
-    "named": false
   },
   {
     "type": "string_fragment",
     "named": true
   },
   {
-    "type": "supremum",
-    "named": true
-  },
-  {
-    "type": "true",
-    "named": false
-  },
-  {
-    "type": "variable",
-    "named": true
-  },
-  {
     "type": "widentifier",
     "named": true
-  },
-  {
-    "type": "{",
-    "named": false
-  },
-  {
-    "type": "|",
-    "named": false
-  },
-  {
-    "type": "}",
-    "named": false
-  },
-  {
-    "type": "~",
-    "named": false
   }
 ]

@@ -12,10 +12,12 @@ head :-  body.
       (literal
         (atom
           (identifier))))
+    (IF)
     (bodydot
       (literal
         (atom
-          (identifier))))))
+          (identifier)))
+    (DOT))))
 
 ==================
 true as identifier
@@ -34,7 +36,9 @@ true(A).
           (argvec
             (ntermvec
               (term
-                (variable)))))))))
+                (VARIABLE))))
+          (RPAREN))))
+    (DOT)))
 
 ==================
 constant declaration
@@ -45,7 +49,10 @@ constant declaration
 ---
 (source_file
   (statement
+    (CONST)
     (identifier)
+    (EQ)
     (constterm
-      (number
-        (dec)))))
+      (NUMBER
+        (dec)))
+    (DOT)))
