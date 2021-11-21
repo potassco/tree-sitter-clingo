@@ -32,7 +32,7 @@ true(A).
     (head
       (literal
         (atom
-          (identifier) (LPAREN2) 
+          (identifier) (LPAREN) 
           (argvec
             (ntermvec
               (term

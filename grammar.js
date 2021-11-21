@@ -1143,8 +1143,7 @@ module.exports = grammar({
     VARIABLE: $ => token(seq(repeat('_'), /[A-Z]/, repeat(/[A-Za-z0-9_]/))),
     identifier: $ => token(seq(repeat('_'), /[a-z]/, repeat(/[A-Za-z0-9_]/))),
     //Introduced to disallow white space after identifier followed by a bracket ie. not 'bla ()' but 'bla()'
-    _widentifier: $ => seq($.identifier,$.LPAREN2),
-    LPAREN2: $ => token.immediate('('),
+    _widentifier: $ => seq($.identifier,alias(token.immediate('('), $.LPAREN)),
     
 
 

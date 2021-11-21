@@ -5410,17 +5410,18 @@
           "name": "identifier"
         },
         {
-          "type": "SYMBOL",
-          "name": "LPAREN2"
+          "type": "ALIAS",
+          "content": {
+            "type": "IMMEDIATE_TOKEN",
+            "content": {
+              "type": "STRING",
+              "value": "("
+            }
+          },
+          "named": true,
+          "value": "LPAREN"
         }
       ]
-    },
-    "LPAREN2": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "STRING",
-        "value": "("
-      }
     },
     "NUMBER": {
       "type": "CHOICE",

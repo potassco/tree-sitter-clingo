@@ -177,7 +177,7 @@
       "required": true,
       "types": [
         {
-          "type": "LPAREN2",
+          "type": "LPAREN",
           "named": true
         },
         {
@@ -461,10 +461,6 @@
         },
         {
           "type": "LPAREN",
-          "named": true
-        },
-        {
-          "type": "LPAREN2",
           "named": true
         },
         {
@@ -1627,10 +1623,6 @@
           "named": true
         },
         {
-          "type": "LPAREN2",
-          "named": true
-        },
-        {
           "type": "MUL",
           "named": true
         },
@@ -1729,7 +1721,7 @@
       "required": true,
       "types": [
         {
-          "type": "LPAREN2",
+          "type": "LPAREN",
           "named": true
         },
         {
@@ -1967,10 +1959,6 @@
   },
   {
     "type": "LPAREN",
-    "named": true
-  },
-  {
-    "type": "LPAREN2",
     "named": true
   },
   {
