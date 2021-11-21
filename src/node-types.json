@@ -177,6 +177,10 @@
       "required": true,
       "types": [
         {
+          "type": "LPAREN2",
+          "named": true
+        },
+        {
           "type": "RPAREN",
           "named": true
         },
@@ -190,10 +194,6 @@
         },
         {
           "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "widentifier",
           "named": true
         }
       ]
@@ -464,6 +464,10 @@
           "named": true
         },
         {
+          "type": "LPAREN2",
+          "named": true
+        },
+        {
           "type": "MOD",
           "named": true
         },
@@ -525,10 +529,6 @@
         },
         {
           "type": "nconstargvec",
-          "named": true
-        },
-        {
-          "type": "widentifier",
           "named": true
         }
       ]
@@ -1627,6 +1627,10 @@
           "named": true
         },
         {
+          "type": "LPAREN2",
+          "named": true
+        },
+        {
           "type": "MUL",
           "named": true
         },
@@ -1693,10 +1697,6 @@
         {
           "type": "unaryargvec",
           "named": true
-        },
-        {
-          "type": "widentifier",
-          "named": true
         }
       ]
     }
@@ -1729,6 +1729,10 @@
       "required": true,
       "types": [
         {
+          "type": "LPAREN2",
+          "named": true
+        },
+        {
           "type": "RPAREN",
           "named": true
         },
@@ -1738,10 +1742,6 @@
         },
         {
           "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "widentifier",
           "named": true
         }
       ]
@@ -1970,6 +1970,10 @@
     "named": true
   },
   {
+    "type": "LPAREN2",
+    "named": true
+  },
+  {
     "type": "LT",
     "named": true
   },
@@ -2119,10 +2123,6 @@
   },
   {
     "type": "string_fragment",
-    "named": true
-  },
-  {
-    "type": "widentifier",
     "named": true
   }
 ]

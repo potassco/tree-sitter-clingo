@@ -153,10 +153,10 @@ module.exports = grammar({
       seq($.LPAREN,              $.RPAREN),
       seq($.LPAREN, $.consttermvec, $.RPAREN),
       seq($.LPAREN, $.consttermvec, $.COMMA, $.RPAREN),
-      seq($.widentifier,                 $.RPAREN),
-      seq($.widentifier, $.nconstargvec, $.RPAREN),
-      seq($.AT, $.widentifier,                 $.RPAREN),
-      seq($.AT, $.widentifier, $.nconstargvec, $.RPAREN),
+      seq($._widentifier,                 $.RPAREN),
+      seq($._widentifier, $.nconstargvec, $.RPAREN),
+      seq($.AT, $._widentifier,                 $.RPAREN),
+      seq($.AT, $._widentifier, $.nconstargvec, $.RPAREN),
       seq($.VBAR, $.constterm, $.VBAR),
       $.identifier,
       seq($.AT, $.identifier,),
@@ -225,8 +225,8 @@ module.exports = grammar({
       prec.left(1, seq($.BNOT, $.term)),
       seq($.LPAREN,              $.RPAREN),
       seq($.LPAREN, $.ntuplevec, $.RPAREN),
-      seq($.widentifier, $.argvec, $.RPAREN),
-      seq($.AT, $.widentifier, $.argvec, $.RPAREN),
+      seq($._widentifier, $.argvec, $.RPAREN),
+      seq($.AT, $._widentifier, $.argvec, $.RPAREN),
       seq($.VBAR, $.unaryargvec, $.VBAR),
       $.identifier,
       seq($.AT, $.identifier,),
@@ -336,11 +336,11 @@ module.exports = grammar({
     // ;
     atom: $ => choice(
       $.identifier,
-      seq($.widentifier, $.RPAREN),
-      seq($.widentifier, $.argvec, $.RPAREN),
+      seq($._widentifier, $.RPAREN),
+      seq($._widentifier, $.argvec, $.RPAREN),
       seq($.SUB, $.identifier),
-      seq($.SUB, $.widentifier, $.RPAREN),
-      seq($.SUB, $.widentifier, $.argvec, $.RPAREN),
+      seq($.SUB, $._widentifier, $.RPAREN),
+      seq($.SUB, $._widentifier, $.argvec, $.RPAREN),
     ),
 
     // literal
@@ -1032,8 +1032,9 @@ module.exports = grammar({
     //     | identifier[id] LPAREN argvec[tvv] RPAREN[r]     { $$ = BUILDER.term(@$, String::fromRep($id), $tvv, false); }
     theory_atom_name: $ => choice(
       $.identifier,
-      seq($.widentifier, $.RPAREN),
-      seq($.widentifier, $.argvec, $.RPAREN),
+      seq($._widentifier, $.RPAREN),
+      seq($._widentifier, $.argvec, $.RPAREN),
+   
     ),
 
     // theory_atom
@@ -1142,7 +1143,9 @@ module.exports = grammar({
     VARIABLE: $ => token(seq(repeat('_'), /[A-Z]/, repeat(/[A-Za-z0-9_]/))),
     identifier: $ => token(seq(repeat('_'), /[a-z]/, repeat(/[A-Za-z0-9_]/))),
     //Introduced to disallow white space after identifier followed by a bracket ie. not 'bla ()' but 'bla()'
-    widentifier: $ => token(seq(repeat('_'), /[a-z]/, repeat(/[A-Za-z0-9_]/), '(')),
+    _widentifier: $ => seq($.identifier,$.LPAREN2),
+    LPAREN2: $ => token.immediate('('),
+    
 
 
     NUMBER: $ => choice(
