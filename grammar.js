@@ -1140,7 +1140,7 @@ module.exports = grammar({
     // infimum: $ => token(seq($.INFIMUM, optional('imum'))),
     // supremum: $ => token(seq($.SUPREMUM, optional('remum'))),
     ANONYMOUS: $ => '_',
-    VARIABLE: $ => token(seq(repeat('_'), /[A-Z]/, repeat(/[A-Za-z0-9_]/))),
+    VARIABLE: $ => token(seq(repeat('_'), /[A-Z]/, repeat(/[A-Za-z0-9_']/))),
     identifier: $ => token(seq(repeat('_'), /[a-z]/, repeat(/[A-Za-z0-9_]/))),
     //Introduced to disallow white space after identifier followed by a bracket ie. not 'bla ()' but 'bla()'
     _widentifier: $ => seq($.identifier,alias(token.immediate('('), $.LPAREN)),

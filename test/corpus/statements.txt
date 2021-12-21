@@ -23,7 +23,7 @@ head :-  body.
 true as identifier
 ==================
 
-true(A).
+true(A').
 
 ---
 
