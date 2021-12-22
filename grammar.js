@@ -6,9 +6,16 @@ module.exports = grammar({
 
     source_file: $ => repeat($.statement),
 
-    comment: $ => token(
-      seq('%', /.*/)
-    ),
+    // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
+    // Taken from tree-sitter-prolog
+    comment: $ => token(choice(
+      seq('%', /.*/),
+      seq(
+        '%*',
+        /[^*]*\*+([^%*][^*]*\*+)*/,
+        '%'
+      )
+    )),
 
 //     token
   ADD: $ => '+',
