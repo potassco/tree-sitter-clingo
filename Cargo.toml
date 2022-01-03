@@ -1,12 +1,17 @@
 [package]
 name = "tree-sitter-clingo"
+version = "0.0.2"
+publish = true
+authors = ["Sven Thiele <sthiele78@gmail.com>"]
 description = "Clingo grammar for the tree-sitter parsing library"
-version = "0.0.1"
+readme = "README.md"
 keywords = ["incremental", "parsing", "Clingo"]
 categories = ["parsing", "text-editors"]
+documentation = "https://docs.rs/tree-sitter-clingo"
 repository = "https://github.com/sthiele/tree-sitter-clingo"
 edition = "2018"
 license = "MIT"
+exclude = ["/.github"]
 
 build = "bindings/rust/build.rs"
 include = [

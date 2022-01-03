@@ -13,4 +13,4 @@ This file contains instructions that will help you to make a contribution.
 
 ## License
 
-Any contribution intentionally submitted for inclusion in the work by you, shall be licensed under the terms of the [Apache 2.0 license](https://github.com/sthiele/tree-sitter-clingo/blob/master/LICENSE) without any additional terms or conditions.
+Any contribution intentionally submitted for inclusion in the work by you, shall be licensed under the terms of the [MIT license](https://github.com/sthiele/tree-sitter-clingo/blob/master/LICENSE) without any additional terms or conditions.
