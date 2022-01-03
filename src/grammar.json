@@ -300,11 +300,40 @@
     },
     "SCRIPT": {
       "type": "STRING",
-      "value": "<SCRIPT>"
+      "value": "#script"
     },
     "CODE": {
-      "type": "STRING",
-      "value": "<CODE>"
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "PATTERN",
+                "value": "[^#]*"
+              },
+              {
+                "type": "PATTERN",
+                "value": "(#+[^e][^#]*)*"
+              },
+              {
+                "type": "PATTERN",
+                "value": "(#+e*[^n][^#]*)*"
+              },
+              {
+                "type": "PATTERN",
+                "value": "(#+e*n*[^d][^#]*)*"
+              },
+              {
+                "type": "STRING",
+                "value": "#end"
+              }
+            ]
+          }
+        ]
+      }
     },
     "NOT": {
       "type": "STRING",

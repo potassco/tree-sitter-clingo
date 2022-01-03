@@ -108,8 +108,13 @@ module.exports = grammar({
 // %token <str>
 //     ANONYMOUS  "<ANONYMOUS>"
 //     IDENTIFIER "<IDENTIFIER>"
-    SCRIPT: $ => '<SCRIPT>',
-    CODE: $ => '<CODE>',
+
+    // SCRIPT: $ => '<SCRIPT>',
+    SCRIPT: $ => '#script',
+    // CODE: $ => '<CODE>',
+    CODE: $ => token(choice(
+      seq(/[^#]*/, /(#+[^e][^#]*)*/, /(#+e*[^n][^#]*)*/, /(#+e*n*[^d][^#]*)*/, '#end'),
+    )),
 //     STRING     "<STRING>"
 //     VARIABLE   "<VARIABLE>"
 //     THEORY_OP  "<THEORYOP>"

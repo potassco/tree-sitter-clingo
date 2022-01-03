@@ -56,3 +56,25 @@ constant declaration
       (NUMBER
         (dec)))
     (DOT)))
+
+==================
+embedded script
+==================
+
+#script (bla)
+
+some script code
+#en comment
+more script code
+
+#end.
+
+---
+(source_file
+  (statement
+    (SCRIPT)
+    (LPAREN)
+    (identifier)
+    (RPAREN)
+    (CODE)
+    (DOT)))
