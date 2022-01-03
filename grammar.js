@@ -90,24 +90,37 @@ module.exports = grammar({
     XOR: $ => '^',
 //     PARSE_LP    "<program>"
 //     PARSE_DEF   "<define>"
-//     ANY         "any"
-//     UNARY       "unary"
-//     BINARY      "binary"
-//     LEFT        "left"
-//     RIGHT       "right"
-//     HEAD        "head"
-//     BODY        "body"
-//     DIRECTIVE   "directive"
-//     THEORY      "#theory"
+    ANY: $ => 'any',
+    UNARY: $ => 'unary',
+    BINARY: $ => 'binary',
+    LEFT: $ => 'left',
+    RIGHT: $ => 'right',
+    HEAD: $ => 'head',
+    BODY: $ => 'body',
+    DIRECTIVE: $ => 'directive',
+    THEORY: $ => '#theory',
 //     SYNC        "EOF"
 
 
-// %token <num>
 //     NUMBER     "<NUMBER>"
+    NUMBER: $ => choice(
+      $.dec,
+      $.hex,
+      $.oct,
+      $.bin,
+    ),
+    dec: $ => choice('0', /([1-9][0-9]*)/),
+    hex: $ => token(seq('0x', /([0-9A-Fa-f]+)/)),
+    oct: $ => token(seq('0o', /([1-7]+)/)),
+    bin: $ => token(seq('0b', /([0-1]+)/)),
 
 // %token <str>
 //     ANONYMOUS  "<ANONYMOUS>"
+    ANONYMOUS: $ => '_',
 //     IDENTIFIER "<IDENTIFIER>"
+    identifier: $ => token(seq(repeat('_'), /[a-z]/, repeat(/[A-Za-z0-9_]/))),
+    //Introduced to disallow white space after identifier followed by a bracket ie. not 'bla ()' but 'bla()'
+    _widentifier: $ => seq($.identifier, alias(token.immediate('('), $.LPAREN)),
 
     // SCRIPT: $ => '<SCRIPT>',
     SCRIPT: $ => '#script',
@@ -116,8 +129,8 @@ module.exports = grammar({
       seq(/[^#]*/, /(#+[^e][^#]*)*/, /(#+e*[^n][^#]*)*/, /(#+e*n*[^d][^#]*)*/, '#end'),
     )),
 //     STRING     "<STRING>"
-//     VARIABLE   "<VARIABLE>"
-//     THEORY_OP  "<THEORYOP>"
+    VARIABLE: $ => token(seq(repeat('_'), /[A-Z]/, repeat(/[A-Za-z0-9_']/))),
+    THEORY_OP: $ => /[/!<=>+\-*\\?&@|:;~\^\.]+/,
     NOT: $ => 'not',
     DEFAULT: $ => 'default',
     OVERRIDE: $ => 'override',
@@ -194,7 +207,6 @@ module.exports = grammar({
     nconstargvec: $ =>
       $.consttermvec,
 
-    // // {{{2 terms including variables
 
     // term
     //     : term[a] DOTS term[b]                     { $$ = BUILDER.term(@$, $a, $b); }
@@ -320,7 +332,6 @@ module.exports = grammar({
     // //       parse a tuple as a list of terms
     // //       each term is either a tuple or a term -> which afterwards is turned into a pool!
 
-    // // {{{1 literals
 
     // cmp
     //     : GT     { $$ = Relation::GT; }
@@ -440,15 +451,14 @@ module.exports = grammar({
     //     : literal[lit]                    { $$ = BUILDER.litvec(BUILDER.litvec(), $lit); }
     //     | nlitvec[vec] COMMA literal[lit] { $$ = BUILDER.litvec($vec, $lit); }
     //     ;
-    nlitvec: $ => choice(
-      $.literal,
-      seq($.nlitvec, $.COMMA, $.literal)
-    ),
-
     // litvec
     //     : nlitvec[vec] { $$ = $vec; }
     //     |              { $$ = BUILDER.litvec(); }
     //     ;
+    nlitvec: $ => choice(
+      $.literal,
+      seq($.nlitvec, $.COMMA, $.literal)
+    ),
 
     // optcondition
     //     : COLON litvec[vec] { $$ = $vec; }
@@ -612,6 +622,10 @@ module.exports = grammar({
     //     :                     termvec[tuple] COLON csp_add_term[add] optcondition[cond] { $$ = BUILDER.cspelemvec(BUILDER.cspelemvec(), @$, $tuple, $add, $cond); }
     //     | cspelemvec[vec] SEM termvec[tuple] COLON csp_add_term[add] optcondition[cond] { $$ = BUILDER.cspelemvec($vec, @$, $tuple, $add, $cond); }
     //     ;
+    // cspelemvec
+    //     : ncspelemvec[vec] { $$ = $vec; }
+    //     |                  { $$ = BUILDER.cspelemvec(); }
+    //     ;
     ncspelemvec: $ => choice(
       seq(                                $.COLON, $.csp_add_term,                ),
       seq(                                $.COLON, $.csp_add_term, $.noptcondition),
@@ -622,12 +636,6 @@ module.exports = grammar({
       seq( $.ncspelemvec,$.SEM, $.ntermvec, $.COLON, $.csp_add_term,                ),
       seq( $.ncspelemvec,$.SEM, $.ntermvec, $.COLON, $.csp_add_term, $.noptcondition),
     ),
-
-    // cspelemvec
-    //     : ncspelemvec[vec] { $$ = $vec; }
-    //     |                  { $$ = BUILDER.cspelemvec(); }
-    //     ;
-    
 
     // disjoint
     //     :         DISJOINT LBRACE cspelemvec[elems] RBRACE { $$ = { NAF::POS, $elems }; }
@@ -846,6 +854,9 @@ module.exports = grammar({
     //     | EXTERNAL atom[hd] COLON DOT         LBRACK term[t] RBRACK { BUILDER.external(@$, $hd, BUILDER.body(), $t); }
     //     | EXTERNAL atom[hd] DOT               LBRACK term[t] RBRACK { BUILDER.external(@$, $hd, BUILDER.body(), $t); }
     //     ;
+    // statement
+    //     : THEORY identifier[name] enable_theory_definition_lexing LBRACE theory_definition_list[defs] RBRACE disable_theory_lexing DOT { BUILDER.theorydef(@$, String::fromRep($name), $defs, LOGGER); }
+    //     ;
     statement: $ => choice(
       seq($.head, $.DOT),
       seq($.head, $.IF, $.DOT),
@@ -892,6 +903,8 @@ module.exports = grammar({
       seq($.EXTERNAL, $.atom, $.COLON, $.bodydot, $.LBRACK, $.term, $.RBRACK),
       seq($.EXTERNAL, $.atom, $.COLON, $.DOT, $.LBRACK, $.term, $.RBRACK),
       seq($.EXTERNAL, $.atom, $.DOT, $.LBRACK, $.term, $.RBRACK),
+      seq($.THEORY, $.identifier, $.LBRACE, $.RBRACE, $.DOT),
+      seq($.THEORY, $.identifier, $.LBRACE, $.theory_definition_nlist, $.RBRACE, $.DOT)
     ),
 
     // optimizetuple
@@ -963,35 +976,39 @@ module.exports = grammar({
     //     : identifier[uid] EQ constterm[rhs] {  BUILDER.define(@$, String::fromRep($uid), $rhs, false, LOGGER); }
     //     ;
 
-    // nidlist 
+    // nidlist
     //     : nidlist[list] COMMA identifier[id] { $$ = BUILDER.idvec($list, @id, String::fromRep($id)); }
     //     | identifier[id]                     { $$ = BUILDER.idvec(BUILDER.idvec(), @id, String::fromRep($id)); }
+    //     ;
+    // idlist
+    //     :               { $$ = BUILDER.idvec(); }
+    //     | nidlist[list] { $$ = $list; }
     //     ;
     nidlist: $ => choice(
       seq($.nidlist, $.COMMA, $.identifier),
       $.identifier,
     ),
 
-    // idlist 
-    //     :               { $$ = BUILDER.idvec(); }
-    //     | nidlist[list] { $$ = $list; }
-    //     ;
 
 
-    // // {{{1 theory
 
     // theory_op
     //     : THEORY_OP[op]  { $$ = $op; }
     //     | NOT[not]       { $$ = $not; }
     //     ;
-
-    // // {{{2 theory atoms
+    theory_op: $ => choice(
+      $.THEORY_OP,
+      $.NOT
+    ),
 
     // theory_op_list
     //     : theory_op_list[ops] theory_op[op] { $$ = BUILDER.theoryops($ops, String::fromRep($op)); }
     //     | theory_op[op]                     { $$ = BUILDER.theoryops(BUILDER.theoryops(), String::fromRep($op)); }
     //     ;
-
+    theory_op_list: $ => choice(
+      seq($.theory_op_list, $.theory_op),
+      $.theory_op
+    ),
     // theory_term
     //     : LBRACE theory_opterm_list[list] RBRACE                              { $$ = BUILDER.theorytermset(@$, $list); }
     //     | LBRACK theory_opterm_list[list] RBRACK                              { $$ = BUILDER.theoryoptermlist(@$, $list); }
@@ -1007,13 +1024,34 @@ module.exports = grammar({
     //     | SUPREMUM                                                            { $$ = BUILDER.theorytermvalue(@$, Symbol::createSup()); }
     //     | VARIABLE[var]                                                       { $$ = BUILDER.theorytermvar(@$, String::fromRep($var)); }
     //     ;
-
+    theory_term: $ => choice(
+      seq($.LBRACE, $.RBRACE),
+      seq($.LBRACE, $.theory_opterm_nlist, $.RBRACE),
+      seq($.LBRACK, $.RBRACK),
+      seq($.LBRACK, $.theory_opterm_nlist, $.RBRACK),
+      seq($.LPAREN, $.RPAREN),
+      seq($.LPAREN, $.theory_opterm, $.RPAREN),
+      seq($.LPAREN, $.theory_opterm, $.COMMA, $.RPAREN),
+      seq($.LPAREN, $.theory_opterm, $.COMMA, $.theory_opterm_nlist, $.RPAREN),
+      seq($.identifier, $.LPAREN, $.RPAREN),
+      seq($.identifier, $.LPAREN, $.theory_opterm_nlist, $.RPAREN),
+      $.identifier,
+      $.NUMBER,
+      $.STRING,
+      $.INFIMUM,
+      $.SUPREMUM,
+      $.VARIABLE,
+    ),
     // theory_opterm
     //     : theory_opterm[opterm] theory_op_list[ops] theory_term[term] { $$ = BUILDER.theoryopterm($opterm, $ops, $term); }
     //     | theory_op_list[ops] theory_term[term]                       { $$ = BUILDER.theoryopterm($ops, $term); }
     //     | theory_term[term]                                           { $$ = BUILDER.theoryopterm(BUILDER.theoryops(), $term); }
     //     ;
-
+    theory_opterm: $ => choice(
+      seq($.theory_opterm, $.theory_op_list, $.theory_term),
+      seq($.theory_op_list, $.theory_term),
+      $.theory_term
+    ),
     // theory_opterm_nlist
     //     : theory_opterm_nlist[list] COMMA theory_opterm[opterm] { $$ = BUILDER.theoryopterms($list, @opterm, $opterm); }
     //     | theory_opterm[opterm]                                 { $$ = BUILDER.theoryopterms(BUILDER.theoryopterms(), @opterm, $opterm); }
@@ -1023,11 +1061,20 @@ module.exports = grammar({
     //     : theory_opterm_nlist[list] { $$ = $list; }
     //     |                           { $$ = BUILDER.theoryopterms(); }
     //     ;
-
+    theory_opterm_nlist: $ => choice(
+      seq($.theory_opterm_nlist, $.COMMA, $.theory_opterm),
+      $.theory_opterm
+    ),
     // theory_atom_element 
     //     : theory_opterm_nlist[list] disable_theory_lexing optcondition[cond] { $$ = { $list, $cond }; }
     //     |                           disable_theory_lexing COLON litvec[cond] { $$ = { BUILDER.theoryopterms(), $cond }; }
     //     ;
+    theory_atom_element: $ => choice(
+      seq($.theory_opterm_nlist),
+      seq($.theory_opterm_nlist, $.noptcondition),
+      seq($.COLON),
+      seq($.COLON, $.nlitvec),
+    ),
 
     // theory_atom_element_nlist
     //     : theory_atom_element_nlist[list] enable_theory_lexing SEM theory_atom_element[elem] { $$ = BUILDER.theoryelems($list, $elem.first, $elem.second); }
@@ -1038,7 +1085,10 @@ module.exports = grammar({
     //     : theory_atom_element_nlist[list] { $$ = $list; }
     //     |                                 { $$ = BUILDER.theoryelems(); }
     //     ;
-
+    theory_atom_element_nlist: $ => choice(
+      seq($.theory_atom_element_nlist, $.SEM, $.theory_atom_element),
+      $.theory_atom_element,
+    ),
     // theory_atom_name
     //     : identifier[id]                                  { $$ = BUILDER.term(@$, String::fromRep($id), BUILDER.termvecvec(BUILDER.termvecvec(), BUILDER.termvec()), false); }
     //     | identifier[id] LPAREN argvec[tvv] RPAREN[r]     { $$ = BUILDER.term(@$, String::fromRep($id), $tvv, false); }
@@ -1056,12 +1106,11 @@ module.exports = grammar({
     //     ;
     theory_atom: $ => choice(
       seq($.AND, $.theory_atom_name),
-      // TODO
-      // seq($.AND, $.theory_atom_name, $.enable_theory_lexing, $.LBRACE, $.theory_atom_element_list, $.enable_theory_lexing ,$.RBRACE, $.disable_theory_lexing),
-      // seq($.AND, $.theory_atom_name, $.enable_theory_lexing, $.LBRACE, $.theory_atom_element_list, $.enable_theory_lexing ,$.RBRACE, $.theory_op, $.theory_opterm, $.disable_theory_lexing),
+      seq($.AND, $.theory_atom_name, $.LBRACE, $.RBRACE),
+      seq($.AND, $.theory_atom_name, $.LBRACE, $.theory_atom_element_nlist, $.RBRACE),
+      seq($.AND, $.theory_atom_name, $.LBRACE, $.RBRACE, $.theory_op, $.theory_opterm),
+      seq($.AND, $.theory_atom_name, $.LBRACE, $.theory_atom_element_nlist, $.RBRACE, $.theory_op, $.theory_opterm),
     ),
-
-    // // {{{2 theory definition
 
     // theory_operator_nlist
     //     : theory_op[op]                                  { $$ = BUILDER.theoryops(BUILDER.theoryops(), String::fromRep($op)); }
@@ -1072,13 +1121,20 @@ module.exports = grammar({
     //     : theory_operator_nlist[ops] { $$ = $ops; }
     //     |                            { $$ = BUILDER.theoryops(); }
     //     ;
-
+    theory_operator_nlist: $ => choice(
+      $.theory_op,
+      seq($.theory_operator_nlist, $.COMMA, $.theory_op)
+    ),
     // theory_operator_definition
     //     : theory_op[op] enable_theory_definition_lexing COLON NUMBER[arity] COMMA UNARY              { $$ = BUILDER.theoryopdef(@$, String::fromRep($op), $arity, TheoryOperatorType::Unary); }
     //     | theory_op[op] enable_theory_definition_lexing COLON NUMBER[arity] COMMA BINARY COMMA LEFT  { $$ = BUILDER.theoryopdef(@$, String::fromRep($op), $arity, TheoryOperatorType::BinaryLeft); }
     //     | theory_op[op] enable_theory_definition_lexing COLON NUMBER[arity] COMMA BINARY COMMA RIGHT { $$ = BUILDER.theoryopdef(@$, String::fromRep($op), $arity, TheoryOperatorType::BinaryRight); }
     //     ;
-
+    theory_operator_definition: $ => choice(
+      seq($.theory_op, $.COLON, $.NUMBER, $.COMMA, $.UNARY),
+      seq($.theory_op, $.COLON, $.NUMBER, $.COMMA, $.BINARY, $.COMMA, $.LEFT),
+      seq($.theory_op, $.COLON, $.NUMBER, $.COMMA, $.BINARY, $.COMMA, $.RIGHT),
+    ),
     // theory_operator_definition_nlist
     //     : theory_operator_definition[def]                                                                 { $$ = BUILDER.theoryopdefs(BUILDER.theoryopdefs(), $def); }
     //     | theory_operator_definition_nlist[defs] enable_theory_lexing SEM theory_operator_definition[def] { $$ = BUILDER.theoryopdefs($defs, $def); }
@@ -1088,6 +1144,10 @@ module.exports = grammar({
     //     : theory_operator_definition_nlist[defs] { $$ = $defs; }
     //     |                                        { $$ = BUILDER.theoryopdefs(); }
     //     ;
+    theory_operator_definition_nlist: $ => choice(
+      $.theory_operator_definition,
+      seq($.theory_operator_definition_nlist, $.SEM, $.theory_operator_definition)
+    ),
 
     // theory_definition_identifier
     //     : identifier[id] { $$ = $id; }
@@ -1100,75 +1160,66 @@ module.exports = grammar({
     //     | ANY            { $$ = String::toRep("any"); }
     //     | DIRECTIVE      { $$ = String::toRep("directive"); }
     //     ;
-
+    theory_definition_identifier: $ => choice(
+      $.identifier,
+      $.LEFT,
+      $.RIGHT,
+      $.UNARY,
+      $.BINARY,
+      $.HEAD,
+      $.BODY,
+      $.ANY,
+      $.DIRECTIVE
+    ),
     // theory_term_definition
     //     : theory_definition_identifier[name] enable_theory_lexing LBRACE theory_operator_definiton_list[ops] enable_theory_definition_lexing RBRACE { $$ = BUILDER.theorytermdef(@$, String::fromRep($name), $ops, LOGGER); }
     //     ;
-
+    theory_term_definition: $ => choice(
+      seq($.theory_definition_identifier, $.LBRACE, $.RBRACE),
+      seq($.theory_definition_identifier, $.LBRACE, $.theory_operator_definition_nlist, $.RBRACE)),
     // theory_atom_type
     //     : HEAD      { $$ = TheoryAtomType::Head; }
     //     | BODY      { $$ = TheoryAtomType::Body; }
     //     | ANY       { $$ = TheoryAtomType::Any; }
     //     | DIRECTIVE { $$ = TheoryAtomType::Directive; }
     //     ;
-
+    theory_atom_type: $ => choice(
+      $.HEAD,
+      $.BODY,
+      $.ANY,
+      $.DIRECTIVE
+    ),
     // theory_atom_definition
     //     : AND theory_definition_identifier[name] SLASH NUMBER[arity] COLON theory_definition_identifier[termdef] COMMA
     //       enable_theory_lexing LBRACE theory_operator_list[ops] enable_theory_definition_lexing RBRACE COMMA theory_definition_identifier[guarddef] COMMA theory_atom_type[type] { $$ = BUILDER.theoryatomdef(@$, String::fromRep($name), $arity, String::fromRep($termdef), $type, $ops, String::fromRep($guarddef)); }
     //     | AND theory_definition_identifier[name] SLASH NUMBER[arity] COLON theory_definition_identifier[termdef] COMMA                                    theory_atom_type[type] { $$ = BUILDER.theoryatomdef(@$, String::fromRep($name), $arity, String::fromRep($termdef), $type); }
     //     ;
 
+    theory_atom_definition: $ => choice(
+      seq($.AND, $.theory_definition_identifier, $.SLASH, $.NUMBER, $.COLON, $.theory_definition_identifier, $.COMMA, $.LBRACE, $.RBRACE, $.COMMA, $.theory_definition_identifier, $.COMMA, $.theory_atom_type),
+      seq($.AND, $.theory_definition_identifier, $.SLASH, $.NUMBER, $.COLON, $.theory_definition_identifier, $.COMMA, $.LBRACE, $.theory_operator_nlist, $.RBRACE, $.COMMA, $.theory_definition_identifier, $.COMMA, $.theory_atom_type),
+      seq($.AND, $.theory_definition_identifier, $.SLASH, $.NUMBER, $.COLON, $.theory_definition_identifier, $.COMMA, $.theory_atom_type)
+    ),
     // theory_definition_nlist
     //     : theory_definition_list[defs] SEM theory_atom_definition[def] { $$ = BUILDER.theorydefs($defs, $def); }
     //     | theory_definition_list[defs] SEM theory_term_definition[def] { $$ = BUILDER.theorydefs($defs, $def); }
     //     | theory_atom_definition[def] { $$ = BUILDER.theorydefs(BUILDER.theorydefs(), $def); }
     //     | theory_term_definition[def] { $$ = BUILDER.theorydefs(BUILDER.theorydefs(), $def); }
     //     ;
-
     // theory_definition_list
     //     : theory_definition_nlist[defs] { $$ = $defs; }
     //     |                               { $$ = BUILDER.theorydefs(); }
     //     ;
-
-    // statement
-    //     : THEORY identifier[name] enable_theory_definition_lexing LBRACE theory_definition_list[defs] RBRACE disable_theory_lexing DOT { BUILDER.theorydef(@$, String::fromRep($name), $defs, LOGGER); }
-    //     ;
-
-    // // {{{2 lexing
-
-    // enable_theory_lexing
-    //     : { lexer->theoryLexing(TheoryLexing::Theory); }
-    //     ;
-
-    // enable_theory_definition_lexing
-    //     : { lexer->theoryLexing(TheoryLexing::Definition); }
-    //     ;
-
-    // disable_theory_lexing
-    //     : { lexer->theoryLexing(TheoryLexing::Disabled); }
-    //     ;
+    theory_definition_nlist: $ => choice(
+      $.theory_atom_definition,
+      $.theory_term_definition,
+      seq($.theory_atom_definition, $.SEM, $.theory_definition_nlist),
+      seq($.theory_term_definition, $.SEM, $.theory_definition_nlist),
+    ),
 
 
     // infimum: $ => token(seq($.INFIMUM, optional('imum'))),
     // supremum: $ => token(seq($.SUPREMUM, optional('remum'))),
-    ANONYMOUS: $ => '_',
-    VARIABLE: $ => token(seq(repeat('_'), /[A-Z]/, repeat(/[A-Za-z0-9_']/))),
-    identifier: $ => token(seq(repeat('_'), /[a-z]/, repeat(/[A-Za-z0-9_]/))),
-    //Introduced to disallow white space after identifier followed by a bracket ie. not 'bla ()' but 'bla()'
-    _widentifier: $ => seq($.identifier,alias(token.immediate('('), $.LPAREN)),
-    
-
-
-    NUMBER: $ => choice(
-      $.dec,
-      $.hex,
-      $.oct,
-      $.bin,
-    ),
-    dec: $ => choice('0',/([1-9][0-9]*)/),
-    hex: $ =>  token(seq('0x',/([0-9A-Fa-f]+)/)),
-    oct: $ =>  token(seq('0o',/([1-7]+)/)),
-    bin: $ =>  token(seq('0b',/([0-1]+)/)),
  
     ////////// TODO: This is taken from tree-sitter-java! ////////////
     // Here we tolerate unescaped newlines in double-quoted and

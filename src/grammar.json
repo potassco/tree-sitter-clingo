@@ -298,6 +298,175 @@
       "type": "STRING",
       "value": "^"
     },
+    "ANY": {
+      "type": "STRING",
+      "value": "any"
+    },
+    "UNARY": {
+      "type": "STRING",
+      "value": "unary"
+    },
+    "BINARY": {
+      "type": "STRING",
+      "value": "binary"
+    },
+    "LEFT": {
+      "type": "STRING",
+      "value": "left"
+    },
+    "RIGHT": {
+      "type": "STRING",
+      "value": "right"
+    },
+    "HEAD": {
+      "type": "STRING",
+      "value": "head"
+    },
+    "BODY": {
+      "type": "STRING",
+      "value": "body"
+    },
+    "DIRECTIVE": {
+      "type": "STRING",
+      "value": "directive"
+    },
+    "THEORY": {
+      "type": "STRING",
+      "value": "#theory"
+    },
+    "NUMBER": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "dec"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "hex"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "oct"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "bin"
+        }
+      ]
+    },
+    "dec": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "0"
+        },
+        {
+          "type": "PATTERN",
+          "value": "([1-9][0-9]*)"
+        }
+      ]
+    },
+    "hex": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "0x"
+          },
+          {
+            "type": "PATTERN",
+            "value": "([0-9A-Fa-f]+)"
+          }
+        ]
+      }
+    },
+    "oct": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "0o"
+          },
+          {
+            "type": "PATTERN",
+            "value": "([1-7]+)"
+          }
+        ]
+      }
+    },
+    "bin": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "0b"
+          },
+          {
+            "type": "PATTERN",
+            "value": "([0-1]+)"
+          }
+        ]
+      }
+    },
+    "ANONYMOUS": {
+      "type": "STRING",
+      "value": "_"
+    },
+    "identifier": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "STRING",
+              "value": "_"
+            }
+          },
+          {
+            "type": "PATTERN",
+            "value": "[a-z]"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "PATTERN",
+              "value": "[A-Za-z0-9_]"
+            }
+          }
+        ]
+      }
+    },
+    "_widentifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "IMMEDIATE_TOKEN",
+            "content": {
+              "type": "STRING",
+              "value": "("
+            }
+          },
+          "named": true,
+          "value": "LPAREN"
+        }
+      ]
+    },
     "SCRIPT": {
       "type": "STRING",
       "value": "#script"
@@ -334,6 +503,36 @@
           }
         ]
       }
+    },
+    "VARIABLE": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "STRING",
+              "value": "_"
+            }
+          },
+          {
+            "type": "PATTERN",
+            "value": "[A-Z]"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "PATTERN",
+              "value": "[A-Za-z0-9_']"
+            }
+          }
+        ]
+      }
+    },
+    "THEORY_OP": {
+      "type": "PATTERN",
+      "value": "[/!<=>+\\-*\\\\?&@|:;~\\^\\.]+"
     },
     "NOT": {
       "type": "STRING",
@@ -4942,6 +5141,60 @@
               "name": "RBRACK"
             }
           ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "THEORY"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "DOT"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "THEORY"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "DOT"
+            }
+          ]
         }
       ]
     },
@@ -5340,6 +5593,384 @@
         }
       ]
     },
+    "theory_op": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "THEORY_OP"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "NOT"
+        }
+      ]
+    },
+    "theory_op_list": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_op_list"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_op"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "theory_op"
+        }
+      ]
+    },
+    "theory_term": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACE"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACE"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "LBRACK"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACK"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "LBRACK"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACK"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "LPAREN"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RPAREN"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "LPAREN"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RPAREN"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "LPAREN"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RPAREN"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "LPAREN"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RPAREN"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LPAREN"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RPAREN"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LPAREN"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RPAREN"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "NUMBER"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "STRING"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "INFIMUM"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "SUPREMUM"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "VARIABLE"
+        }
+      ]
+    },
+    "theory_opterm": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_op_list"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_term"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_op_list"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_term"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "theory_term"
+        }
+      ]
+    },
+    "theory_opterm_nlist": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "theory_opterm"
+        }
+      ]
+    },
+    "theory_atom_element": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm_nlist"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "noptcondition"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "COLON"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "COLON"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "nlitvec"
+            }
+          ]
+        }
+      ]
+    },
+    "theory_atom_element_nlist": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_atom_element_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "SEM"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_atom_element"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "theory_atom_element"
+        }
+      ]
+    },
     "theory_atom_name": {
       "type": "CHOICE",
       "members": [
@@ -5394,167 +6025,576 @@
               "name": "theory_atom_name"
             }
           ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "AND"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_atom_name"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACE"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "AND"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_atom_name"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_atom_element_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACE"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "AND"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_atom_name"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_op"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "AND"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_atom_name"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_atom_element_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_op"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_opterm"
+            }
+          ]
         }
       ]
     },
-    "ANONYMOUS": {
-      "type": "STRING",
-      "value": "_"
+    "theory_operator_nlist": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "theory_op"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_operator_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_op"
+            }
+          ]
+        }
+      ]
     },
-    "VARIABLE": {
-      "type": "TOKEN",
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "REPEAT",
-            "content": {
-              "type": "STRING",
-              "value": "_"
+    "theory_operator_definition": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_op"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COLON"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "NUMBER"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "UNARY"
             }
-          },
-          {
-            "type": "PATTERN",
-            "value": "[A-Z]"
-          },
-          {
-            "type": "REPEAT",
-            "content": {
-              "type": "PATTERN",
-              "value": "[A-Za-z0-9_']"
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_op"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COLON"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "NUMBER"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "BINARY"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LEFT"
             }
-          }
-        ]
-      }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_op"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COLON"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "NUMBER"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "BINARY"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RIGHT"
+            }
+          ]
+        }
+      ]
     },
-    "identifier": {
-      "type": "TOKEN",
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "REPEAT",
-            "content": {
-              "type": "STRING",
-              "value": "_"
+    "theory_operator_definition_nlist": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "theory_operator_definition"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_operator_definition_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "SEM"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_operator_definition"
             }
-          },
-          {
-            "type": "PATTERN",
-            "value": "[a-z]"
-          },
-          {
-            "type": "REPEAT",
-            "content": {
-              "type": "PATTERN",
-              "value": "[A-Za-z0-9_]"
-            }
-          }
-        ]
-      }
+          ]
+        }
+      ]
     },
-    "_widentifier": {
-      "type": "SEQ",
+    "theory_definition_identifier": {
+      "type": "CHOICE",
       "members": [
         {
           "type": "SYMBOL",
           "name": "identifier"
         },
         {
-          "type": "ALIAS",
-          "content": {
-            "type": "IMMEDIATE_TOKEN",
-            "content": {
-              "type": "STRING",
-              "value": "("
+          "type": "SYMBOL",
+          "name": "LEFT"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "RIGHT"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "UNARY"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "BINARY"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "HEAD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "BODY"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "ANY"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "DIRECTIVE"
+        }
+      ]
+    },
+    "theory_term_definition": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACE"
             }
-          },
-          "named": true,
-          "value": "LPAREN"
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_operator_definition_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACE"
+            }
+          ]
         }
       ]
     },
-    "NUMBER": {
+    "theory_atom_type": {
       "type": "CHOICE",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "dec"
+          "name": "HEAD"
         },
         {
           "type": "SYMBOL",
-          "name": "hex"
+          "name": "BODY"
         },
         {
           "type": "SYMBOL",
-          "name": "oct"
+          "name": "ANY"
         },
         {
           "type": "SYMBOL",
-          "name": "bin"
+          "name": "DIRECTIVE"
         }
       ]
     },
-    "dec": {
+    "theory_atom_definition": {
       "type": "CHOICE",
       "members": [
         {
-          "type": "STRING",
-          "value": "0"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "AND"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "SLASH"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "NUMBER"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COLON"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_atom_type"
+            }
+          ]
         },
         {
-          "type": "PATTERN",
-          "value": "([1-9][0-9]*)"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "AND"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "SLASH"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "NUMBER"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COLON"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_operator_nlist"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "RBRACE"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_atom_type"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "AND"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "SLASH"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "NUMBER"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COLON"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "COMMA"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_atom_type"
+            }
+          ]
         }
       ]
     },
-    "hex": {
-      "type": "TOKEN",
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "0x"
-          },
-          {
-            "type": "PATTERN",
-            "value": "([0-9A-Fa-f]+)"
-          }
-        ]
-      }
-    },
-    "oct": {
-      "type": "TOKEN",
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "0o"
-          },
-          {
-            "type": "PATTERN",
-            "value": "([1-7]+)"
-          }
-        ]
-      }
-    },
-    "bin": {
-      "type": "TOKEN",
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "0b"
-          },
-          {
-            "type": "PATTERN",
-            "value": "([0-1]+)"
-          }
-        ]
-      }
+    "theory_definition_nlist": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "theory_atom_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "theory_term_definition"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_atom_definition"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "SEM"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_nlist"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "theory_term_definition"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "SEM"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "theory_definition_nlist"
+            }
+          ]
+        }
+      ]
     },
     "STRING": {
       "type": "CHOICE",

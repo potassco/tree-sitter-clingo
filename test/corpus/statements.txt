@@ -78,3 +78,137 @@ more script code
     (RPAREN)
     (CODE)
     (DOT)))
+
+==================
+theory definition
+==================
+
+#theory lp { 
+    lin_term {
+    + : 0, binary, left
+    };
+    bounds{
+    + : 0, binary, left
+    };
+
+    &op/0   : lin_term, {<=,>=,>,<,=,!=}, bounds, any
+}.
+
+---
+(source_file
+  (statement
+    (THEORY)
+    (identifier)
+    (LBRACE)
+    (theory_definition_nlist
+      (theory_term_definition
+        (theory_definition_identifier
+          (identifier))
+        (LBRACE)
+        (theory_operator_definition_nlist
+          (theory_operator_definition
+            (theory_op
+              (THEORY_OP))
+            (COLON)
+            (NUMBER
+              (dec))
+            (COMMA)
+            (BINARY)
+            (COMMA)
+            (LEFT)))
+        (RBRACE))
+      (SEM)
+      (theory_definition_nlist
+        (theory_term_definition
+          (theory_definition_identifier
+            (identifier))
+          (LBRACE)
+          (theory_operator_definition_nlist
+            (theory_operator_definition
+              (theory_op
+                (THEORY_OP))
+              (COLON)
+              (NUMBER
+                (dec))
+              (COMMA)
+              (BINARY)
+              (COMMA)
+              (LEFT)))
+          (RBRACE))
+        (SEM)
+        (theory_definition_nlist
+          (theory_atom_definition
+            (AND)
+            (theory_definition_identifier
+              (identifier))
+            (SLASH)
+            (NUMBER
+              (dec))
+            (COLON)
+            (theory_definition_identifier
+              (identifier))
+            (COMMA)
+            (LBRACE)
+            (theory_operator_nlist
+              (theory_operator_nlist
+                (theory_operator_nlist
+                  (theory_operator_nlist
+                    (theory_operator_nlist
+                      (theory_operator_nlist
+                        (theory_op
+                          (THEORY_OP)))
+                      (COMMA)
+                      (theory_op
+                        (THEORY_OP)))
+                    (COMMA)
+                    (theory_op
+                      (THEORY_OP)))
+                  (COMMA)
+                  (theory_op
+                    (THEORY_OP)))
+                (COMMA)
+                (theory_op
+                  (THEORY_OP)))
+              (COMMA)
+              (theory_op
+                (THEORY_OP)))
+            (RBRACE)
+            (COMMA)
+            (theory_definition_identifier
+              (identifier))
+            (COMMA)
+            (theory_atom_type
+              (ANY))))))
+    (RBRACE)
+    (DOT)))
+
+==================
+theory atom
+==================
+
+&sum{x} >= 4000.
+
+---
+(source_file
+  (statement
+    (head
+      (luheadaggregate
+        (theory_atom
+          (AND)
+          (theory_atom_name
+            (identifier))
+          (LBRACE)
+          (theory_atom_element_nlist
+            (theory_atom_element
+              (theory_opterm_nlist
+                (theory_opterm
+                  (theory_term
+                    (identifier))))))
+          (RBRACE)
+          (theory_op
+            (THEORY_OP))
+          (theory_opterm
+            (theory_term
+              (NUMBER
+                (dec)))))))
+    (DOT)))

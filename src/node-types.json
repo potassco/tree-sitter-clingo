@@ -1520,6 +1520,10 @@
           "named": true
         },
         {
+          "type": "THEORY",
+          "named": true
+        },
+        {
           "type": "WIF",
           "named": true
         },
@@ -1577,6 +1581,10 @@
         },
         {
           "type": "term",
+          "named": true
+        },
+        {
+          "type": "theory_definition_nlist",
           "named": true
         }
       ]
@@ -1706,7 +1714,128 @@
           "named": true
         },
         {
+          "type": "LBRACE",
+          "named": true
+        },
+        {
+          "type": "RBRACE",
+          "named": true
+        },
+        {
+          "type": "theory_atom_element_nlist",
+          "named": true
+        },
+        {
           "type": "theory_atom_name",
+          "named": true
+        },
+        {
+          "type": "theory_op",
+          "named": true
+        },
+        {
+          "type": "theory_opterm",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_atom_definition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "AND",
+          "named": true
+        },
+        {
+          "type": "COLON",
+          "named": true
+        },
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "LBRACE",
+          "named": true
+        },
+        {
+          "type": "NUMBER",
+          "named": true
+        },
+        {
+          "type": "RBRACE",
+          "named": true
+        },
+        {
+          "type": "SLASH",
+          "named": true
+        },
+        {
+          "type": "theory_atom_type",
+          "named": true
+        },
+        {
+          "type": "theory_definition_identifier",
+          "named": true
+        },
+        {
+          "type": "theory_operator_nlist",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_atom_element",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COLON",
+          "named": true
+        },
+        {
+          "type": "nlitvec",
+          "named": true
+        },
+        {
+          "type": "noptcondition",
+          "named": true
+        },
+        {
+          "type": "theory_opterm_nlist",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_atom_element_nlist",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "SEM",
+          "named": true
+        },
+        {
+          "type": "theory_atom_element",
+          "named": true
+        },
+        {
+          "type": "theory_atom_element_nlist",
           "named": true
         }
       ]
@@ -1734,6 +1863,378 @@
         },
         {
           "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_atom_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "ANY",
+          "named": true
+        },
+        {
+          "type": "BODY",
+          "named": true
+        },
+        {
+          "type": "DIRECTIVE",
+          "named": true
+        },
+        {
+          "type": "HEAD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_definition_identifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "ANY",
+          "named": true
+        },
+        {
+          "type": "BINARY",
+          "named": true
+        },
+        {
+          "type": "BODY",
+          "named": true
+        },
+        {
+          "type": "DIRECTIVE",
+          "named": true
+        },
+        {
+          "type": "HEAD",
+          "named": true
+        },
+        {
+          "type": "LEFT",
+          "named": true
+        },
+        {
+          "type": "RIGHT",
+          "named": true
+        },
+        {
+          "type": "UNARY",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_definition_nlist",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "SEM",
+          "named": true
+        },
+        {
+          "type": "theory_atom_definition",
+          "named": true
+        },
+        {
+          "type": "theory_definition_nlist",
+          "named": true
+        },
+        {
+          "type": "theory_term_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_op",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "NOT",
+          "named": true
+        },
+        {
+          "type": "THEORY_OP",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_op_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "theory_op",
+          "named": true
+        },
+        {
+          "type": "theory_op_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_operator_definition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "BINARY",
+          "named": true
+        },
+        {
+          "type": "COLON",
+          "named": true
+        },
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "LEFT",
+          "named": true
+        },
+        {
+          "type": "NUMBER",
+          "named": true
+        },
+        {
+          "type": "RIGHT",
+          "named": true
+        },
+        {
+          "type": "UNARY",
+          "named": true
+        },
+        {
+          "type": "theory_op",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_operator_definition_nlist",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "SEM",
+          "named": true
+        },
+        {
+          "type": "theory_operator_definition",
+          "named": true
+        },
+        {
+          "type": "theory_operator_definition_nlist",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_operator_nlist",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "theory_op",
+          "named": true
+        },
+        {
+          "type": "theory_operator_nlist",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_opterm",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "theory_op_list",
+          "named": true
+        },
+        {
+          "type": "theory_opterm",
+          "named": true
+        },
+        {
+          "type": "theory_term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_opterm_nlist",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "theory_opterm",
+          "named": true
+        },
+        {
+          "type": "theory_opterm_nlist",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_term",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "INFIMUM",
+          "named": true
+        },
+        {
+          "type": "LBRACE",
+          "named": true
+        },
+        {
+          "type": "LBRACK",
+          "named": true
+        },
+        {
+          "type": "LPAREN",
+          "named": true
+        },
+        {
+          "type": "NUMBER",
+          "named": true
+        },
+        {
+          "type": "RBRACE",
+          "named": true
+        },
+        {
+          "type": "RBRACK",
+          "named": true
+        },
+        {
+          "type": "RPAREN",
+          "named": true
+        },
+        {
+          "type": "STRING",
+          "named": true
+        },
+        {
+          "type": "SUPREMUM",
+          "named": true
+        },
+        {
+          "type": "VARIABLE",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "theory_opterm",
+          "named": true
+        },
+        {
+          "type": "theory_opterm_nlist",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_term_definition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "LBRACE",
+          "named": true
+        },
+        {
+          "type": "RBRACE",
+          "named": true
+        },
+        {
+          "type": "theory_definition_identifier",
+          "named": true
+        },
+        {
+          "type": "theory_operator_definition_nlist",
           "named": true
         }
       ]
@@ -1814,7 +2315,15 @@
     "named": true
   },
   {
+    "type": "ANY",
+    "named": true
+  },
+  {
     "type": "AT",
+    "named": true
+  },
+  {
+    "type": "BINARY",
     "named": true
   },
   {
@@ -1823,6 +2332,10 @@
   },
   {
     "type": "BNOT",
+    "named": true
+  },
+  {
+    "type": "BODY",
     "named": true
   },
   {
@@ -1894,6 +2407,10 @@
     "named": true
   },
   {
+    "type": "DIRECTIVE",
+    "named": true
+  },
+  {
     "type": "DISJOINT",
     "named": true
   },
@@ -1930,6 +2447,10 @@
     "named": true
   },
   {
+    "type": "HEAD",
+    "named": true
+  },
+  {
     "type": "HEURISTIC",
     "named": true
   },
@@ -1951,6 +2472,10 @@
   },
   {
     "type": "LBRACK",
+    "named": true
+  },
+  {
+    "type": "LEFT",
     "named": true
   },
   {
@@ -2022,6 +2547,10 @@
     "named": true
   },
   {
+    "type": "RIGHT",
+    "named": true
+  },
+  {
     "type": "RPAREN",
     "named": true
   },
@@ -2062,7 +2591,19 @@
     "named": true
   },
   {
+    "type": "THEORY",
+    "named": true
+  },
+  {
+    "type": "THEORY_OP",
+    "named": true
+  },
+  {
     "type": "TRUE",
+    "named": true
+  },
+  {
+    "type": "UNARY",
     "named": true
   },
   {
