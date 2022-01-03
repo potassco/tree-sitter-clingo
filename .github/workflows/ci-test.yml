@@ -1,0 +1,24 @@
+name: CI Test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install tree-sitter CLI
+      run: npm install tree-sitter-cli
+    - name: Run tests
+      run: ./node_modules/tree-sitter-cli/tree-sitter test
+    
+    - name: Build
+      run: cargo build --verbose
+    - name: Run tests
+      run: cargo test --verbose
