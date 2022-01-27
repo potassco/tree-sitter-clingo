@@ -58,6 +58,23 @@ constant declaration
     (DOT)))
 
 ==================
+constant declaration
+==================
+
+#const n="test%".
+
+---
+(source_file
+  (statement
+    (CONST)
+    (identifier)
+    (EQ)
+    (constterm
+      (STRING
+        (string_fragment)))
+    (DOT)))
+
+==================
 embedded script
 ==================
 
