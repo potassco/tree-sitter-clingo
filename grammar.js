@@ -9,12 +9,13 @@ module.exports = grammar({
     // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
     // Taken from tree-sitter-prolog
     comment: $ => token(choice(
-      seq('%', /.*/),
+      seq('%', /[^*]/, /.* /),
       seq(
         '%*',
         /[^*]*\*+([^%*][^*]*\*+)*/,
         '%'
-      )
+      ),
+      '%'
     )),
 
 //     token
