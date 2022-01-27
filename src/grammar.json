@@ -22,7 +22,11 @@
               },
               {
                 "type": "PATTERN",
-                "value": ".*"
+                "value": "[^*]"
+              },
+              {
+                "type": "PATTERN",
+                "value": ".* "
               }
             ]
           },
@@ -42,6 +46,10 @@
                 "value": "%"
               }
             ]
+          },
+          {
+            "type": "STRING",
+            "value": "%"
           }
         ]
       }
