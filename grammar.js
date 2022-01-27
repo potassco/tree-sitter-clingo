@@ -1,7 +1,7 @@
 module.exports = grammar({
   name: 'clingo',
-  extras: $ => [$.comment,/\s/],
-  
+  extras: $ => [$.comment, /\s/],
+
   rules: {
 
     source_file: $ => repeat($.statement),
@@ -18,12 +18,12 @@ module.exports = grammar({
       '%'
     )),
 
-//     token
-  ADD: $ => '+',
+    //     token
+    ADD: $ => '+',
     AND: $ => '&',
     EQ: $ => '=',
     AT: $ => '@',
-//     BASE        "#base"
+    //     BASE        "#base"
     BNOT: $ => '~',
     COLON: $ => ':',
     COMMA: $ => ',',
@@ -39,15 +39,15 @@ module.exports = grammar({
     CSP_GEQ: $ => '$>=',
     CSP_EQ: $ => '$=',
     CSP_NEQ: $ => '$!=',
-//     CUMULATIVE  "#cumulative"
+    //     CUMULATIVE  "#cumulative"
     DISJOINT: $ => '#disjoint',
     DOT: $ => '.',
     DOTS: $ => '..',
-//     END         0 "<EOF>"
+    //     END         0 "<EOF>"
     EXTERNAL: $ => '#external',
     DEFINED: $ => '#defined',
     FALSE: $ => '#false',
-//     FORGET      "#forget"
+    //     FORGET      "#forget"
     GEQ: $ => '>=',
     GT: $ => '>',
     IF: $ => ':-',
@@ -83,14 +83,14 @@ module.exports = grammar({
     SUPREMUM: $ => '#sup',
     TRUE: $ => '#true',
     BLOCK: $ => '#program',
-//     UBNOT
-//     UMINUS
+    //     UBNOT
+    //     UMINUS
     VBAR: $ => '|',
-//     VOLATILE    "#volatile"
+    //     VOLATILE    "#volatile"
     WIF: $ => ':~',
     XOR: $ => '^',
-//     PARSE_LP    "<program>"
-//     PARSE_DEF   "<define>"
+    //     PARSE_LP    "<program>"
+    //     PARSE_DEF   "<define>"
     ANY: $ => 'any',
     UNARY: $ => 'unary',
     BINARY: $ => 'binary',
@@ -100,10 +100,10 @@ module.exports = grammar({
     BODY: $ => 'body',
     DIRECTIVE: $ => 'directive',
     THEORY: $ => '#theory',
-//     SYNC        "EOF"
+    //     SYNC        "EOF"
 
 
-//     NUMBER     "<NUMBER>"
+    //     NUMBER     "<NUMBER>"
     NUMBER: $ => choice(
       $.dec,
       $.hex,
@@ -115,10 +115,10 @@ module.exports = grammar({
     oct: $ => token(seq('0o', /([1-7]+)/)),
     bin: $ => token(seq('0b', /([0-1]+)/)),
 
-// %token <str>
-//     ANONYMOUS  "<ANONYMOUS>"
+    // %token <str>
+    //     ANONYMOUS  "<ANONYMOUS>"
     ANONYMOUS: $ => '_',
-//     IDENTIFIER "<IDENTIFIER>"
+    //     IDENTIFIER "<IDENTIFIER>"
     identifier: $ => token(seq(repeat('_'), /[a-z]/, repeat(/[A-Za-z0-9_]/))),
     //Introduced to disallow white space after identifier followed by a bracket ie. not 'bla ()' but 'bla()'
     _widentifier: $ => seq($.identifier, alias(token.immediate('('), $.LPAREN)),
@@ -129,7 +129,7 @@ module.exports = grammar({
     CODE: $ => token(choice(
       seq(/[^#]*/, /(#+[^e][^#]*)*/, /(#+e*[^n][^#]*)*/, /(#+e*n*[^d][^#]*)*/, '#end'),
     )),
-//     STRING     "<STRING>"
+    //     STRING     "<STRING>"
     VARIABLE: $ => token(seq(repeat('_'), /[A-Z]/, repeat(/[A-Za-z0-9_']/))),
     THEORY_OP: $ => /[/!<=>+\-*\\?&@|:;~\^\.]+/,
     NOT: $ => 'not',
@@ -165,23 +165,23 @@ module.exports = grammar({
     //     | SUPREMUM[a]                                      { $$ = BUILDER.term(@$, Symbol::createSup()); }
     //     ;
     constterm: $ => choice(
-      prec.left(7, seq( $.constterm, $.XOR, $.constterm)),
-      prec.left(6, seq( $.constterm, $.QUESTION, $.constterm)),
-      prec.left(5, seq( $.constterm, $.AND, $.constterm)),
-      prec.left(4, seq( $.constterm, $.ADD, $.constterm)),
-      prec.left(4, seq( $.constterm, $.SUB, $.constterm)),
-      prec.left(3, seq( $.constterm, $.MUL, $.constterm)),
-      prec.left(3, seq( $.constterm, $.SLASH, $.constterm)),
-      prec.left(3, seq( $.constterm, $.MOD, $.constterm)),
-      prec.right(2, seq( $.constterm, $.POW, $.constterm)),
+      prec.left(7, seq($.constterm, $.XOR, $.constterm)),
+      prec.left(6, seq($.constterm, $.QUESTION, $.constterm)),
+      prec.left(5, seq($.constterm, $.AND, $.constterm)),
+      prec.left(4, seq($.constterm, $.ADD, $.constterm)),
+      prec.left(4, seq($.constterm, $.SUB, $.constterm)),
+      prec.left(3, seq($.constterm, $.MUL, $.constterm)),
+      prec.left(3, seq($.constterm, $.SLASH, $.constterm)),
+      prec.left(3, seq($.constterm, $.MOD, $.constterm)),
+      prec.right(2, seq($.constterm, $.POW, $.constterm)),
       prec.left(1, seq($.SUB, $.constterm)),
       prec.left(1, seq($.BNOT, $.constterm)),
-      seq($.LPAREN,              $.RPAREN),
+      seq($.LPAREN, $.RPAREN),
       seq($.LPAREN, $.consttermvec, $.RPAREN),
       seq($.LPAREN, $.consttermvec, $.COMMA, $.RPAREN),
-      seq($._widentifier,                 $.RPAREN),
+      seq($._widentifier, $.RPAREN),
       seq($._widentifier, $.nconstargvec, $.RPAREN),
-      seq($.AT, $._widentifier,                 $.RPAREN),
+      seq($.AT, $._widentifier, $.RPAREN),
       seq($.AT, $._widentifier, $.nconstargvec, $.RPAREN),
       seq($.VBAR, $.constterm, $.VBAR),
       $.identifier,
@@ -248,7 +248,7 @@ module.exports = grammar({
       prec.right(2, seq($.term, $.POW, $.term)),
       prec.left(1, seq($.SUB, $.term)),
       prec.left(1, seq($.BNOT, $.term)),
-      seq($.LPAREN,              $.RPAREN),
+      seq($.LPAREN, $.RPAREN),
       seq($.LPAREN, $.ntuplevec, $.RPAREN),
       seq($._widentifier, $.argvec, $.RPAREN),
       seq($.AT, $._widentifier, $.argvec, $.RPAREN),
@@ -262,7 +262,7 @@ module.exports = grammar({
       $.VARIABLE,
       $.ANONYMOUS,
     ),
-    
+
     // unaryargvec
     //     : term[a]                    { $$ = BUILDER.termvec(BUILDER.termvec(), $a); }
     //     | unaryargvec[a] SEM term[b] { $$ = BUILDER.termvec($a, $b); }
@@ -301,9 +301,9 @@ module.exports = grammar({
     //     :                 tuple[b] SEM { $$ = BUILDER.termvec(BUILDER.termvec(), $b); }
     //     | tuplevec_sem[a] tuple[b] SEM { $$ = BUILDER.termvec($a, $b); }
     tuplevec_sem: $ => choice(
-      seq(          $.SEM),
+      seq($.SEM),
       seq($.ntuple, $.SEM),
-      seq($.tuplevec_sem,           $.SEM),
+      seq($.tuplevec_sem, $.SEM),
       seq($.tuplevec_sem, $.ntuple, $.SEM),
     ),
 
@@ -311,7 +311,7 @@ module.exports = grammar({
     //     :                 tuple[b] { $$ = BUILDER.termvec(BUILDER.termvec(), $b); }
     //     | tuplevec_sem[a] tuple[b] { $$ = BUILDER.termvec($a, $b); }
     ntuplevec: $ => choice(
-      seq(                $.ntuple),
+      seq($.ntuple),
       seq($.tuplevec_sem, $.ntuple),
     ),
 
@@ -466,7 +466,7 @@ module.exports = grammar({
     //     |                   { $$ = BUILDER.litvec(); }
     //     ;
     noptcondition: $ => choice(
-      seq($.COLON           ),
+      seq($.COLON),
       seq($.COLON, $.nlitvec),
     ),
 
@@ -490,9 +490,9 @@ module.exports = grammar({
     //     | ntermvec[args] optcondition[cond] { $$ = { $args, $cond }; }
     //     ;
     bodyaggrelem: $ => choice(
-      seq($.COLON,          ), 
+      seq($.COLON,),
       seq($.COLON, $.nlitvec),
-      seq($.ntermvec,                ),
+      seq($.ntermvec,),
       seq($.ntermvec, $.noptcondition),
     ),
 
@@ -511,7 +511,7 @@ module.exports = grammar({
     //     : literal[lit] optcondition[cond] { $$ = { $lit, $cond }; }
     //     ;
     altbodyaggrelem: $ => choice(
-      seq($.literal,                ),
+      seq($.literal,),
       seq($.literal, $.noptcondition),
     ),
 
@@ -555,11 +555,11 @@ module.exports = grammar({
     //     | theory_atom[atom]                          { $$ = lexer->aggregate($atom); }
     //     ;
     lubodyaggregate: $ => choice(
-      seq($.term, $.bodyaggregate          ),
+      seq($.term, $.bodyaggregate),
       seq($.term, $.bodyaggregate, $.nupper),
-      seq($.term, $.cmp, $.bodyaggregate          ),
+      seq($.term, $.cmp, $.bodyaggregate),
       seq($.term, $.cmp, $.bodyaggregate, $.nupper),
-      seq($.bodyaggregate          ),
+      seq($.bodyaggregate),
       seq($.bodyaggregate, $.nupper),
       $.theory_atom
     ),
@@ -569,13 +569,13 @@ module.exports = grammar({
     //     | termvec[tuple] COLON literal[head] optcondition[cond]                          { $$ = BUILDER.headaggrelemvec(BUILDER.headaggrelemvec(), $tuple, $head, $cond); }
     //     ;
     headaggrelemvec: $ => choice(
-      seq($.headaggrelemvec, $.SEM,             $.COLON, $.literal,                ),
-      seq($.headaggrelemvec, $.SEM, $.ntermvec, $.COLON, $.literal,                ),
-      seq($.headaggrelemvec, $.SEM,             $.COLON, $.literal, $.noptcondition),
+      seq($.headaggrelemvec, $.SEM, $.COLON, $.literal,),
+      seq($.headaggrelemvec, $.SEM, $.ntermvec, $.COLON, $.literal,),
+      seq($.headaggrelemvec, $.SEM, $.COLON, $.literal, $.noptcondition),
       seq($.headaggrelemvec, $.SEM, $.ntermvec, $.COLON, $.literal, $.noptcondition),
-      seq(            $.COLON, $.literal,                ),
-      seq($.ntermvec, $.COLON, $.literal,                ),
-      seq(            $.COLON, $.literal, $.noptcondition),
+      seq($.COLON, $.literal,),
+      seq($.ntermvec, $.COLON, $.literal,),
+      seq($.COLON, $.literal, $.noptcondition),
       seq($.ntermvec, $.COLON, $.literal, $.noptcondition),
     ),
 
@@ -584,9 +584,9 @@ module.exports = grammar({
     //     | altheadaggrelemvec[vec] SEM literal[lit] optcondition[cond] { $$ = BUILDER.condlitvec($vec, $lit, $cond); }
     //     ;
     altheadaggrelemvec: $ => choice(
-      seq($.literal,                ),
+      seq($.literal,),
       seq($.literal, $.noptcondition),
-      seq($.altheadaggrelemvec, $.SEM, $.literal,                ),
+      seq($.altheadaggrelemvec, $.SEM, $.literal,),
       seq($.altheadaggrelemvec, $.SEM, $.literal, $.noptcondition),
     ),
 
@@ -610,11 +610,11 @@ module.exports = grammar({
     //     | theory_atom[atom]                          { $$ = lexer->aggregate($atom); }
     //     ;
     luheadaggregate: $ => choice(
-      seq($.term, $.headaggregate          ),
+      seq($.term, $.headaggregate),
       seq($.term, $.headaggregate, $.nupper),
-      seq($.term, $.cmp, $.headaggregate          ),
+      seq($.term, $.cmp, $.headaggregate),
       seq($.term, $.cmp, $.headaggregate, $.nupper),
-      seq($.headaggregate          ),
+      seq($.headaggregate),
       seq($.headaggregate, $.nupper),
       $.theory_atom,
     ),
@@ -628,14 +628,14 @@ module.exports = grammar({
     //     |                  { $$ = BUILDER.cspelemvec(); }
     //     ;
     ncspelemvec: $ => choice(
-      seq(                                $.COLON, $.csp_add_term,                ),
-      seq(                                $.COLON, $.csp_add_term, $.noptcondition),
-      seq(                    $.ntermvec, $.COLON, $.csp_add_term,                ),
-      seq(                    $.ntermvec, $.COLON, $.csp_add_term, $.noptcondition),
-      seq( $.ncspelemvec,$.SEM,             $.COLON, $.csp_add_term,                ),
-      seq( $.ncspelemvec,$.SEM,             $.COLON, $.csp_add_term, $.noptcondition),
-      seq( $.ncspelemvec,$.SEM, $.ntermvec, $.COLON, $.csp_add_term,                ),
-      seq( $.ncspelemvec,$.SEM, $.ntermvec, $.COLON, $.csp_add_term, $.noptcondition),
+      seq($.COLON, $.csp_add_term,),
+      seq($.COLON, $.csp_add_term, $.noptcondition),
+      seq($.ntermvec, $.COLON, $.csp_add_term,),
+      seq($.ntermvec, $.COLON, $.csp_add_term, $.noptcondition),
+      seq($.ncspelemvec, $.SEM, $.COLON, $.csp_add_term,),
+      seq($.ncspelemvec, $.SEM, $.COLON, $.csp_add_term, $.noptcondition),
+      seq($.ncspelemvec, $.SEM, $.ntermvec, $.COLON, $.csp_add_term,),
+      seq($.ncspelemvec, $.SEM, $.ntermvec, $.COLON, $.csp_add_term, $.noptcondition),
     ),
 
     // disjoint
@@ -644,11 +644,11 @@ module.exports = grammar({
     //     | NOT NOT DISJOINT LBRACE cspelemvec[elems] RBRACE { $$ = { NAF::NOTNOT, $elems }; }
     //     ;
     disjoint: $ => choice(
-      seq(            $.DISJOINT, $.LBRACE,                $.RBRACE),
-      seq(            $.DISJOINT, $.LBRACE, $.ncspelemvec, $.RBRACE),
-      seq(      $.NOT, $.DISJOINT, $.LBRACE,                $.RBRACE),
-      seq(      $.NOT, $.DISJOINT, $.LBRACE, $.ncspelemvec, $.RBRACE),
-      seq($.NOT, $.NOT, $.DISJOINT, $.LBRACE,                $.RBRACE),
+      seq($.DISJOINT, $.LBRACE, $.RBRACE),
+      seq($.DISJOINT, $.LBRACE, $.ncspelemvec, $.RBRACE),
+      seq($.NOT, $.DISJOINT, $.LBRACE, $.RBRACE),
+      seq($.NOT, $.DISJOINT, $.LBRACE, $.ncspelemvec, $.RBRACE),
+      seq($.NOT, $.NOT, $.DISJOINT, $.LBRACE, $.RBRACE),
       seq($.NOT, $.NOT, $.DISJOINT, $.LBRACE, $.ncspelemvec, $.RBRACE),
     ),
 
@@ -657,7 +657,7 @@ module.exports = grammar({
     //     : literal[lit] COLON litvec[cond] { $$ = { $lit, $cond }; }
     //     ;
     conjunction: $ => choice(
-      seq($.literal, $.COLON,          ),
+      seq($.literal, $.COLON,),
       seq($.literal, $.COLON, $.nlitvec)
     ),
 
@@ -698,9 +698,9 @@ module.exports = grammar({
     //     | literal[lit] COLON litvec[cond]                     { $$ = BUILDER.condlitvec(BUILDER.condlitvec(), $lit, $cond); }
     //     ;
     disjunction: $ => choice(
-      seq($.disjunctionsep, $.literal                 ),
+      seq($.disjunctionsep, $.literal),
       seq($.disjunctionsep, $.literal, $.noptcondition),
-      seq($.literal, $.COLON           ),
+      seq($.literal, $.COLON),
       seq($.literal, $.COLON, $.nlitvec)
     ),
 
@@ -718,25 +718,25 @@ module.exports = grammar({
     //     |                                                         { $$ = BUILDER.body(); }
     //     ;
     nbodycomma: $ => choice(
-      seq(              $.literal, $.COMMA),
+      seq($.literal, $.COMMA),
       seq($.nbodycomma, $.literal, $.COMMA),
-      seq(              $.literal, $.SEM),
+      seq($.literal, $.SEM),
       seq($.nbodycomma, $.literal, $.SEM),
-      seq(              $.lubodyaggregate, $.COMMA),
+      seq($.lubodyaggregate, $.COMMA),
       seq($.nbodycomma, $.lubodyaggregate, $.COMMA),
-      seq(              $.lubodyaggregate, $.SEM),
+      seq($.lubodyaggregate, $.SEM),
       seq($.nbodycomma, $.lubodyaggregate, $.SEM),
-      seq(              $.NOT, $.lubodyaggregate, $.COMMA),
+      seq($.NOT, $.lubodyaggregate, $.COMMA),
       seq($.nbodycomma, $.NOT, $.lubodyaggregate, $.COMMA),
-      seq(              $.NOT, $.lubodyaggregate, $.SEM),
+      seq($.NOT, $.lubodyaggregate, $.SEM),
       seq($.nbodycomma, $.NOT, $.lubodyaggregate, $.SEM),
-      seq(              $.NOT, $.NOT, $.lubodyaggregate, $.COMMA),
+      seq($.NOT, $.NOT, $.lubodyaggregate, $.COMMA),
       seq($.nbodycomma, $.NOT, $.NOT, $.lubodyaggregate, $.COMMA),
-      seq(              $.NOT, $.NOT, $.lubodyaggregate, $.SEM),
+      seq($.NOT, $.NOT, $.lubodyaggregate, $.SEM),
       seq($.nbodycomma, $.NOT, $.NOT, $.lubodyaggregate, $.SEM),
-      seq(              $.conjunction, $.SEM),
+      seq($.conjunction, $.SEM),
       seq($.nbodycomma, $.conjunction, $.SEM),
-      seq(              $.disjoint, $.SEM),
+      seq($.disjoint, $.SEM),
       seq($.nbodycomma, $.disjoint, $.SEM),
     ),
 
@@ -749,17 +749,17 @@ module.exports = grammar({
     //     | bodycomma[body] disjoint[cons] DOT                    { $$ = BUILDER.disjoint($body, @cons, $cons.first, $cons.second); }
     //     ;
     bodydot: $ => choice(
-      seq(              $.literal, $.DOT),
+      seq($.literal, $.DOT),
       seq($.nbodycomma, $.literal, $.DOT),
-      seq(              $.lubodyaggregate, $.DOT),
+      seq($.lubodyaggregate, $.DOT),
       seq($.nbodycomma, $.lubodyaggregate, $.DOT),
-      seq(              $.NOT, $.lubodyaggregate, $.DOT),
+      seq($.NOT, $.lubodyaggregate, $.DOT),
       seq($.nbodycomma, $.NOT, $.lubodyaggregate, $.DOT),
-      seq(              $.NOT, $.NOT, $.lubodyaggregate, $.DOT),
+      seq($.NOT, $.NOT, $.lubodyaggregate, $.DOT),
       seq($.nbodycomma, $.NOT, $.NOT, $.lubodyaggregate, $.DOT),
-      seq(              $.conjunction, $.DOT),
+      seq($.conjunction, $.DOT),
       seq($.nbodycomma, $.conjunction, $.DOT),
-      seq(              $.disjoint, $.DOT),
+      seq($.disjoint, $.DOT),
       seq($.nbodycomma, $.disjoint, $.DOT),
     ),
 
@@ -867,18 +867,18 @@ module.exports = grammar({
       seq($.disjoint, $.IF, $.bodydot),
       seq($.disjoint, $.IF, $.DOT),
       seq($.disjoint, $.DOT),
-      seq($.WIF, $.bodydot, $.LBRACK, $.optimizeweight,                   $.RBRACK),
+      seq($.WIF, $.bodydot, $.LBRACK, $.optimizeweight, $.RBRACK),
       seq($.WIF, $.bodydot, $.LBRACK, $.optimizeweight, $.noptimizetuple, $.RBRACK),
-      seq($.MINIMIZE,$.LBRACE,$.RBRACE, $.DOT),
-      seq($.MAXIMIZE,$.LBRACE,$.RBRACE, $.DOT),
-      seq($.MINIMIZE,$.LBRACE, $.minelemlist, $.RBRACE, $.DOT),
+      seq($.MINIMIZE, $.LBRACE, $.RBRACE, $.DOT),
+      seq($.MAXIMIZE, $.LBRACE, $.RBRACE, $.DOT),
+      seq($.MINIMIZE, $.LBRACE, $.minelemlist, $.RBRACE, $.DOT),
       seq($.MAXIMIZE, $.maxelemlist, $.RBRACE, $.DOT),
-      seq($.SHOWSIG, $.identifier, $.SLASH, $.NUMBER ,$.DOT),
-      seq($.SHOWSIG, $.SUB, $.identifier, $.SLASH, $.NUMBER ,$.DOT),
-      seq($.SHOW,$.DOT),
+      seq($.SHOWSIG, $.identifier, $.SLASH, $.NUMBER, $.DOT),
+      seq($.SHOWSIG, $.SUB, $.identifier, $.SLASH, $.NUMBER, $.DOT),
+      seq($.SHOW, $.DOT),
       seq($.SHOW, $.term, $.COLON, $.bodydot),
       seq($.SHOW, $.term, $.DOT),
-      seq($.SHOWSIG, $.CSP, $.identifier, $.SLASH, $.NUMBER ,$.DOT),
+      seq($.SHOWSIG, $.CSP, $.identifier, $.SLASH, $.NUMBER, $.DOT),
       seq($.SHOW, $.CSP, $.term, $.COLON, $.bodydot),
       seq($.SHOW, $.CSP, $.term, $.DOT),
       seq($.DEFINED, $.identifier, $.SLASH, $.NUMBER, $.DOT),
@@ -895,7 +895,7 @@ module.exports = grammar({
       seq($.SCRIPT, $.LPAREN, $.identifier, $.RPAREN, $.CODE, $.DOT),
       seq($.INCLUDE, $.STRING, $.DOT),
       seq($.INCLUDE, $.LT, $.identifier, $.GT, $.DOT),
-      seq($.BLOCK, $.identifier, $.LPAREN,            $.RPAREN, $.DOT),
+      seq($.BLOCK, $.identifier, $.LPAREN, $.RPAREN, $.DOT),
       seq($.BLOCK, $.identifier, $.LPAREN, $.nidlist, $.RPAREN, $.DOT),
       seq($.BLOCK, $.identifier, $.DOT),
       seq($.EXTERNAL, $.atom, $.COLON, $.bodydot),
@@ -948,13 +948,13 @@ module.exports = grammar({
     //     | maxelemlist SEM optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, BUILDER.term(@w, UnOp::NEG, $w.first), $w.second, $t, $bd); }
     //     ;
     maxelemlist: $ => choice(
-      seq($.optimizeweight,                                  ),
-      seq($.optimizeweight,                   $.noptimizecond),
-      seq($.optimizeweight, $.noptimizetuple,                ),
+      seq($.optimizeweight,),
+      seq($.optimizeweight, $.noptimizecond),
+      seq($.optimizeweight, $.noptimizetuple,),
       seq($.optimizeweight, $.noptimizetuple, $.noptimizecond),
-      seq($.maxelemlist, $.SEM, $.optimizeweight,                                  ),
-      seq($.maxelemlist, $.SEM, $.optimizeweight,                   $.noptimizecond),
-      seq($.maxelemlist, $.SEM, $.optimizeweight, $.noptimizetuple,                ),
+      seq($.maxelemlist, $.SEM, $.optimizeweight,),
+      seq($.maxelemlist, $.SEM, $.optimizeweight, $.noptimizecond),
+      seq($.maxelemlist, $.SEM, $.optimizeweight, $.noptimizetuple,),
       seq($.maxelemlist, $.SEM, $.optimizeweight, $.noptimizetuple, $.noptimizecond),
     ),
 
@@ -963,13 +963,13 @@ module.exports = grammar({
     //     | minelemlist SEM optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, $w.first, $w.second, $t, $bd); }
     //     ;
     minelemlist: $ => choice(
-      seq($.optimizeweight,                                  ),
-      seq($.optimizeweight,                   $.noptimizecond),
-      seq($.optimizeweight, $.noptimizetuple,                ),
+      seq($.optimizeweight,),
+      seq($.optimizeweight, $.noptimizecond),
+      seq($.optimizeweight, $.noptimizetuple,),
       seq($.optimizeweight, $.noptimizetuple, $.noptimizecond),
-      seq($.minelemlist, $.SEM, $.optimizeweight,                                  ),
-      seq($.minelemlist, $.SEM, $.optimizeweight,                   $.noptimizecond),
-      seq($.minelemlist, $.SEM, $.optimizeweight, $.noptimizetuple,                ),
+      seq($.minelemlist, $.SEM, $.optimizeweight,),
+      seq($.minelemlist, $.SEM, $.optimizeweight, $.noptimizecond),
+      seq($.minelemlist, $.SEM, $.optimizeweight, $.noptimizetuple,),
       seq($.minelemlist, $.SEM, $.optimizeweight, $.noptimizetuple, $.noptimizecond),
     ),
 
@@ -1097,7 +1097,7 @@ module.exports = grammar({
       $.identifier,
       seq($._widentifier, $.RPAREN),
       seq($._widentifier, $.argvec, $.RPAREN),
-   
+
     ),
 
     // theory_atom
@@ -1221,7 +1221,7 @@ module.exports = grammar({
 
     // infimum: $ => token(seq($.INFIMUM, optional('imum'))),
     // supremum: $ => token(seq($.SUPREMUM, optional('remum'))),
- 
+
     ////////// TODO: This is taken from tree-sitter-java! ////////////
     // Here we tolerate unescaped newlines in double-quoted and
     // single-quoted string literals.
