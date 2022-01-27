@@ -1,4 +1,15 @@
 ==================
+comment
+==================
+
+% Derive (varying) atoms
+
+---
+
+(source_file
+  (comment))
+    
+==================
 rule statements
 ==================
 
