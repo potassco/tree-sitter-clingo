@@ -119,7 +119,7 @@ module.exports = grammar({
     //     ANONYMOUS  "<ANONYMOUS>"
     ANONYMOUS: $ => '_',
     //     IDENTIFIER "<IDENTIFIER>"
-    identifier: $ => token(seq(repeat('_'), /[a-z]/, repeat(/[A-Za-z0-9_]/))),
+    identifier: $ => token(seq(repeat('_'), /[a-z']/, repeat(/[A-Za-z0-9_']/))),
     //Introduced to disallow white space after identifier followed by a bracket ie. not 'bla ()' but 'bla()'
     _widentifier: $ => seq($.identifier, alias(token.immediate('('), $.LPAREN)),
 
@@ -1237,14 +1237,6 @@ module.exports = grammar({
           $.escape_sequence
         )),
         '"'
-      ),
-      seq(
-        "'",
-        repeat(choice(
-          alias($.unescaped_single_string_fragment, $.string_fragment),
-          $.escape_sequence
-        )),
-        "'"
       )
     ),
 
@@ -1254,10 +1246,6 @@ module.exports = grammar({
     //
     unescaped_double_string_fragment: $ =>
       token.immediate(prec(1, /[^"\\]+/)),
-
-    // same here
-    unescaped_single_string_fragment: $ =>
-      token.immediate(prec(1, /[^'\\]+/)),
 
     escape_sequence: $ => token.immediate(seq(
       '\\',

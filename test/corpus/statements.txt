@@ -13,7 +13,7 @@ comment
 rule statements
 ==================
 
-head :-  body.
+head :-  'body.
 
 ---
 
