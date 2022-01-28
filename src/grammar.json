@@ -442,13 +442,13 @@
           },
           {
             "type": "PATTERN",
-            "value": "[a-z]"
+            "value": "[a-z']"
           },
           {
             "type": "REPEAT",
             "content": {
               "type": "PATTERN",
-              "value": "[A-Za-z0-9_]"
+              "value": "[A-Za-z0-9_']"
             }
           }
         ]
@@ -6640,40 +6640,6 @@
               "value": "\""
             }
           ]
-        },
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "'"
-            },
-            {
-              "type": "REPEAT",
-              "content": {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "ALIAS",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "unescaped_single_string_fragment"
-                    },
-                    "named": true,
-                    "value": "string_fragment"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "escape_sequence"
-                  }
-                ]
-              }
-            },
-            {
-              "type": "STRING",
-              "value": "'"
-            }
-          ]
         }
       ]
     },
@@ -6685,17 +6651,6 @@
         "content": {
           "type": "PATTERN",
           "value": "[^\"\\\\]+"
-        }
-      }
-    },
-    "unescaped_single_string_fragment": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "PREC",
-        "value": 1,
-        "content": {
-          "type": "PATTERN",
-          "value": "[^'\\\\]+"
         }
       }
     },
