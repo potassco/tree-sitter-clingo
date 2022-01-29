@@ -872,7 +872,7 @@ module.exports = grammar({
       seq($.MINIMIZE, $.LBRACE, $.RBRACE, $.DOT),
       seq($.MAXIMIZE, $.LBRACE, $.RBRACE, $.DOT),
       seq($.MINIMIZE, $.LBRACE, $.minelemlist, $.RBRACE, $.DOT),
-      seq($.MAXIMIZE, $.maxelemlist, $.RBRACE, $.DOT),
+      seq($.MAXIMIZE, $.LBRACE, $.maxelemlist, $.RBRACE, $.DOT),
       seq($.SHOWSIG, $.identifier, $.SLASH, $.NUMBER, $.DOT),
       seq($.SHOWSIG, $.SUB, $.identifier, $.SLASH, $.NUMBER, $.DOT),
       seq($.SHOW, $.DOT),
