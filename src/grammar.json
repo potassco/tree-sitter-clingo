@@ -4331,6 +4331,10 @@
             },
             {
               "type": "SYMBOL",
+              "name": "LBRACE"
+            },
+            {
+              "type": "SYMBOL",
               "name": "maxelemlist"
             },
             {
