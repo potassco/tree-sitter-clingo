@@ -52,7 +52,7 @@ true(A').
     (DOT)))
 
 ==================
-constant declaration
+constant number declaration
 ==================
 
 #const n=1.
@@ -69,7 +69,7 @@ constant declaration
     (DOT)))
 
 ==================
-constant declaration
+constant string declaration
 ==================
 
 #const n="test%".
@@ -85,6 +85,23 @@ constant declaration
         (string_fragment)))
     (DOT)))
 
+==================
+maximize statement
+==================
+
+#maximize {atom}.
+
+---
+(source_file
+  (statement
+    (MAXIMIZE)
+    (LBRACE) 
+    (maxelemlist
+      (optimizeweight
+        (term
+          (identifier))))
+    (RBRACE)
+    (DOT)))
 ==================
 embedded script
 ==================
