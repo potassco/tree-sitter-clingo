@@ -904,8 +904,8 @@ module.exports = grammar({
       seq($.EXTERNAL, $.atom, $.COLON, $.bodydot, $.LBRACK, $.term, $.RBRACK),
       seq($.EXTERNAL, $.atom, $.COLON, $.DOT, $.LBRACK, $.term, $.RBRACK),
       seq($.EXTERNAL, $.atom, $.DOT, $.LBRACK, $.term, $.RBRACK),
-      seq($.THEORY, $.identifier, $.LBRACE, $.RBRACE, $.DOT),
-      seq($.THEORY, $.identifier, $.LBRACE, $.theory_definition_nlist, $.RBRACE, $.DOT)
+      seq($.THEORY, $.theory_identifier, $.LBRACE, $.RBRACE, $.DOT),
+      seq($.THEORY, $.theory_identifier, $.LBRACE, $.theory_definition_nlist, $.RBRACE, $.DOT)
     ),
 
     // optimizetuple
@@ -991,7 +991,7 @@ module.exports = grammar({
     ),
 
 
-
+    theory_identifier: $ => $.identifier,
 
     // theory_op
     //     : THEORY_OP[op]  { $$ = $op; }
