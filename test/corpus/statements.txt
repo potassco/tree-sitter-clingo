@@ -143,7 +143,7 @@ theory definition
 (source_file
   (statement
     (THEORY)
-    (identifier)
+    (theory_identifier (identifier))
     (LBRACE)
     (theory_definition_nlist
       (theory_term_definition
