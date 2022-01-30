@@ -5163,7 +5163,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "identifier"
+              "name": "theory_identifier"
             },
             {
               "type": "SYMBOL",
@@ -5188,7 +5188,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "identifier"
+              "name": "theory_identifier"
             },
             {
               "type": "SYMBOL",
@@ -5604,6 +5604,10 @@
           "name": "identifier"
         }
       ]
+    },
+    "theory_identifier": {
+      "type": "SYMBOL",
+      "name": "identifier"
     },
     "theory_op": {
       "type": "CHOICE",
