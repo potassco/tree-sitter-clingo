@@ -23,7 +23,6 @@ module.exports = grammar({
     AND: $ => '&',
     EQ: $ => '=',
     AT: $ => '@',
-    //     BASE        "#base"
     BNOT: $ => '~',
     COLON: $ => ':',
     COMMA: $ => ',',
@@ -39,15 +38,12 @@ module.exports = grammar({
     CSP_GEQ: $ => '$>=',
     CSP_EQ: $ => '$=',
     CSP_NEQ: $ => '$!=',
-    //     CUMULATIVE  "#cumulative"
     DISJOINT: $ => '#disjoint',
     DOT: $ => '.',
     DOTS: $ => '..',
-    //     END         0 "<EOF>"
     EXTERNAL: $ => '#external',
     DEFINED: $ => '#defined',
     FALSE: $ => '#false',
-    //     FORGET      "#forget"
     GEQ: $ => '>=',
     GT: $ => '>',
     IF: $ => ':-',
@@ -94,14 +90,9 @@ module.exports = grammar({
     ),
     TRUE: $ => '#true',
     BLOCK: $ => '#program',
-    //     UBNOT
-    //     UMINUS
     VBAR: $ => '|',
-    //     VOLATILE    "#volatile"
     WIF: $ => ':~',
     XOR: $ => '^',
-    //     PARSE_LP    "<program>"
-    //     PARSE_DEF   "<define>"
     ANY: $ => 'any',
     UNARY: $ => 'unary',
     BINARY: $ => 'binary',
@@ -111,10 +102,6 @@ module.exports = grammar({
     BODY: $ => 'body',
     DIRECTIVE: $ => 'directive',
     THEORY: $ => '#theory',
-    //     SYNC        "EOF"
-
-
-    //     NUMBER     "<NUMBER>"
     NUMBER: $ => choice(
       $.dec,
       $.hex,
@@ -126,55 +113,21 @@ module.exports = grammar({
     oct: $ => token(seq('0o', /([1-7]+)/)),
     bin: $ => token(seq('0b', /([0-1]+)/)),
 
-    // %token <str>
-    //     ANONYMOUS  "<ANONYMOUS>"
     ANONYMOUS: $ => '_',
-    //     IDENTIFIER "<IDENTIFIER>"
     identifier: $ => token(seq(repeat('_'), /[a-z']/, repeat(/[A-Za-z0-9_']/))),
     //Introduced to disallow white space after identifier followed by a bracket ie. not 'bla ()' but 'bla()'
     _widentifier: $ => seq($.identifier, alias(token.immediate('('), $.LPAREN)),
 
-    // SCRIPT: $ => '<SCRIPT>',
     SCRIPT: $ => '#script',
-    // CODE: $ => '<CODE>',
     CODE: $ => token(choice(
       seq(/[^#]*/, /(#+[^e][^#]*)*/, /(#+e*[^n][^#]*)*/, /(#+e*n*[^d][^#]*)*/, '#end'),
     )),
-    //     STRING     "<STRING>"
     VARIABLE: $ => token(seq(repeat('_'), /[A-Z]/, repeat(/[A-Za-z0-9_']/))),
     THEORY_OP: $ => /[/!<=>+\-*\\?&@|:;~\^\.]+/,
     NOT: $ => 'not',
     DEFAULT: $ => 'default',
     OVERRIDE: $ => 'override',
 
-
-
-    //     constterm
-    //     : constterm[a] XOR constterm[b]                    { $$ = BUILDER.term(@$, BinOp::XOR, $a, $b); }
-    //     | constterm[a] QUESTION constterm[b]               { $$ = BUILDER.term(@$, BinOp::OR, $a, $b); }
-    //     | constterm[a] AND constterm[b]                    { $$ = BUILDER.term(@$, BinOp::AND, $a, $b); }
-    //     | constterm[a] ADD constterm[b]                    { $$ = BUILDER.term(@$, BinOp::ADD, $a, $b); }
-    //     | constterm[a] SUB constterm[b]                    { $$ = BUILDER.term(@$, BinOp::SUB, $a, $b); }
-    //     | constterm[a] MUL constterm[b]                    { $$ = BUILDER.term(@$, BinOp::MUL, $a, $b); }
-    //     | constterm[a] SLASH constterm[b]                  { $$ = BUILDER.term(@$, BinOp::DIV, $a, $b); }
-    //     | constterm[a] MOD constterm[b]                    { $$ = BUILDER.term(@$, BinOp::MOD, $a, $b); }
-    //     | constterm[a] POW constterm[b]                    { $$ = BUILDER.term(@$, BinOp::POW, $a, $b); }
-    //     | SUB constterm[a] %prec UMINUS                    { $$ = BUILDER.term(@$, UnOp::NEG, $a); }
-    //     | BNOT constterm[a] %prec UBNOT                    { $$ = BUILDER.term(@$, UnOp::NOT, $a); }
-    //     | LPAREN RPAREN                                    { $$ = BUILDER.term(@$, BUILDER.termvec(), false); }
-    //     | LPAREN COMMA RPAREN                              { $$ = BUILDER.term(@$, BUILDER.termvec(), true); }
-    //     | LPAREN consttermvec[a] RPAREN                    { $$ = BUILDER.term(@$, $a, false); }
-    //     | LPAREN consttermvec[a] COMMA RPAREN              { $$ = BUILDER.term(@$, $a, true); }
-    //     | identifier[a] LPAREN constargvec[b] RPAREN       { $$ = BUILDER.term(@$, String::fromRep($a), $b, false); }
-    //     | AT[l] identifier[a] LPAREN constargvec[b] RPAREN { $$ = BUILDER.term(@$, String::fromRep($a), $b, true); }
-    //     | VBAR[l] constterm[a] VBAR                        { $$ = BUILDER.term(@$, UnOp::ABS, $a); }
-    //     | identifier[a]                                    { $$ = BUILDER.term(@$, Symbol::createId(String::fromRep($a))); }
-    //     | AT[l] identifier[a]                              { $$ = BUILDER.term(@$, String::fromRep($a), BUILDER.termvecvec(BUILDER.termvecvec(), BUILDER.termvec()), true); }
-    //     | NUMBER[a]                                        { $$ = BUILDER.term(@$, Symbol::createNum($a)); }
-    //     | STRING[a]                                        { $$ = BUILDER.term(@$, Symbol::createStr(String::fromRep($a))); }
-    //     | INFIMUM[a]                                       { $$ = BUILDER.term(@$, Symbol::createInf()); }
-    //     | SUPREMUM[a]                                      { $$ = BUILDER.term(@$, Symbol::createSup()); }
-    //     ;
     constterm: $ => choice(
       prec.left(7, seq($.constterm, $.XOR, $.constterm)),
       prec.left(6, seq($.constterm, $.QUESTION, $.constterm)),
@@ -191,9 +144,9 @@ module.exports = grammar({
       seq($.LPAREN, $.consttermvec, $.RPAREN),
       seq($.LPAREN, $.consttermvec, $.COMMA, $.RPAREN),
       seq($._widentifier, $.RPAREN),
-      seq($._widentifier, $.nconstargvec, $.RPAREN),
+      seq($._widentifier, $.constargvec, $.RPAREN),
       seq($.AT, $._widentifier, $.RPAREN),
-      seq($.AT, $._widentifier, $.nconstargvec, $.RPAREN),
+      seq($.AT, $._widentifier, $.constargvec, $.RPAREN),
       seq($.VBAR, $.constterm, $.VBAR),
       $.identifier,
       seq($.AT, $.identifier,),
@@ -203,49 +156,14 @@ module.exports = grammar({
       $.SUPREMUM,
     ),
 
-    // consttermvec
-    //     : constterm[a]                       { $$ = BUILDER.termvec(BUILDER.termvec(), $a);  }
-    //     | consttermvec[a] COMMA constterm[b] { $$ = BUILDER.termvec($a, $b);  }
-    //     ;
     consttermvec: $ => choice(
       $.constterm,
       seq($.consttermvec, $.COMMA, $.constterm),
     ),
 
-    // constargvec
-    //     : consttermvec[a] { $$ = BUILDER.termvecvec(BUILDER.termvecvec(), $a);  }
-    //     |                 { $$ = BUILDER.termvecvec(BUILDER.termvecvec(), BUILDER.termvec());  }
-    //     ;
-    nconstargvec: $ =>
+    constargvec: $ =>
       $.consttermvec,
 
-
-    // term
-    //     : term[a] DOTS term[b]                     { $$ = BUILDER.term(@$, $a, $b); }
-    //     | term[a] XOR term[b]                      { $$ = BUILDER.term(@$, BinOp::XOR, $a, $b); }
-    //     | term[a] QUESTION term[b]                 { $$ = BUILDER.term(@$, BinOp::OR, $a, $b); }
-    //     | term[a] AND term[b]                      { $$ = BUILDER.term(@$, BinOp::AND, $a, $b); }
-    //     | term[a] ADD term[b]                      { $$ = BUILDER.term(@$, BinOp::ADD, $a, $b); }
-    //     | term[a] SUB term[b]                      { $$ = BUILDER.term(@$, BinOp::SUB, $a, $b); }
-    //     | term[a] MUL term[b]                      { $$ = BUILDER.term(@$, BinOp::MUL, $a, $b); }
-    //     | term[a] SLASH term[b]                    { $$ = BUILDER.term(@$, BinOp::DIV, $a, $b); }
-    //     | term[a] MOD term[b]                      { $$ = BUILDER.term(@$, BinOp::MOD, $a, $b); }
-    //     | term[a] POW term[b]                      { $$ = BUILDER.term(@$, BinOp::POW, $a, $b); }
-    //     | SUB term[a] %prec UMINUS                 { $$ = BUILDER.term(@$, UnOp::NEG, $a); }
-    //     | BNOT term[a] %prec UBNOT                 { $$ = BUILDER.term(@$, UnOp::NOT, $a); }
-    //     | LPAREN tuplevec[a] RPAREN                { $$ = BUILDER.pool(@$, $a); }
-    //     | identifier[a] LPAREN argvec[b] RPAREN    { $$ = BUILDER.term(@$, String::fromRep($a), $b, false); }
-    //     | AT identifier[a] LPAREN argvec[b] RPAREN { $$ = BUILDER.term(@$, String::fromRep($a), $b, true); }
-    //     | VBAR unaryargvec[a] VBAR                 { $$ = BUILDER.term(@$, UnOp::ABS, $a); }
-    //     | identifier[a]                            { $$ = BUILDER.term(@$, Symbol::createId(String::fromRep($a))); }
-    //     | AT[l] identifier[a]                      { $$ = BUILDER.term(@$, String::fromRep($a), BUILDER.termvecvec(BUILDER.termvecvec(), BUILDER.termvec()), true); }
-    //     | NUMBER[a]                                { $$ = BUILDER.term(@$, Symbol::createNum($a)); }
-    //     | STRING[a]                                { $$ = BUILDER.term(@$, Symbol::createStr(String::fromRep($a))); }
-    //     | INFIMUM[a]                               { $$ = BUILDER.term(@$, Symbol::createInf()); }
-    //     | SUPREMUM[a]                              { $$ = BUILDER.term(@$, Symbol::createSup()); }
-    //     | VARIABLE[a]                              { $$ = BUILDER.term(@$, String::fromRep($a)); }
-    //     | ANONYMOUS[a]                             { $$ = BUILDER.term(@$, String("_")); }
-    //     ;
     term: $ => choice(
       prec.left(8, seq($.term, $.DOTS, $.term)),
       prec.left(7, seq($.term, $.XOR, $.term)),
@@ -260,7 +178,7 @@ module.exports = grammar({
       prec.left(1, seq($.SUB, $.term)),
       prec.left(1, seq($.BNOT, $.term)),
       seq($.LPAREN, $.RPAREN),
-      seq($.LPAREN, $.ntuplevec, $.RPAREN),
+      seq($.LPAREN, $.tuplevec, $.RPAREN),
       seq($._widentifier, $.argvec, $.RPAREN),
       seq($.AT, $._widentifier, $.argvec, $.RPAREN),
       seq($.VBAR, $.unaryargvec, $.VBAR),
@@ -274,85 +192,48 @@ module.exports = grammar({
       $.ANONYMOUS,
     ),
 
-    // unaryargvec
-    //     : term[a]                    { $$ = BUILDER.termvec(BUILDER.termvec(), $a); }
-    //     | unaryargvec[a] SEM term[b] { $$ = BUILDER.termvec($a, $b); }
-    //     ;
     unaryargvec: $ => choice(
       $.term,
       seq($.unaryargvec, $.SEM, $.term)
     ),
 
-    // ntermvec
-    //     : term[a]                   { $$ = BUILDER.termvec(BUILDER.termvec(), $a); }
-    //     | ntermvec[a] COMMA term[b] { $$ = BUILDER.termvec($a, $b); }
-    //     ;
-    ntermvec: $ => choice(
+    termvec: $ => choice(
       $.term,
-      seq($.ntermvec, $.COMMA, $.term)
+      seq($.termvec, $.COMMA, $.term)
     ),
 
-    // termvec
-    //     : ntermvec[a] { $$ = $a; }
-    //     |             { $$ = BUILDER.termvec(); }
-    //     ;
-
-    // tuple
-    //     : ntermvec[a] COMMA { $$ = BUILDER.term(@$, $a, true); }
-    //     | ntermvec[a]       { $$ = BUILDER.term(@$, $a, false); }
-    //     |             COMMA { $$ = BUILDER.term(@$, BUILDER.termvec(), true); }
-    //     |                   { $$ = BUILDER.term(@$, BUILDER.termvec(), false); }
-    ntuple: $ => choice(
-      seq($.ntermvec, $.COMMA),
-      $.ntermvec,
+    tuple: $ => choice(
+      seq($.termvec, $.COMMA),
+      $.termvec,
       $.COMMA
     ),
 
-    // tuplevec_sem
-    //     :                 tuple[b] SEM { $$ = BUILDER.termvec(BUILDER.termvec(), $b); }
-    //     | tuplevec_sem[a] tuple[b] SEM { $$ = BUILDER.termvec($a, $b); }
     tuplevec_sem: $ => choice(
       seq($.SEM),
-      seq($.ntuple, $.SEM),
+      seq($.tuple, $.SEM),
       seq($.tuplevec_sem, $.SEM),
-      seq($.tuplevec_sem, $.ntuple, $.SEM),
+      seq($.tuplevec_sem, $.tuple, $.SEM),
     ),
 
-    // tuplevec
-    //     :                 tuple[b] { $$ = BUILDER.termvec(BUILDER.termvec(), $b); }
-    //     | tuplevec_sem[a] tuple[b] { $$ = BUILDER.termvec($a, $b); }
-    ntuplevec: $ => choice(
-      seq($.ntuple),
-      seq($.tuplevec_sem, $.ntuple),
+    tuplevec: $ => choice(
+      seq($.tuple),
+      seq($.tuplevec_sem, $.tuple),
     ),
 
     argvec: $ => choice(
-      $.ntermvec,
-      seq($.argvec, $.SEM, $.ntermvec,),
+      $.termvec,
+      seq($.argvec, $.SEM, $.termvec,),
     ),
 
-    // binaryargvec
-    //     :                       term[a] COMMA term[b] { $$ = BUILDER.termvecvec(BUILDER.termvecvec(), BUILDER.termvec(BUILDER.termvec(BUILDER.termvec(), $a), $b)); }
-    //     | binaryargvec[vec] SEM term[a] COMMA term[b] { $$ = BUILDER.termvecvec($vec, BUILDER.termvec(BUILDER.termvec(BUILDER.termvec(), $a), $b)); }
-    //     ;
     binaryargvec: $ => choice(
       seq($.term, $.COMMA, $.term),
       seq($.binaryargvec, $.SEM, $.term, $.COMMA, $.term),
     ),
 
-    // // TODO: I might have to create tuples differently
-    // //       parse a tuple as a list of terms
-    // //       each term is either a tuple or a term -> which afterwards is turned into a pool!
+    // TODO: I might have to create tuples differently
+    //       parse a tuple as a list of terms
+    //       each term is either a tuple or a term -> which afterwards is turned into a pool!
 
-
-    // cmp
-    //     : GT     { $$ = Relation::GT; }
-    //     | LT     { $$ = Relation::LT; }
-    //     | GEQ    { $$ = Relation::GEQ; }
-    //     | LEQ    { $$ = Relation::LEQ; }
-    //     | EQ     { $$ = Relation::EQ; }
-    //     | NEQ    { $$ = Relation::NEQ; }
-    //     ;
     cmp: $ => choice(
       $.GT,
       $.LT,
@@ -363,12 +244,6 @@ module.exports = grammar({
       $.NEQ
     ),
 
-    // atom
-    // : identifier[id]                                  { $$ = BUILDER.predRep(@$, false, String::fromRep($id), BUILDER.termvecvec(BUILDER.termvecvec(), BUILDER.termvec())); }
-    // | identifier[id] LPAREN argvec[tvv] RPAREN[r]     { $$ = BUILDER.predRep(@$, false, String::fromRep($id), $tvv); }
-    // | SUB identifier[id]                              { $$ = BUILDER.predRep(@$, true, String::fromRep($id), BUILDER.termvecvec(BUILDER.termvecvec(), BUILDER.termvec())); }
-    // | SUB identifier[id] LPAREN argvec[tvv] RPAREN[r] { $$ = BUILDER.predRep(@$, true, String::fromRep($id), $tvv); }
-    // ;
     atom: $ => choice(
       $.identifier,
       seq($._widentifier, $.RPAREN),
@@ -378,21 +253,6 @@ module.exports = grammar({
       seq($.SUB, $._widentifier, $.argvec, $.RPAREN),
     ),
 
-    // literal
-    // :         TRUE                     { $$ = BUILDER.boollit(@$, true); }
-    // |     NOT TRUE                     { $$ = BUILDER.boollit(@$, false); }
-    // | NOT NOT TRUE                     { $$ = BUILDER.boollit(@$, true); }
-    // |         FALSE                    { $$ = BUILDER.boollit(@$, false); }
-    // |     NOT FALSE                    { $$ = BUILDER.boollit(@$, true); }
-    // | NOT NOT FALSE                    { $$ = BUILDER.boollit(@$, false); }
-    // |         atom[a]                  { $$ = BUILDER.predlit(@$, NAF::POS, $a); }
-    // |     NOT atom[a]                  { $$ = BUILDER.predlit(@$, NAF::NOT, $a); }
-    // | NOT NOT atom[a]                  { $$ = BUILDER.predlit(@$, NAF::NOTNOT, $a); }
-    // |         term[l] cmp[rel] term[r] { $$ = BUILDER.rellit(@$, $rel, $l, $r); }
-    // |     NOT term[l] cmp[rel] term[r] { $$ = BUILDER.rellit(@$, neg($rel), $l, $r); }
-    // | NOT NOT term[l] cmp[rel] term[r] { $$ = BUILDER.rellit(@$, $rel, $l, $r); }
-    // | csp_literal[lit]                 { $$ = BUILDER.csplit($lit); }
-    // ;
     literal: $ => choice(
       $.TRUE,
       seq($.NOT, $.TRUE),
@@ -409,12 +269,6 @@ module.exports = grammar({
       $.csp_literal
     ),
 
-    // csp_mul_term
-    //     : CSP term[var] CSP_MUL term[coe] { $$ = BUILDER.cspmulterm(@$, $coe,                     $var); }
-    //     | term[coe] CSP_MUL CSP term[var] { $$ = BUILDER.cspmulterm(@$, $coe,                     $var); }
-    //     | CSP term[var]                   { $$ = BUILDER.cspmulterm(@$, BUILDER.term(@$, Symbol::createNum(1)), $var); }
-    //     | term[coe]                       { $$ = BUILDER.cspmulterm(@$, $coe); }
-    //     ;
     csp_mul_term: $ => choice(
       seq($.CSP, $.term, $.CSP_MUL, $.term),
       seq($.term, $.CSP_MUL, $.CSP, $.term),
@@ -422,25 +276,12 @@ module.exports = grammar({
       $.term
     ),
 
-    // csp_add_term
-    //     : csp_add_term[add] CSP_ADD csp_mul_term[mul] { $$ = BUILDER.cspaddterm(@$, $add, $mul, true); }
-    //     | csp_add_term[add] CSP_SUB csp_mul_term[mul] { $$ = BUILDER.cspaddterm(@$, $add, $mul, false); }
-    //     | csp_mul_term[mul]                           { $$ = BUILDER.cspaddterm(@$, $mul); }
-    //     ;
     csp_add_term: $ => choice(
       seq($.csp_add_term, $.CSP_ADD, $.csp_mul_term),
       seq($.csp_add_term, $.CSP_SUB, $.csp_mul_term),
       $.csp_mul_term
     ),
 
-    // csp_rel
-    //     : CSP_GT  { $$ = Relation::GT; }
-    //     | CSP_LT  { $$ = Relation::LT; }
-    //     | CSP_GEQ { $$ = Relation::GEQ; }
-    //     | CSP_LEQ { $$ = Relation::LEQ; }
-    //     | CSP_EQ  { $$ = Relation::EQ; }
-    //     | CSP_NEQ { $$ = Relation::NEQ; }
-    //     ;
     csp_rel: $ => choice(
       $.CSP_GT,
       $.CSP_LT,
@@ -450,44 +291,21 @@ module.exports = grammar({
       $.CSP_NEQ
     ),
 
-    // csp_literal 
-    //     : csp_literal[lit] csp_rel[rel] csp_add_term[b] { $$ = BUILDER.csplit(@$, $lit, $rel, $b); }
-    //     | csp_add_term[a]  csp_rel[rel] csp_add_term[b] { $$ = BUILDER.csplit(@$, $a,   $rel, $b); }
-    //     ;
     csp_literal: $ => choice(
       seq($.csp_literal, $.csp_rel, $.csp_add_term),
       seq($.csp_add_term, $.csp_rel, $.csp_add_term),
     ),
 
-    // nlitvec
-    //     : literal[lit]                    { $$ = BUILDER.litvec(BUILDER.litvec(), $lit); }
-    //     | nlitvec[vec] COMMA literal[lit] { $$ = BUILDER.litvec($vec, $lit); }
-    //     ;
-    // litvec
-    //     : nlitvec[vec] { $$ = $vec; }
-    //     |              { $$ = BUILDER.litvec(); }
-    //     ;
-    nlitvec: $ => choice(
+    litvec: $ => choice(
       $.literal,
-      seq($.nlitvec, $.COMMA, $.literal)
+      seq($.litvec, $.COMMA, $.literal)
     ),
 
-    // optcondition
-    //     : COLON litvec[vec] { $$ = $vec; }
-    //     |                   { $$ = BUILDER.litvec(); }
-    //     ;
-    noptcondition: $ => choice(
+    optcondition: $ => choice(
       seq($.COLON),
-      seq($.COLON, $.nlitvec),
+      seq($.COLON, $.litvec),
     ),
 
-    // aggregatefunction
-    //     : SUM   { $$ = AggregateFunction::SUM; }
-    //     | SUMP  { $$ = AggregateFunction::SUMP; }
-    //     | MIN   { $$ = AggregateFunction::MIN; }
-    //     | MAX   { $$ = AggregateFunction::MAX; }
-    //     | COUNT { $$ = AggregateFunction::COUNT; }
-    //     ;
     aggregatefunction: $ => choice(
       $.SUM,
       $.SUMP,
@@ -496,52 +314,30 @@ module.exports = grammar({
       $.COUNT
     ),
 
-    // bodyaggrelem
-    //     : COLON litvec[cond]                { $$ = { BUILDER.termvec(), $cond }; }
-    //     | ntermvec[args] optcondition[cond] { $$ = { $args, $cond }; }
-    //     ;
     bodyaggrelem: $ => choice(
       seq($.COLON,),
-      seq($.COLON, $.nlitvec),
-      seq($.ntermvec,),
-      seq($.ntermvec, $.noptcondition),
+      seq($.COLON, $.litvec),
+      seq($.termvec,),
+      seq($.termvec, $.optcondition),
     ),
 
-    // bodyaggrelemvec
-    //     : bodyaggrelem[elem]                          { $$ = BUILDER.bodyaggrelemvec(BUILDER.bodyaggrelemvec(), $elem.first, $elem.second); }
-    //     | bodyaggrelemvec[vec] SEM bodyaggrelem[elem] { $$ = BUILDER.bodyaggrelemvec($vec, $elem.first, $elem.second); }
-    //     ;
     bodyaggrelemvec: $ => choice(
       $.bodyaggrelem,
       seq($.bodyaggrelemvec, $.SEM, $.bodyaggrelem),
     ),
 
-    // // Note: alternative syntax (without weight)
-
-    // altbodyaggrelem
-    //     : literal[lit] optcondition[cond] { $$ = { $lit, $cond }; }
-    //     ;
+    // Note: alternative syntax (without weight)
     altbodyaggrelem: $ => choice(
       seq($.literal,),
-      seq($.literal, $.noptcondition),
+      seq($.literal, $.optcondition),
     ),
 
-    // altbodyaggrelemvec
-    //     : altbodyaggrelem[elem]                             { $$ = BUILDER.condlitvec(BUILDER.condlitvec(), $elem.first, $elem.second); }
-    //     | altbodyaggrelemvec[vec] SEM altbodyaggrelem[elem] { $$ = BUILDER.condlitvec($vec, $elem.first, $elem.second); }
-    //     ;
     altbodyaggrelemvec: $ => choice(
       $.altbodyaggrelem,
       seq($.altbodyaggrelemvec, $.SEM),
       seq($.altbodyaggrelemvec, $.SEM, $.altbodyaggrelem),
     ),
 
-    // bodyaggregate
-    //     : LBRACE RBRACE                                               { $$ = { AggregateFunction::COUNT, true, BUILDER.condlitvec() }; }
-    //     | LBRACE altbodyaggrelemvec[elems] RBRACE                     { $$ = { AggregateFunction::COUNT, true, $elems }; }
-    //     | aggregatefunction[fun] LBRACE RBRACE                        { $$ = { $fun, false, BUILDER.bodyaggrelemvec() }; }
-    //     | aggregatefunction[fun] LBRACE bodyaggrelemvec[elems] RBRACE { $$ = { $fun, false, $elems }; }
-    //     ;
     bodyaggregate: $ => choice(
       seq($.LBRACE, $.RBRACE),
       seq($.LBRACE, $.altbodyaggrelemvec, $.RBRACE),
@@ -549,64 +345,39 @@ module.exports = grammar({
       seq($.aggregatefunction, $.LBRACE, $.bodyaggrelemvec, $.RBRACE),
     ),
 
-    // upper
-    //     : term[t]          { $$ = { Relation::LEQ, $t }; }
-    //     | cmp[rel] term[t] { $$ = { $rel, $t }; }
-    //     |                  { $$ = { Relation::LEQ, TermUid(-1) }; }
-    //     ;
-    nupper: $ => choice(
+    upper: $ => choice(
       $.term,
       seq($.cmp, $.term),
     ),
 
-    // lubodyaggregate
-    //     : term[l]          bodyaggregate[a] upper[u] { $$ = lexer->aggregate($a.fun, $a.choice, $a.elems, lexer->boundvec(Relation::LEQ, $l, $u.rel, $u.term)); }
-    //     | term[l] cmp[rel] bodyaggregate[a] upper[u] { $$ = lexer->aggregate($a.fun, $a.choice, $a.elems, lexer->boundvec($rel, $l, $u.rel, $u.term)); }
-    //     |                  bodyaggregate[a] upper[u] { $$ = lexer->aggregate($a.fun, $a.choice, $a.elems, lexer->boundvec(Relation::LEQ, TermUid(-1), $u.rel, $u.term)); }
-    //     | theory_atom[atom]                          { $$ = lexer->aggregate($atom); }
-    //     ;
     lubodyaggregate: $ => choice(
       seq($.term, $.bodyaggregate),
-      seq($.term, $.bodyaggregate, $.nupper),
+      seq($.term, $.bodyaggregate, $.upper),
       seq($.term, $.cmp, $.bodyaggregate),
-      seq($.term, $.cmp, $.bodyaggregate, $.nupper),
+      seq($.term, $.cmp, $.bodyaggregate, $.upper),
       seq($.bodyaggregate),
-      seq($.bodyaggregate, $.nupper),
+      seq($.bodyaggregate, $.upper),
       $.theory_atom
     ),
 
-    // headaggrelemvec
-    //     : headaggrelemvec[vec] SEM termvec[tuple] COLON literal[head] optcondition[cond] { $$ = BUILDER.headaggrelemvec($vec, $tuple, $head, $cond); }
-    //     | termvec[tuple] COLON literal[head] optcondition[cond]                          { $$ = BUILDER.headaggrelemvec(BUILDER.headaggrelemvec(), $tuple, $head, $cond); }
-    //     ;
     headaggrelemvec: $ => choice(
       seq($.headaggrelemvec, $.SEM, $.COLON, $.literal,),
-      seq($.headaggrelemvec, $.SEM, $.ntermvec, $.COLON, $.literal,),
-      seq($.headaggrelemvec, $.SEM, $.COLON, $.literal, $.noptcondition),
-      seq($.headaggrelemvec, $.SEM, $.ntermvec, $.COLON, $.literal, $.noptcondition),
+      seq($.headaggrelemvec, $.SEM, $.termvec, $.COLON, $.literal,),
+      seq($.headaggrelemvec, $.SEM, $.COLON, $.literal, $.optcondition),
+      seq($.headaggrelemvec, $.SEM, $.termvec, $.COLON, $.literal, $.optcondition),
       seq($.COLON, $.literal,),
-      seq($.ntermvec, $.COLON, $.literal,),
-      seq($.COLON, $.literal, $.noptcondition),
-      seq($.ntermvec, $.COLON, $.literal, $.noptcondition),
+      seq($.termvec, $.COLON, $.literal,),
+      seq($.COLON, $.literal, $.optcondition),
+      seq($.termvec, $.COLON, $.literal, $.optcondition),
     ),
 
-    // altheadaggrelemvec
-    //     : literal[lit] optcondition[cond]                             { $$ = BUILDER.condlitvec(BUILDER.condlitvec(), $lit, $cond); }
-    //     | altheadaggrelemvec[vec] SEM literal[lit] optcondition[cond] { $$ = BUILDER.condlitvec($vec, $lit, $cond); }
-    //     ;
     altheadaggrelemvec: $ => choice(
       seq($.literal,),
-      seq($.literal, $.noptcondition),
+      seq($.literal, $.optcondition),
       seq($.altheadaggrelemvec, $.SEM, $.literal,),
-      seq($.altheadaggrelemvec, $.SEM, $.literal, $.noptcondition),
+      seq($.altheadaggrelemvec, $.SEM, $.literal, $.optcondition),
     ),
 
-    // headaggregate
-    //     : aggregatefunction[fun] LBRACE RBRACE                        { $$ = { $fun, false, BUILDER.headaggrelemvec() }; }
-    //     | aggregatefunction[fun] LBRACE headaggrelemvec[elems] RBRACE { $$ = { $fun, false, $elems }; }
-    //     | LBRACE RBRACE                                               { $$ = { AggregateFunction::COUNT, true, BUILDER.condlitvec()}; }
-    //     | LBRACE altheadaggrelemvec[elems] RBRACE                     { $$ = { AggregateFunction::COUNT, true, $elems}; }
-    //     ;
     headaggregate: $ => choice(
       seq($.aggregatefunction, $.LBRACE, $.RBRACE),
       seq($.aggregatefunction, $.LBRACE, $.headaggrelemvec, $.RBRACE),
@@ -614,261 +385,116 @@ module.exports = grammar({
       seq($.LBRACE, $.altheadaggrelemvec, $.RBRACE),
     ),
 
-    // luheadaggregate
-    //     : term[l]          headaggregate[a] upper[u] { $$ = lexer->aggregate($a.fun, $a.choice, $a.elems, lexer->boundvec(Relation::LEQ, $l, $u.rel, $u.term)); }
-    //     | term[l] cmp[rel] headaggregate[a] upper[u] { $$ = lexer->aggregate($a.fun, $a.choice, $a.elems, lexer->boundvec($rel, $l, $u.rel, $u.term)); }
-    //     |                  headaggregate[a] upper[u] { $$ = lexer->aggregate($a.fun, $a.choice, $a.elems, lexer->boundvec(Relation::LEQ, TermUid(-1), $u.rel, $u.term)); }
-    //     | theory_atom[atom]                          { $$ = lexer->aggregate($atom); }
-    //     ;
     luheadaggregate: $ => choice(
       seq($.term, $.headaggregate),
-      seq($.term, $.headaggregate, $.nupper),
+      seq($.term, $.headaggregate, $.upper),
       seq($.term, $.cmp, $.headaggregate),
-      seq($.term, $.cmp, $.headaggregate, $.nupper),
+      seq($.term, $.cmp, $.headaggregate, $.upper),
       seq($.headaggregate),
-      seq($.headaggregate, $.nupper),
+      seq($.headaggregate, $.upper),
       $.theory_atom,
     ),
 
-    // ncspelemvec
-    //     :                     termvec[tuple] COLON csp_add_term[add] optcondition[cond] { $$ = BUILDER.cspelemvec(BUILDER.cspelemvec(), @$, $tuple, $add, $cond); }
-    //     | cspelemvec[vec] SEM termvec[tuple] COLON csp_add_term[add] optcondition[cond] { $$ = BUILDER.cspelemvec($vec, @$, $tuple, $add, $cond); }
-    //     ;
-    // cspelemvec
-    //     : ncspelemvec[vec] { $$ = $vec; }
-    //     |                  { $$ = BUILDER.cspelemvec(); }
-    //     ;
-    ncspelemvec: $ => choice(
+    cspelemvec: $ => choice(
       seq($.COLON, $.csp_add_term,),
-      seq($.COLON, $.csp_add_term, $.noptcondition),
-      seq($.ntermvec, $.COLON, $.csp_add_term,),
-      seq($.ntermvec, $.COLON, $.csp_add_term, $.noptcondition),
-      seq($.ncspelemvec, $.SEM, $.COLON, $.csp_add_term,),
-      seq($.ncspelemvec, $.SEM, $.COLON, $.csp_add_term, $.noptcondition),
-      seq($.ncspelemvec, $.SEM, $.ntermvec, $.COLON, $.csp_add_term,),
-      seq($.ncspelemvec, $.SEM, $.ntermvec, $.COLON, $.csp_add_term, $.noptcondition),
+      seq($.COLON, $.csp_add_term, $.optcondition),
+      seq($.termvec, $.COLON, $.csp_add_term,),
+      seq($.termvec, $.COLON, $.csp_add_term, $.optcondition),
+      seq($.cspelemvec, $.SEM, $.COLON, $.csp_add_term,),
+      seq($.cspelemvec, $.SEM, $.COLON, $.csp_add_term, $.optcondition),
+      seq($.cspelemvec, $.SEM, $.termvec, $.COLON, $.csp_add_term,),
+      seq($.cspelemvec, $.SEM, $.termvec, $.COLON, $.csp_add_term, $.optcondition),
     ),
 
-    // disjoint
-    //     :         DISJOINT LBRACE cspelemvec[elems] RBRACE { $$ = { NAF::POS, $elems }; }
-    //     | NOT     DISJOINT LBRACE cspelemvec[elems] RBRACE { $$ = { NAF::NOT, $elems }; }
-    //     | NOT NOT DISJOINT LBRACE cspelemvec[elems] RBRACE { $$ = { NAF::NOTNOT, $elems }; }
-    //     ;
     disjoint: $ => choice(
       seq($.DISJOINT, $.LBRACE, $.RBRACE),
-      seq($.DISJOINT, $.LBRACE, $.ncspelemvec, $.RBRACE),
+      seq($.DISJOINT, $.LBRACE, $.cspelemvec, $.RBRACE),
       seq($.NOT, $.DISJOINT, $.LBRACE, $.RBRACE),
-      seq($.NOT, $.DISJOINT, $.LBRACE, $.ncspelemvec, $.RBRACE),
+      seq($.NOT, $.DISJOINT, $.LBRACE, $.cspelemvec, $.RBRACE),
       seq($.NOT, $.NOT, $.DISJOINT, $.LBRACE, $.RBRACE),
-      seq($.NOT, $.NOT, $.DISJOINT, $.LBRACE, $.ncspelemvec, $.RBRACE),
+      seq($.NOT, $.NOT, $.DISJOINT, $.LBRACE, $.cspelemvec, $.RBRACE),
     ),
 
-
-    // conjunction
-    //     : literal[lit] COLON litvec[cond] { $$ = { $lit, $cond }; }
-    //     ;
     conjunction: $ => choice(
       seq($.literal, $.COLON,),
-      seq($.literal, $.COLON, $.nlitvec)
+      seq($.literal, $.COLON, $.litvec)
     ),
 
-    // dsym
-    //     : SEM
-    //     | VBAR
-    //     ;
     dsym: $ => choice(
       $.SEM,
       $.VBAR
     ),
 
-    // // NOTE: this is so complicated because VBAR is also used as the absolute function for terms
-    // //       due to limited lookahead I found no reasonable way to parse p(X):|q(X)
-    // disjunctionsep
-    //     : disjunctionsep[vec] literal[lit] COMMA                    { $$ = BUILDER.condlitvec($vec, $lit, BUILDER.litvec()); }
-    //     | disjunctionsep[vec] literal[lit] dsym                     { $$ = BUILDER.condlitvec($vec, $lit, BUILDER.litvec()); }
-    //     | disjunctionsep[vec] literal[lit] COLON SEM                { $$ = BUILDER.condlitvec($vec, $lit, BUILDER.litvec()); }
-    //     | disjunctionsep[vec] literal[lit] COLON nlitvec[cond] dsym { $$ = BUILDER.condlitvec($vec, $lit, $cond); }
-    //     | literal[lit] COMMA                                        { $$ = BUILDER.condlitvec(BUILDER.condlitvec(), $lit, BUILDER.litvec()); }
-    //     | literal[lit] dsym                                         { $$ = BUILDER.condlitvec(BUILDER.condlitvec(), $lit, BUILDER.litvec()); }
-    //     | literal[lit] COLON nlitvec[cond] dsym                     { $$ = BUILDER.condlitvec(BUILDER.condlitvec(), $lit, $cond); }
-    //     | literal[lit] COLON SEM                                    { $$ = BUILDER.condlitvec(BUILDER.condlitvec(), $lit, BUILDER.litvec()); }
-    //     ;
+    // NOTE: this is so complicated because VBAR is also used as the absolute function for terms
+    //       due to limited lookahead I found no reasonable way to parse p(X):|q(X)
     disjunctionsep: $ => choice(
       seq($.disjunctionsep, $.literal, $.COMMA),
       seq($.disjunctionsep, $.literal, $.dsym),
       seq($.disjunctionsep, $.literal, $.COLON, $.SEM),
-      seq($.disjunctionsep, $.literal, $.COLON, $.nlitvec, $.dsym),
+      seq($.disjunctionsep, $.literal, $.COLON, $.litvec, $.dsym),
       seq($.literal, $.COMMA),
       seq($.literal, $.dsym),
-      seq($.literal, $.COLON, $.nlitvec, $.dsym),
+      seq($.literal, $.COLON, $.litvec, $.dsym),
       seq($.literal, $.COLON, $.SEM),
     ),
 
-    // disjunction
-    //     : disjunctionsep[vec] literal[lit] optcondition[cond] { $$ = BUILDER.condlitvec($vec, $lit, $cond); }
-    //     | literal[lit] COLON litvec[cond]                     { $$ = BUILDER.condlitvec(BUILDER.condlitvec(), $lit, $cond); }
-    //     ;
     disjunction: $ => choice(
       seq($.disjunctionsep, $.literal),
-      seq($.disjunctionsep, $.literal, $.noptcondition),
+      seq($.disjunctionsep, $.literal, $.optcondition),
       seq($.literal, $.COLON),
-      seq($.literal, $.COLON, $.nlitvec)
+      seq($.literal, $.COLON, $.litvec)
     ),
 
-    // bodycomma
-    //     : bodycomma[body] literal[lit] COMMA                      { $$ = BUILDER.bodylit($body, $lit); }
-    //     | bodycomma[body] literal[lit] SEM                        { $$ = BUILDER.bodylit($body, $lit); }
-    //     | bodycomma[body] lubodyaggregate[aggr] COMMA             { $$ = lexer->bodyaggregate($body, @aggr, NAF::POS, $aggr); }
-    //     | bodycomma[body] lubodyaggregate[aggr] SEM               { $$ = lexer->bodyaggregate($body, @aggr, NAF::POS, $aggr); }
-    //     | bodycomma[body] NOT[l] lubodyaggregate[aggr] COMMA      { $$ = lexer->bodyaggregate($body, @aggr + @l, NAF::NOT, $aggr); }
-    //     | bodycomma[body] NOT[l] lubodyaggregate[aggr] SEM        { $$ = lexer->bodyaggregate($body, @aggr + @l, NAF::NOT, $aggr); }
-    //     | bodycomma[body] NOT[l] NOT lubodyaggregate[aggr] COMMA  { $$ = lexer->bodyaggregate($body, @aggr + @l, NAF::NOTNOT, $aggr); }
-    //     | bodycomma[body] NOT[l] NOT lubodyaggregate[aggr] SEM    { $$ = lexer->bodyaggregate($body, @aggr + @l, NAF::NOTNOT, $aggr); }
-    //     | bodycomma[body] conjunction[conj] SEM                   { $$ = BUILDER.conjunction($body, @conj, $conj.first, $conj.second); }
-    //     | bodycomma[body] disjoint[cons] SEM                      { $$ = BUILDER.disjoint($body, @cons, $cons.first, $cons.second); }
-    //     |                                                         { $$ = BUILDER.body(); }
-    //     ;
-    nbodycomma: $ => choice(
+    bodycomma: $ => choice(
       seq($.literal, $.COMMA),
-      seq($.nbodycomma, $.literal, $.COMMA),
+      seq($.bodycomma, $.literal, $.COMMA),
       seq($.literal, $.SEM),
-      seq($.nbodycomma, $.literal, $.SEM),
+      seq($.bodycomma, $.literal, $.SEM),
       seq($.lubodyaggregate, $.COMMA),
-      seq($.nbodycomma, $.lubodyaggregate, $.COMMA),
+      seq($.bodycomma, $.lubodyaggregate, $.COMMA),
       seq($.lubodyaggregate, $.SEM),
-      seq($.nbodycomma, $.lubodyaggregate, $.SEM),
+      seq($.bodycomma, $.lubodyaggregate, $.SEM),
       seq($.NOT, $.lubodyaggregate, $.COMMA),
-      seq($.nbodycomma, $.NOT, $.lubodyaggregate, $.COMMA),
+      seq($.bodycomma, $.NOT, $.lubodyaggregate, $.COMMA),
       seq($.NOT, $.lubodyaggregate, $.SEM),
-      seq($.nbodycomma, $.NOT, $.lubodyaggregate, $.SEM),
+      seq($.bodycomma, $.NOT, $.lubodyaggregate, $.SEM),
       seq($.NOT, $.NOT, $.lubodyaggregate, $.COMMA),
-      seq($.nbodycomma, $.NOT, $.NOT, $.lubodyaggregate, $.COMMA),
+      seq($.bodycomma, $.NOT, $.NOT, $.lubodyaggregate, $.COMMA),
       seq($.NOT, $.NOT, $.lubodyaggregate, $.SEM),
-      seq($.nbodycomma, $.NOT, $.NOT, $.lubodyaggregate, $.SEM),
+      seq($.bodycomma, $.NOT, $.NOT, $.lubodyaggregate, $.SEM),
       seq($.conjunction, $.SEM),
-      seq($.nbodycomma, $.conjunction, $.SEM),
+      seq($.bodycomma, $.conjunction, $.SEM),
       seq($.disjoint, $.SEM),
-      seq($.nbodycomma, $.disjoint, $.SEM),
+      seq($.bodycomma, $.disjoint, $.SEM),
     ),
 
-    // bodydot
-    //     : bodycomma[body] literal[lit] DOT                      { $$ = BUILDER.bodylit($body, $lit); }
-    //     | bodycomma[body] lubodyaggregate[aggr] DOT             { $$ = lexer->bodyaggregate($body, @aggr, NAF::POS, $aggr); }
-    //     | bodycomma[body] NOT[l] lubodyaggregate[aggr] DOT      { $$ = lexer->bodyaggregate($body, @aggr + @l, NAF::NOT, $aggr); }
-    //     | bodycomma[body] NOT[l] NOT lubodyaggregate[aggr] DOT  { $$ = lexer->bodyaggregate($body, @aggr + @l, NAF::NOTNOT, $aggr); }
-    //     | bodycomma[body] conjunction[conj] DOT                 { $$ = BUILDER.conjunction($body, @conj, $conj.first, $conj.second); }
-    //     | bodycomma[body] disjoint[cons] DOT                    { $$ = BUILDER.disjoint($body, @cons, $cons.first, $cons.second); }
-    //     ;
     bodydot: $ => choice(
       seq($.literal, $.DOT),
-      seq($.nbodycomma, $.literal, $.DOT),
+      seq($.bodycomma, $.literal, $.DOT),
       seq($.lubodyaggregate, $.DOT),
-      seq($.nbodycomma, $.lubodyaggregate, $.DOT),
+      seq($.bodycomma, $.lubodyaggregate, $.DOT),
       seq($.NOT, $.lubodyaggregate, $.DOT),
-      seq($.nbodycomma, $.NOT, $.lubodyaggregate, $.DOT),
+      seq($.bodycomma, $.NOT, $.lubodyaggregate, $.DOT),
       seq($.NOT, $.NOT, $.lubodyaggregate, $.DOT),
-      seq($.nbodycomma, $.NOT, $.NOT, $.lubodyaggregate, $.DOT),
+      seq($.bodycomma, $.NOT, $.NOT, $.lubodyaggregate, $.DOT),
       seq($.conjunction, $.DOT),
-      seq($.nbodycomma, $.conjunction, $.DOT),
+      seq($.bodycomma, $.conjunction, $.DOT),
       seq($.disjoint, $.DOT),
-      seq($.nbodycomma, $.disjoint, $.DOT),
+      seq($.bodycomma, $.disjoint, $.DOT),
     ),
 
-    // bodyconddot
-    //     : DOT             { $$ = BUILDER.body(); }
-    //     | COLON DOT       { $$ = BUILDER.body(); }
-    //     | COLON bodydot[body]   { $$ = $body; }
     bodyconddot: $ => choice(
       $.DOT,
       seq($.COLON, $.DOT),
       seq($.COLON, $.bodydot),
     ),
 
-    // head
-    //     : literal[lit]            { $$ = BUILDER.headlit($lit); }
-    //     | disjunction[elems]      { $$ = BUILDER.disjunction(@$, $elems); }
-    //     | luheadaggregate[aggr]   { $$ = lexer->headaggregate(@$, $aggr); }
-    //     ;
     head: $ => choice(
       $.literal,
       $.disjunction,
       $.luheadaggregate
     ),
 
-    // statement
-    //     : head[hd] DOT            { BUILDER.rule(@$, $hd); }
-    //     | head[hd] IF DOT         { BUILDER.rule(@$, $hd); }
-    //     | head[hd] IF bodydot[bd] { BUILDER.rule(@$, $hd, $bd); }
-    //     | IF bodydot[bd]          { BUILDER.rule(@$, BUILDER.headlit(BUILDER.boollit(@$, false)), $bd); }
-    //     | IF DOT                  { BUILDER.rule(@$, BUILDER.headlit(BUILDER.boollit(@$, false)), BUILDER.body()); }
-    //     ;
-    // statement
-    //     : disjoint[hd] IF bodydot[body] { BUILDER.rule(@$, BUILDER.headlit(BUILDER.boollit(@hd, false)), BUILDER.disjoint($body, @hd, inv($hd.first), $hd.second)); }
-    //     | disjoint[hd] IF DOT           { BUILDER.rule(@$, BUILDER.headlit(BUILDER.boollit(@hd, false)), BUILDER.disjoint(BUILDER.body(), @hd, inv($hd.first), $hd.second)); }
-    //     | disjoint[hd] DOT              { BUILDER.rule(@$, BUILDER.headlit(BUILDER.boollit(@hd, false)), BUILDER.disjoint(BUILDER.body(), @hd, inv($hd.first), $hd.second)); }
-    //     ;
-    // statement
-    //     : WIF bodydot[bd] LBRACK optimizeweight[w] optimizetuple[t] RBRACK { BUILDER.optimize(@$, $w.first, $w.second, $t, $bd); }
-    //     | WIF         DOT LBRACK optimizeweight[w] optimizetuple[t] RBRACK { BUILDER.optimize(@$, $w.first, $w.second, $t, BUILDER.body()); }
-    //     ;
-    // statement
-    //     : MINIMIZE LBRACE RBRACE DOT
-    //     | MAXIMIZE LBRACE RBRACE DOT
-    //     | MINIMIZE LBRACE minelemlist RBRACE DOT
-    //     | MAXIMIZE LBRACE maxelemlist RBRACE DOT
-    //     ;
-    // statement
-    //     : SHOWSIG identifier[id] SLASH NUMBER[num] DOT     { BUILDER.showsig(@$, Sig(String::fromRep($id), $num, false), false); }
-    //     | SHOWSIG SUB identifier[id] SLASH NUMBER[num] DOT { BUILDER.showsig(@$, Sig(String::fromRep($id), $num, true), false); }
-    //     | SHOW DOT                                         { BUILDER.showsig(@$, Sig("", 0, false), false); }
-    //     | SHOW term[t] COLON bodydot[bd]                   { BUILDER.show(@$, $t, $bd, false); }
-    //     | SHOW term[t] DOT                                 { BUILDER.show(@$, $t, BUILDER.body(), false); }
-    //     | SHOWSIG CSP identifier[id] SLASH NUMBER[num] DOT { BUILDER.showsig(@$, Sig(String::fromRep($id), $num, false), true); }
-    //     | SHOW CSP term[t] COLON bodydot[bd]               { BUILDER.show(@$, $t, $bd, true); }
-    //     | SHOW CSP term[t] DOT                             { BUILDER.show(@$, $t, BUILDER.body(), true); }
-    //     ;
-    // statement
-    //     : DEFINED identifier[id] SLASH NUMBER[num] DOT     { BUILDER.defined(@$, Sig(String::fromRep($id), $num, false)); }
-    //     | DEFINED SUB identifier[id] SLASH NUMBER[num] DOT { BUILDER.defined(@$, Sig(String::fromRep($id), $num, true)); }
-    // statement
-    //     : EDGE LPAREN binaryargvec[args] RPAREN bodyconddot[body] { BUILDER.edge(@$, $args, $body); }
-    //     ;
-    // statement
-    //     : HEURISTIC atom[a] bodyconddot[body] LBRACK term[t] AT term[p] COMMA term[mod] RBRACK { BUILDER.heuristic(@$, $a, $body, $t, $p, $mod); }
-    //     | HEURISTIC atom[a] bodyconddot[body] LBRACK term[t]            COMMA term[mod] RBRACK { BUILDER.heuristic(@$, $a, $body, $t, BUILDER.term(@$, Symbol::createNum(0)), $mod); }
-    //     ;
-    // statement
-    //     : PROJECT identifier[name] SLASH NUMBER[arity] DOT     { BUILDER.project(@$, Sig(String::fromRep($name), $arity, false)); }
-    //     | PROJECT SUB identifier[name] SLASH NUMBER[arity] DOT { BUILDER.project(@$, Sig(String::fromRep($name), $arity, true)); }
-    //     | PROJECT atom[a] bodyconddot[body]                    { BUILDER.project(@$, $a, $body); }
-    //     ;
-    // statement
-    //     : CONST identifier[uid] EQ constterm[rhs] DOT                        { BUILDER.define(@$, String::fromRep($uid), $rhs, true, LOGGER); }
-    //     | CONST identifier[uid] EQ constterm[rhs] DOT LBRACK DEFAULT  RBRACK { BUILDER.define(@$, String::fromRep($uid), $rhs, true, LOGGER); }
-    //     | CONST identifier[uid] EQ constterm[rhs] DOT LBRACK OVERRIDE RBRACK { BUILDER.define(@$, String::fromRep($uid), $rhs, false, LOGGER); }
-    //     ;
-    // statement
-    //     : SCRIPT LPAREN IDENTIFIER[type] RPAREN CODE[code] DOT { BUILDER.script(@$, String::fromRep($type), String::fromRep($code)); }
-    //     ;
-    // statement
-    //     : INCLUDE    STRING[file]        DOT { lexer->include(String::fromRep($file), @$, false, LOGGER); }
-    //     | INCLUDE LT identifier[file] GT DOT { lexer->include(String::fromRep($file), @$, true, LOGGER); }
-    //     ;
-    // statement
-    //     : BLOCK identifier[name] LPAREN idlist[args] RPAREN DOT { BUILDER.block(@$, String::fromRep($name), $args); }
-    //     | BLOCK identifier[name] DOT                            { BUILDER.block(@$, String::fromRep($name), BUILDER.idvec()); }
-    //     ;
-    // statement
-    //     : EXTERNAL atom[hd] COLON bodydot[bd]                       { BUILDER.external(@$, $hd, $bd, BUILDER.term(@$, Symbol::createId("false"))); }
-    //     | EXTERNAL atom[hd] COLON DOT                               { BUILDER.external(@$, $hd, BUILDER.body(), BUILDER.term(@$, Symbol::createId("false"))); }
-    //     | EXTERNAL atom[hd] DOT                                     { BUILDER.external(@$, $hd, BUILDER.body(), BUILDER.term(@$, Symbol::createId("false"))); }
-    //     | EXTERNAL atom[hd] COLON bodydot[bd] LBRACK term[t] RBRACK { BUILDER.external(@$, $hd, $bd, $t); }
-    //     | EXTERNAL atom[hd] COLON DOT         LBRACK term[t] RBRACK { BUILDER.external(@$, $hd, BUILDER.body(), $t); }
-    //     | EXTERNAL atom[hd] DOT               LBRACK term[t] RBRACK { BUILDER.external(@$, $hd, BUILDER.body(), $t); }
-    //     ;
-    // statement
-    //     : THEORY identifier[name] enable_theory_definition_lexing LBRACE theory_definition_list[defs] RBRACE disable_theory_lexing DOT { BUILDER.theorydef(@$, String::fromRep($name), $defs, LOGGER); }
-    //     ;
     statement: $ => choice(
       seq($.head, $.DOT),
       seq($.head, $.IF, $.DOT),
@@ -879,7 +505,7 @@ module.exports = grammar({
       seq($.disjoint, $.IF, $.DOT),
       seq($.disjoint, $.DOT),
       seq($.WIF, $.bodydot, $.LBRACK, $.optimizeweight, $.RBRACK),
-      seq($.WIF, $.bodydot, $.LBRACK, $.optimizeweight, $.noptimizetuple, $.RBRACK),
+      seq($.WIF, $.bodydot, $.LBRACK, $.optimizeweight, $.optimizetuple, $.RBRACK),
       seq($.MINIMIZE, $.LBRACE, $.RBRACE, $.DOT),
       seq($.MAXIMIZE, $.LBRACE, $.RBRACE, $.DOT),
       seq($.MINIMIZE, $.LBRACE, $.minelemlist, $.RBRACE, $.DOT),
@@ -907,7 +533,7 @@ module.exports = grammar({
       seq($.INCLUDE, $.STRING, $.DOT),
       seq($.INCLUDE, $.LT, $.identifier, $.GT, $.DOT),
       seq($.BLOCK, $.identifier, $.LPAREN, $.RPAREN, $.DOT),
-      seq($.BLOCK, $.identifier, $.LPAREN, $.nidlist, $.RPAREN, $.DOT),
+      seq($.BLOCK, $.identifier, $.LPAREN, $.idlist, $.RPAREN, $.DOT),
       seq($.BLOCK, $.identifier, $.DOT),
       seq($.EXTERNAL, $.atom, $.COLON, $.bodydot),
       seq($.EXTERNAL, $.atom, $.COLON, $.DOT),
@@ -919,123 +545,65 @@ module.exports = grammar({
       seq($.THEORY, $.theory_identifier, $.LBRACE, $.theory_definition_nlist, $.RBRACE, $.DOT)
     ),
 
-    // optimizetuple
-    //     : COMMA ntermvec[vec] { $$ = $vec; }
-    //     |                     { $$ = BUILDER.termvec(); }
-    //     ;
-    noptimizetuple: $ =>
-      seq($.COMMA, $.ntermvec),
 
-    // optimizeweight
-    //     : term[w] AT term[p] { $$ = {$w, $p}; }
-    //     | term[w]            { $$ = {$w, BUILDER.term(@$, Symbol::createNum(0))}; }
-    //     ;
+    optimizetuple: $ =>
+      seq($.COMMA, $.termvec),
+
     optimizeweight: $ => choice(
       seq($.term, $.AT, $.term),
       $.term
     ),
 
-    // optimizelitvec
-    //     : literal[lit]                          { $$ = BUILDER.bodylit(BUILDER.body(), $lit); }
-    //     | optimizelitvec[bd] COMMA literal[lit] { $$ = BUILDER.bodylit($bd, $lit); }
-    //     ;
+
     optimizelitvec: $ => choice(
       $.literal,
       seq($.optimizelitvec, $.COMMA, $.literal),
     ),
 
-    // optimizecond
-    //     : COLON optimizelitvec[bd] { $$ = $bd; }
-    //     | COLON                    { $$ = BUILDER.body(); }
-    //     |                          { $$ = BUILDER.body(); }
-    //     ;
-    noptimizecond: $ => choice(
+    optimizecond: $ => choice(
       seq($.COLON, $.optimizelitvec),
       $.COLON,
     ),
 
-    // maxelemlist
-    //     :                 optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, BUILDER.term(@w, UnOp::NEG, $w.first), $w.second, $t, $bd); }
-    //     | maxelemlist SEM optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, BUILDER.term(@w, UnOp::NEG, $w.first), $w.second, $t, $bd); }
-    //     ;
     maxelemlist: $ => choice(
       seq($.optimizeweight,),
-      seq($.optimizeweight, $.noptimizecond),
-      seq($.optimizeweight, $.noptimizetuple,),
-      seq($.optimizeweight, $.noptimizetuple, $.noptimizecond),
+      seq($.optimizeweight, $.optimizecond),
+      seq($.optimizeweight, $.optimizetuple,),
+      seq($.optimizeweight, $.optimizetuple, $.optimizecond),
       seq($.maxelemlist, $.SEM, $.optimizeweight,),
-      seq($.maxelemlist, $.SEM, $.optimizeweight, $.noptimizecond),
-      seq($.maxelemlist, $.SEM, $.optimizeweight, $.noptimizetuple,),
-      seq($.maxelemlist, $.SEM, $.optimizeweight, $.noptimizetuple, $.noptimizecond),
+      seq($.maxelemlist, $.SEM, $.optimizeweight, $.optimizecond),
+      seq($.maxelemlist, $.SEM, $.optimizeweight, $.optimizetuple,),
+      seq($.maxelemlist, $.SEM, $.optimizeweight, $.optimizetuple, $.optimizecond),
     ),
 
-    // minelemlist
-    //     :                 optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, $w.first, $w.second, $t, $bd); }
-    //     | minelemlist SEM optimizeweight[w] optimizetuple[t] optimizecond[bd] { BUILDER.optimize(@$, $w.first, $w.second, $t, $bd); }
-    //     ;
     minelemlist: $ => choice(
       seq($.optimizeweight,),
-      seq($.optimizeweight, $.noptimizecond),
-      seq($.optimizeweight, $.noptimizetuple,),
-      seq($.optimizeweight, $.noptimizetuple, $.noptimizecond),
+      seq($.optimizeweight, $.optimizecond),
+      seq($.optimizeweight, $.optimizetuple,),
+      seq($.optimizeweight, $.optimizetuple, $.optimizecond),
       seq($.minelemlist, $.SEM, $.optimizeweight,),
-      seq($.minelemlist, $.SEM, $.optimizeweight, $.noptimizecond),
-      seq($.minelemlist, $.SEM, $.optimizeweight, $.noptimizetuple,),
-      seq($.minelemlist, $.SEM, $.optimizeweight, $.noptimizetuple, $.noptimizecond),
+      seq($.minelemlist, $.SEM, $.optimizeweight, $.optimizecond),
+      seq($.minelemlist, $.SEM, $.optimizeweight, $.optimizetuple,),
+      seq($.minelemlist, $.SEM, $.optimizeweight, $.optimizetuple, $.optimizecond),
     ),
 
-    // define
-    //     : identifier[uid] EQ constterm[rhs] {  BUILDER.define(@$, String::fromRep($uid), $rhs, false, LOGGER); }
-    //     ;
-
-    // nidlist
-    //     : nidlist[list] COMMA identifier[id] { $$ = BUILDER.idvec($list, @id, String::fromRep($id)); }
-    //     | identifier[id]                     { $$ = BUILDER.idvec(BUILDER.idvec(), @id, String::fromRep($id)); }
-    //     ;
-    // idlist
-    //     :               { $$ = BUILDER.idvec(); }
-    //     | nidlist[list] { $$ = $list; }
-    //     ;
-    nidlist: $ => choice(
-      seq($.nidlist, $.COMMA, $.identifier),
+    idlist: $ => choice(
+      seq($.idlist, $.COMMA, $.identifier),
       $.identifier,
     ),
 
-
     theory_identifier: $ => $.identifier,
 
-    // theory_op
-    //     : THEORY_OP[op]  { $$ = $op; }
-    //     | NOT[not]       { $$ = $not; }
-    //     ;
     theory_op: $ => choice(
       $.THEORY_OP,
       $.NOT
     ),
 
-    // theory_op_list
-    //     : theory_op_list[ops] theory_op[op] { $$ = BUILDER.theoryops($ops, String::fromRep($op)); }
-    //     | theory_op[op]                     { $$ = BUILDER.theoryops(BUILDER.theoryops(), String::fromRep($op)); }
-    //     ;
     theory_op_list: $ => choice(
       seq($.theory_op_list, $.theory_op),
       $.theory_op
     ),
-    // theory_term
-    //     : LBRACE theory_opterm_list[list] RBRACE                              { $$ = BUILDER.theorytermset(@$, $list); }
-    //     | LBRACK theory_opterm_list[list] RBRACK                              { $$ = BUILDER.theoryoptermlist(@$, $list); }
-    //     | LPAREN RPAREN                                                       { $$ = BUILDER.theorytermtuple(@$, BUILDER.theoryopterms()); }
-    //     | LPAREN theory_opterm[term] RPAREN                                   { $$ = BUILDER.theorytermopterm(@$, $term); }
-    //     | LPAREN theory_opterm[opterm] COMMA RPAREN                           { $$ = BUILDER.theorytermtuple(@$, BUILDER.theoryopterms(BUILDER.theoryopterms(), @opterm, $opterm)); }
-    //     | LPAREN theory_opterm[opterm] COMMA theory_opterm_nlist[list] RPAREN { $$ = BUILDER.theorytermtuple(@$, BUILDER.theoryopterms(@opterm, $opterm, $list)); }
-    //     | identifier[id] LPAREN theory_opterm_list[list] RPAREN               { $$ = BUILDER.theorytermfun(@$, String::fromRep($id), $list); }
-    //     | identifier[id]                                                      { $$ = BUILDER.theorytermvalue(@$, Symbol::createId(String::fromRep($id))); }
-    //     | NUMBER[num]                                                         { $$ = BUILDER.theorytermvalue(@$, Symbol::createNum($num)); }
-    //     | STRING[str]                                                         { $$ = BUILDER.theorytermvalue(@$, Symbol::createStr(String::fromRep($str))); }
-    //     | INFIMUM                                                             { $$ = BUILDER.theorytermvalue(@$, Symbol::createInf()); }
-    //     | SUPREMUM                                                            { $$ = BUILDER.theorytermvalue(@$, Symbol::createSup()); }
-    //     | VARIABLE[var]                                                       { $$ = BUILDER.theorytermvar(@$, String::fromRep($var)); }
-    //     ;
+
     theory_term: $ => choice(
       seq($.LBRACE, $.RBRACE),
       seq($.LBRACE, $.theory_opterm_nlist, $.RBRACE),
@@ -1054,56 +622,30 @@ module.exports = grammar({
       $.SUPREMUM,
       $.VARIABLE,
     ),
-    // theory_opterm
-    //     : theory_opterm[opterm] theory_op_list[ops] theory_term[term] { $$ = BUILDER.theoryopterm($opterm, $ops, $term); }
-    //     | theory_op_list[ops] theory_term[term]                       { $$ = BUILDER.theoryopterm($ops, $term); }
-    //     | theory_term[term]                                           { $$ = BUILDER.theoryopterm(BUILDER.theoryops(), $term); }
-    //     ;
+
     theory_opterm: $ => choice(
       seq($.theory_opterm, $.theory_op_list, $.theory_term),
       seq($.theory_op_list, $.theory_term),
       $.theory_term
     ),
-    // theory_opterm_nlist
-    //     : theory_opterm_nlist[list] COMMA theory_opterm[opterm] { $$ = BUILDER.theoryopterms($list, @opterm, $opterm); }
-    //     | theory_opterm[opterm]                                 { $$ = BUILDER.theoryopterms(BUILDER.theoryopterms(), @opterm, $opterm); }
-    //     ;
 
-    // theory_opterm_list
-    //     : theory_opterm_nlist[list] { $$ = $list; }
-    //     |                           { $$ = BUILDER.theoryopterms(); }
-    //     ;
     theory_opterm_nlist: $ => choice(
       seq($.theory_opterm_nlist, $.COMMA, $.theory_opterm),
       $.theory_opterm
     ),
-    // theory_atom_element 
-    //     : theory_opterm_nlist[list] disable_theory_lexing optcondition[cond] { $$ = { $list, $cond }; }
-    //     |                           disable_theory_lexing COLON litvec[cond] { $$ = { BUILDER.theoryopterms(), $cond }; }
-    //     ;
+
     theory_atom_element: $ => choice(
       seq($.theory_opterm_nlist),
-      seq($.theory_opterm_nlist, $.noptcondition),
+      seq($.theory_opterm_nlist, $.optcondition),
       seq($.COLON),
-      seq($.COLON, $.nlitvec),
+      seq($.COLON, $.litvec),
     ),
 
-    // theory_atom_element_nlist
-    //     : theory_atom_element_nlist[list] enable_theory_lexing SEM theory_atom_element[elem] { $$ = BUILDER.theoryelems($list, $elem.first, $elem.second); }
-    //     | theory_atom_element[elem]                                                          { $$ = BUILDER.theoryelems(BUILDER.theoryelems(), $elem.first, $elem.second); }
-    //     ;
-
-    // theory_atom_element_list
-    //     : theory_atom_element_nlist[list] { $$ = $list; }
-    //     |                                 { $$ = BUILDER.theoryelems(); }
-    //     ;
     theory_atom_element_nlist: $ => choice(
       seq($.theory_atom_element_nlist, $.SEM, $.theory_atom_element),
       $.theory_atom_element,
     ),
-    // theory_atom_name
-    //     : identifier[id]                                  { $$ = BUILDER.term(@$, String::fromRep($id), BUILDER.termvecvec(BUILDER.termvecvec(), BUILDER.termvec()), false); }
-    //     | identifier[id] LPAREN argvec[tvv] RPAREN[r]     { $$ = BUILDER.term(@$, String::fromRep($id), $tvv, false); }
+
     theory_atom_name: $ => choice(
       $.identifier,
       seq($._widentifier, $.RPAREN),
@@ -1111,11 +653,6 @@ module.exports = grammar({
 
     ),
 
-    // theory_atom
-    //     : AND theory_atom_name[name] { $$ = BUILDER.theoryatom($name, BUILDER.theoryelems()); }
-    //     | AND theory_atom_name[name] enable_theory_lexing LBRACE theory_atom_element_list[elems] enable_theory_lexing RBRACE                                     disable_theory_lexing { $$ = BUILDER.theoryatom($name, $elems); }
-    //     | AND theory_atom_name[name] enable_theory_lexing LBRACE theory_atom_element_list[elems] enable_theory_lexing RBRACE theory_op[op] theory_opterm[opterm] disable_theory_lexing { $$ = BUILDER.theoryatom($name, $elems, String::fromRep($op), @opterm, $opterm); }
-    //     ;
     theory_atom: $ => choice(
       seq($.AND, $.theory_atom_name),
       seq($.AND, $.theory_atom_name, $.LBRACE, $.RBRACE),
@@ -1124,54 +661,22 @@ module.exports = grammar({
       seq($.AND, $.theory_atom_name, $.LBRACE, $.theory_atom_element_nlist, $.RBRACE, $.theory_op, $.theory_opterm),
     ),
 
-    // theory_operator_nlist
-    //     : theory_op[op]                                  { $$ = BUILDER.theoryops(BUILDER.theoryops(), String::fromRep($op)); }
-    //     | theory_operator_nlist[ops] COMMA theory_op[op] { $$ = BUILDER.theoryops($ops, String::fromRep($op)); }
-    //     ;
-
-    // theory_operator_list
-    //     : theory_operator_nlist[ops] { $$ = $ops; }
-    //     |                            { $$ = BUILDER.theoryops(); }
-    //     ;
     theory_operator_nlist: $ => choice(
       $.theory_op,
       seq($.theory_operator_nlist, $.COMMA, $.theory_op)
     ),
-    // theory_operator_definition
-    //     : theory_op[op] enable_theory_definition_lexing COLON NUMBER[arity] COMMA UNARY              { $$ = BUILDER.theoryopdef(@$, String::fromRep($op), $arity, TheoryOperatorType::Unary); }
-    //     | theory_op[op] enable_theory_definition_lexing COLON NUMBER[arity] COMMA BINARY COMMA LEFT  { $$ = BUILDER.theoryopdef(@$, String::fromRep($op), $arity, TheoryOperatorType::BinaryLeft); }
-    //     | theory_op[op] enable_theory_definition_lexing COLON NUMBER[arity] COMMA BINARY COMMA RIGHT { $$ = BUILDER.theoryopdef(@$, String::fromRep($op), $arity, TheoryOperatorType::BinaryRight); }
-    //     ;
+
     theory_operator_definition: $ => choice(
       seq($.theory_op, $.COLON, $.NUMBER, $.COMMA, $.UNARY),
       seq($.theory_op, $.COLON, $.NUMBER, $.COMMA, $.BINARY, $.COMMA, $.LEFT),
       seq($.theory_op, $.COLON, $.NUMBER, $.COMMA, $.BINARY, $.COMMA, $.RIGHT),
     ),
-    // theory_operator_definition_nlist
-    //     : theory_operator_definition[def]                                                                 { $$ = BUILDER.theoryopdefs(BUILDER.theoryopdefs(), $def); }
-    //     | theory_operator_definition_nlist[defs] enable_theory_lexing SEM theory_operator_definition[def] { $$ = BUILDER.theoryopdefs($defs, $def); }
-    //     ;
 
-    // theory_operator_definiton_list
-    //     : theory_operator_definition_nlist[defs] { $$ = $defs; }
-    //     |                                        { $$ = BUILDER.theoryopdefs(); }
-    //     ;
     theory_operator_definition_nlist: $ => choice(
       $.theory_operator_definition,
       seq($.theory_operator_definition_nlist, $.SEM, $.theory_operator_definition)
     ),
 
-    // theory_definition_identifier
-    //     : identifier[id] { $$ = $id; }
-    //     | LEFT           { $$ = String::toRep("left"); }
-    //     | RIGHT          { $$ = String::toRep("right"); }
-    //     | UNARY          { $$ = String::toRep("unary"); }
-    //     | BINARY         { $$ = String::toRep("binary"); }
-    //     | HEAD           { $$ = String::toRep("head"); }
-    //     | BODY           { $$ = String::toRep("body"); }
-    //     | ANY            { $$ = String::toRep("any"); }
-    //     | DIRECTIVE      { $$ = String::toRep("directive"); }
-    //     ;
     theory_definition_identifier: $ => choice(
       $.identifier,
       $.LEFT,
@@ -1183,55 +688,30 @@ module.exports = grammar({
       $.ANY,
       $.DIRECTIVE
     ),
-    // theory_term_definition
-    //     : theory_definition_identifier[name] enable_theory_lexing LBRACE theory_operator_definiton_list[ops] enable_theory_definition_lexing RBRACE { $$ = BUILDER.theorytermdef(@$, String::fromRep($name), $ops, LOGGER); }
-    //     ;
+
     theory_term_definition: $ => choice(
       seq($.theory_definition_identifier, $.LBRACE, $.RBRACE),
       seq($.theory_definition_identifier, $.LBRACE, $.theory_operator_definition_nlist, $.RBRACE)),
-    // theory_atom_type
-    //     : HEAD      { $$ = TheoryAtomType::Head; }
-    //     | BODY      { $$ = TheoryAtomType::Body; }
-    //     | ANY       { $$ = TheoryAtomType::Any; }
-    //     | DIRECTIVE { $$ = TheoryAtomType::Directive; }
-    //     ;
+
     theory_atom_type: $ => choice(
       $.HEAD,
       $.BODY,
       $.ANY,
       $.DIRECTIVE
     ),
-    // theory_atom_definition
-    //     : AND theory_definition_identifier[name] SLASH NUMBER[arity] COLON theory_definition_identifier[termdef] COMMA
-    //       enable_theory_lexing LBRACE theory_operator_list[ops] enable_theory_definition_lexing RBRACE COMMA theory_definition_identifier[guarddef] COMMA theory_atom_type[type] { $$ = BUILDER.theoryatomdef(@$, String::fromRep($name), $arity, String::fromRep($termdef), $type, $ops, String::fromRep($guarddef)); }
-    //     | AND theory_definition_identifier[name] SLASH NUMBER[arity] COLON theory_definition_identifier[termdef] COMMA                                    theory_atom_type[type] { $$ = BUILDER.theoryatomdef(@$, String::fromRep($name), $arity, String::fromRep($termdef), $type); }
-    //     ;
 
     theory_atom_definition: $ => choice(
       seq($.AND, $.theory_definition_identifier, $.SLASH, $.NUMBER, $.COLON, $.theory_definition_identifier, $.COMMA, $.LBRACE, $.RBRACE, $.COMMA, $.theory_definition_identifier, $.COMMA, $.theory_atom_type),
       seq($.AND, $.theory_definition_identifier, $.SLASH, $.NUMBER, $.COLON, $.theory_definition_identifier, $.COMMA, $.LBRACE, $.theory_operator_nlist, $.RBRACE, $.COMMA, $.theory_definition_identifier, $.COMMA, $.theory_atom_type),
       seq($.AND, $.theory_definition_identifier, $.SLASH, $.NUMBER, $.COLON, $.theory_definition_identifier, $.COMMA, $.theory_atom_type)
     ),
-    // theory_definition_nlist
-    //     : theory_definition_list[defs] SEM theory_atom_definition[def] { $$ = BUILDER.theorydefs($defs, $def); }
-    //     | theory_definition_list[defs] SEM theory_term_definition[def] { $$ = BUILDER.theorydefs($defs, $def); }
-    //     | theory_atom_definition[def] { $$ = BUILDER.theorydefs(BUILDER.theorydefs(), $def); }
-    //     | theory_term_definition[def] { $$ = BUILDER.theorydefs(BUILDER.theorydefs(), $def); }
-    //     ;
-    // theory_definition_list
-    //     : theory_definition_nlist[defs] { $$ = $defs; }
-    //     |                               { $$ = BUILDER.theorydefs(); }
-    //     ;
+
     theory_definition_nlist: $ => choice(
       $.theory_atom_definition,
       $.theory_term_definition,
       seq($.theory_atom_definition, $.SEM, $.theory_definition_nlist),
       seq($.theory_term_definition, $.SEM, $.theory_definition_nlist),
     ),
-
-
-    // infimum: $ => token(seq($.INFIMUM, optional('imum'))),
-    // supremum: $ => token(seq($.SUPREMUM, optional('remum'))),
 
     ////////// TODO: This is taken from tree-sitter-java! ////////////
     // Here we tolerate unescaped newlines in double-quoted and
