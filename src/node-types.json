@@ -1,5 +1,20 @@
 [
   {
+    "type": "INFIMUM",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "MAXIMIZE",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "MINIMIZE",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "NUMBER",
     "named": true,
     "fields": {},
@@ -44,6 +59,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "SUPREMUM",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "aggregatefunction",
@@ -1504,10 +1524,6 @@
           "named": true
         },
         {
-          "type": "SHOWSIG",
-          "named": true
-        },
-        {
           "type": "SLASH",
           "named": true
         },
@@ -2310,6 +2326,38 @@
     "named": false
   },
   {
+    "type": "#inf",
+    "named": false
+  },
+  {
+    "type": "#infimum",
+    "named": false
+  },
+  {
+    "type": "#maximise",
+    "named": false
+  },
+  {
+    "type": "#maximize",
+    "named": false
+  },
+  {
+    "type": "#minimise",
+    "named": false
+  },
+  {
+    "type": "#minimize",
+    "named": false
+  },
+  {
+    "type": "#sup",
+    "named": false
+  },
+  {
+    "type": "#supremum",
+    "named": false
+  },
+  {
     "type": "0",
     "named": false
   },
@@ -2478,10 +2526,6 @@
     "named": true
   },
   {
-    "type": "INFIMUM",
-    "named": true
-  },
-  {
     "type": "LBRACE",
     "named": true
   },
@@ -2510,15 +2554,7 @@
     "named": true
   },
   {
-    "type": "MAXIMIZE",
-    "named": true
-  },
-  {
     "type": "MIN",
-    "named": true
-  },
-  {
-    "type": "MINIMIZE",
     "named": true
   },
   {
@@ -2582,10 +2618,6 @@
     "named": true
   },
   {
-    "type": "SHOWSIG",
-    "named": true
-  },
-  {
     "type": "SLASH",
     "named": true
   },
@@ -2599,10 +2631,6 @@
   },
   {
     "type": "SUMP",
-    "named": true
-  },
-  {
-    "type": "SUPREMUM",
     "named": true
   },
   {

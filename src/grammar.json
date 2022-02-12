@@ -171,8 +171,17 @@
       "value": "#include"
     },
     "INFIMUM": {
-      "type": "STRING",
-      "value": "#inf"
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "#inf"
+        },
+        {
+          "type": "STRING",
+          "value": "#infimum"
+        }
+      ]
     },
     "LBRACE": {
       "type": "STRING",
@@ -199,16 +208,34 @@
       "value": "#max"
     },
     "MAXIMIZE": {
-      "type": "STRING",
-      "value": "#maximize"
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "#maximize"
+        },
+        {
+          "type": "STRING",
+          "value": "#maximise"
+        }
+      ]
     },
     "MIN": {
       "type": "STRING",
       "value": "#min"
     },
     "MINIMIZE": {
-      "type": "STRING",
-      "value": "#minimize"
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "#minimize"
+        },
+        {
+          "type": "STRING",
+          "value": "#minimise"
+        }
+      ]
     },
     "MOD": {
       "type": "STRING",
@@ -262,10 +289,6 @@
       "type": "STRING",
       "value": "#heuristic"
     },
-    "SHOWSIG": {
-      "type": "STRING",
-      "value": "#showsig"
-    },
     "SLASH": {
       "type": "STRING",
       "value": "/"
@@ -283,8 +306,17 @@
       "value": "#sum+"
     },
     "SUPREMUM": {
-      "type": "STRING",
-      "value": "#sup"
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "#sup"
+        },
+        {
+          "type": "STRING",
+          "value": "#supremum"
+        }
+      ]
     },
     "TRUE": {
       "type": "STRING",
@@ -4348,58 +4380,66 @@
           ]
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "SHOWSIG"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "identifier"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "SLASH"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "NUMBER"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "DOT"
-            }
-          ]
+          "type": "PREC",
+          "value": 8,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "SHOW"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "SLASH"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "NUMBER"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "DOT"
+              }
+            ]
+          }
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "SHOWSIG"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "SUB"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "identifier"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "SLASH"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "NUMBER"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "DOT"
-            }
-          ]
+          "type": "PREC",
+          "value": 8,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "SHOW"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "SUB"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "SLASH"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "NUMBER"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "DOT"
+              }
+            ]
+          }
         },
         {
           "type": "SEQ",
@@ -4453,33 +4493,37 @@
           ]
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "SHOWSIG"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "CSP"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "identifier"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "SLASH"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "NUMBER"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "DOT"
-            }
-          ]
+          "type": "PREC",
+          "value": 8,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "SHOW"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "CSP"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "SLASH"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "NUMBER"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "DOT"
+              }
+            ]
+          }
         },
         {
           "type": "SEQ",
