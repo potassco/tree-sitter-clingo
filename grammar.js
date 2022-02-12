@@ -52,16 +52,25 @@ module.exports = grammar({
     GT: $ => '>',
     IF: $ => ':-',
     INCLUDE: $ => '#include',
-    INFIMUM: $ => '#inf',
+    INFIMUM: $ => choice(
+      '#inf',
+      '#infimum'
+    ),
     LBRACE: $ => '{',
     LBRACK: $ => '[',
     LEQ: $ => '<=',
     LPAREN: $ => '(',
     LT: $ => '<',
     MAX: $ => '#max',
-    MAXIMIZE: $ => '#maximize',
+    MAXIMIZE: $ => choice(
+      '#maximize',
+      '#maximise'
+    ),
     MIN: $ => '#min',
-    MINIMIZE: $ => '#minimize',
+    MINIMIZE: $ => choice(
+      '#minimize',
+      '#minimise'
+    ),
     MOD: $ => '\\',
     MUL: $ => '*',
     NEQ: $ => '!=',
@@ -75,12 +84,14 @@ module.exports = grammar({
     EDGE: $ => '#edge',
     PROJECT: $ => '#project',
     HEURISTIC: $ => '#heuristic',
-    SHOWSIG: $ => '#showsig',
     SLASH: $ => '/',
     SUB: $ => '-',
     SUM: $ => '#sum',
     SUMP: $ => '#sum+',
-    SUPREMUM: $ => '#sup',
+    SUPREMUM: $ => choice(
+      '#sup',
+      '#supremum'
+    ),
     TRUE: $ => '#true',
     BLOCK: $ => '#program',
     //     UBNOT
@@ -873,12 +884,12 @@ module.exports = grammar({
       seq($.MAXIMIZE, $.LBRACE, $.RBRACE, $.DOT),
       seq($.MINIMIZE, $.LBRACE, $.minelemlist, $.RBRACE, $.DOT),
       seq($.MAXIMIZE, $.LBRACE, $.maxelemlist, $.RBRACE, $.DOT),
-      seq($.SHOWSIG, $.identifier, $.SLASH, $.NUMBER, $.DOT),
-      seq($.SHOWSIG, $.SUB, $.identifier, $.SLASH, $.NUMBER, $.DOT),
+      prec(8, seq($.SHOW, $.identifier, $.SLASH, $.NUMBER, $.DOT)),
+      prec(8, seq($.SHOW, $.SUB, $.identifier, $.SLASH, $.NUMBER, $.DOT)),
       seq($.SHOW, $.DOT),
       seq($.SHOW, $.term, $.COLON, $.bodydot),
       seq($.SHOW, $.term, $.DOT),
-      seq($.SHOWSIG, $.CSP, $.identifier, $.SLASH, $.NUMBER, $.DOT),
+      prec(8, seq($.SHOW, $.CSP, $.identifier, $.SLASH, $.NUMBER, $.DOT)),
       seq($.SHOW, $.CSP, $.term, $.COLON, $.bodydot),
       seq($.SHOW, $.CSP, $.term, $.DOT),
       seq($.DEFINED, $.identifier, $.SLASH, $.NUMBER, $.DOT),
