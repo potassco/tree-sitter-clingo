@@ -143,6 +143,36 @@ maximize statement
     (RBRACE)
     (DOT)))
 
+
+==================
+minimise statement
+==================
+
+#minimise {X:ccc(X)}.
+---
+(source_file
+  (statement
+    (MINIMIZE)
+    (LBRACE) 
+    (minelemlist
+      (optimizeweight
+        (term
+          (VARIABLE))) 
+      (noptimizecond
+        (COLON)
+        (optimizelitvec
+          (literal
+            (atom
+              (identifier)
+              (LPAREN)
+              (argvec
+                (ntermvec
+                  (term
+                    (VARIABLE))))
+              (RPAREN))))))
+    (RBRACE)
+    (DOT)))
+
 ==================
 embedded script
 ==================
