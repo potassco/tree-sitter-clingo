@@ -109,7 +109,7 @@
           "named": true
         },
         {
-          "type": "noptcondition",
+          "type": "optcondition",
           "named": true
         }
       ]
@@ -159,7 +159,7 @@
           "named": true
         },
         {
-          "type": "noptcondition",
+          "type": "optcondition",
           "named": true
         }
       ]
@@ -182,7 +182,7 @@
           "named": true
         },
         {
-          "type": "ntermvec",
+          "type": "termvec",
           "named": true
         }
       ]
@@ -290,15 +290,15 @@
           "named": true
         },
         {
-          "type": "nlitvec",
+          "type": "litvec",
           "named": true
         },
         {
-          "type": "noptcondition",
+          "type": "optcondition",
           "named": true
         },
         {
-          "type": "ntermvec",
+          "type": "termvec",
           "named": true
         }
       ]
@@ -322,6 +322,49 @@
         },
         {
           "type": "bodyaggrelemvec",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "bodycomma",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "NOT",
+          "named": true
+        },
+        {
+          "type": "SEM",
+          "named": true
+        },
+        {
+          "type": "bodycomma",
+          "named": true
+        },
+        {
+          "type": "conjunction",
+          "named": true
+        },
+        {
+          "type": "disjoint",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "lubodyaggregate",
           "named": true
         }
       ]
@@ -367,6 +410,10 @@
           "named": true
         },
         {
+          "type": "bodycomma",
+          "named": true
+        },
+        {
           "type": "conjunction",
           "named": true
         },
@@ -380,10 +427,6 @@
         },
         {
           "type": "lubodyaggregate",
-          "named": true
-        },
-        {
-          "type": "nbodycomma",
           "named": true
         }
       ]
@@ -441,7 +484,22 @@
           "named": true
         },
         {
-          "type": "nlitvec",
+          "type": "litvec",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "constargvec",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "consttermvec",
           "named": true
         }
       ]
@@ -532,6 +590,10 @@
           "named": true
         },
         {
+          "type": "constargvec",
+          "named": true
+        },
+        {
           "type": "constterm",
           "named": true
         },
@@ -541,10 +603,6 @@
         },
         {
           "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "nconstargvec",
           "named": true
         }
       ]
@@ -682,6 +740,41 @@
     }
   },
   {
+    "type": "cspelemvec",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COLON",
+          "named": true
+        },
+        {
+          "type": "SEM",
+          "named": true
+        },
+        {
+          "type": "csp_add_term",
+          "named": true
+        },
+        {
+          "type": "cspelemvec",
+          "named": true
+        },
+        {
+          "type": "optcondition",
+          "named": true
+        },
+        {
+          "type": "termvec",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "dec",
     "named": true,
     "fields": {}
@@ -711,7 +804,7 @@
           "named": true
         },
         {
-          "type": "ncspelemvec",
+          "type": "cspelemvec",
           "named": true
         }
       ]
@@ -738,11 +831,11 @@
           "named": true
         },
         {
-          "type": "nlitvec",
+          "type": "litvec",
           "named": true
         },
         {
-          "type": "noptcondition",
+          "type": "optcondition",
           "named": true
         }
       ]
@@ -781,7 +874,7 @@
           "named": true
         },
         {
-          "type": "nlitvec",
+          "type": "litvec",
           "named": true
         }
       ]
@@ -885,11 +978,34 @@
           "named": true
         },
         {
-          "type": "noptcondition",
+          "type": "optcondition",
           "named": true
         },
         {
-          "type": "ntermvec",
+          "type": "termvec",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "idlist",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "idlist",
           "named": true
         }
       ]
@@ -935,6 +1051,29 @@
     }
   },
   {
+    "type": "litvec",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "litvec",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "lubodyaggregate",
     "named": true,
     "fields": {},
@@ -951,15 +1090,15 @@
           "named": true
         },
         {
-          "type": "nupper",
-          "named": true
-        },
-        {
           "type": "term",
           "named": true
         },
         {
           "type": "theory_atom",
+          "named": true
+        },
+        {
+          "type": "upper",
           "named": true
         }
       ]
@@ -982,15 +1121,15 @@
           "named": true
         },
         {
-          "type": "nupper",
-          "named": true
-        },
-        {
           "type": "term",
           "named": true
         },
         {
           "type": "theory_atom",
+          "named": true
+        },
+        {
+          "type": "upper",
           "named": true
         }
       ]
@@ -1013,11 +1152,11 @@
           "named": true
         },
         {
-          "type": "noptimizecond",
+          "type": "optimizecond",
           "named": true
         },
         {
-          "type": "noptimizetuple",
+          "type": "optimizetuple",
           "named": true
         },
         {
@@ -1044,11 +1183,11 @@
           "named": true
         },
         {
-          "type": "noptimizecond",
+          "type": "optimizecond",
           "named": true
         },
         {
-          "type": "noptimizetuple",
+          "type": "optimizetuple",
           "named": true
         },
         {
@@ -1059,65 +1198,7 @@
     }
   },
   {
-    "type": "nbodycomma",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "NOT",
-          "named": true
-        },
-        {
-          "type": "SEM",
-          "named": true
-        },
-        {
-          "type": "conjunction",
-          "named": true
-        },
-        {
-          "type": "disjoint",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "lubodyaggregate",
-          "named": true
-        },
-        {
-          "type": "nbodycomma",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "nconstargvec",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "consttermvec",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "ncspelemvec",
+    "type": "optcondition",
     "named": true,
     "fields": {},
     "children": {
@@ -1129,95 +1210,14 @@
           "named": true
         },
         {
-          "type": "SEM",
-          "named": true
-        },
-        {
-          "type": "csp_add_term",
-          "named": true
-        },
-        {
-          "type": "ncspelemvec",
-          "named": true
-        },
-        {
-          "type": "noptcondition",
-          "named": true
-        },
-        {
-          "type": "ntermvec",
+          "type": "litvec",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "nidlist",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "nidlist",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "nlitvec",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "nlitvec",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "noptcondition",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COLON",
-          "named": true
-        },
-        {
-          "type": "nlitvec",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "noptimizecond",
+    "type": "optimizecond",
     "named": true,
     "fields": {},
     "children": {
@@ -1230,105 +1230,6 @@
         },
         {
           "type": "optimizelitvec",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "noptimizetuple",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "ntermvec",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "ntermvec",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "ntermvec",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "ntuple",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "ntermvec",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "ntuplevec",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "ntuple",
-          "named": true
-        },
-        {
-          "type": "tuplevec_sem",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "nupper",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "cmp",
-          "named": true
-        },
-        {
-          "type": "term",
           "named": true
         }
       ]
@@ -1352,6 +1253,25 @@
         },
         {
           "type": "optimizelitvec",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "optimizetuple",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "termvec",
           "named": true
         }
       ]
@@ -1576,6 +1496,10 @@
           "named": true
         },
         {
+          "type": "idlist",
+          "named": true
+        },
+        {
           "type": "maxelemlist",
           "named": true
         },
@@ -1584,11 +1508,7 @@
           "named": true
         },
         {
-          "type": "nidlist",
-          "named": true
-        },
-        {
-          "type": "noptimizetuple",
+          "type": "optimizetuple",
           "named": true
         },
         {
@@ -1707,7 +1627,30 @@
           "named": true
         },
         {
-          "type": "ntuplevec",
+          "type": "term",
+          "named": true
+        },
+        {
+          "type": "tuplevec",
+          "named": true
+        },
+        {
+          "type": "unaryargvec",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "termvec",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COMMA",
           "named": true
         },
         {
@@ -1715,7 +1658,7 @@
           "named": true
         },
         {
-          "type": "unaryargvec",
+          "type": "termvec",
           "named": true
         }
       ]
@@ -1824,11 +1767,11 @@
           "named": true
         },
         {
-          "type": "nlitvec",
+          "type": "litvec",
           "named": true
         },
         {
-          "type": "noptcondition",
+          "type": "optcondition",
           "named": true
         },
         {
@@ -2276,6 +2219,44 @@
     }
   },
   {
+    "type": "tuple",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "termvec",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "tuplevec",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "tuple",
+          "named": true
+        },
+        {
+          "type": "tuplevec_sem",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "tuplevec_sem",
     "named": true,
     "fields": {},
@@ -2288,7 +2269,7 @@
           "named": true
         },
         {
-          "type": "ntuple",
+          "type": "tuple",
           "named": true
         },
         {
@@ -2316,6 +2297,25 @@
         },
         {
           "type": "unaryargvec",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "upper",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "cmp",
+          "named": true
+        },
+        {
+          "type": "term",
           "named": true
         }
       ]
