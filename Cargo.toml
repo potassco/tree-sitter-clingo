@@ -1,6 +1,6 @@
 [package]
 name = "tree-sitter-clingo"
-version = "0.0.9"
+version = "0.0.10"
 publish = true
 authors = ["Sven Thiele <sthiele78@gmail.com>"]
 description = "Clingo grammar for the tree-sitter parsing library"

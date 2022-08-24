@@ -8,7 +8,7 @@
         "name": "statement"
       }
     },
-    "comment": {
+    "single_comment": {
       "type": "TOKEN",
       "content": {
         "type": "CHOICE",
@@ -31,21 +31,24 @@
             ]
           },
           {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "%*"
-              },
-              {
-                "type": "PATTERN",
-                "value": "[^*]*\\*+([^%*][^*]*\\*+)*"
-              },
-              {
-                "type": "STRING",
-                "value": "%"
-              }
-            ]
+            "type": "STRING",
+            "value": "%"
+          }
+        ]
+      }
+    },
+    "multi_comment": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "%*"
+          },
+          {
+            "type": "PATTERN",
+            "value": "[^*]*\\*+([^%*][^*]*\\*+)*"
           },
           {
             "type": "STRING",
@@ -6747,7 +6750,11 @@
   "extras": [
     {
       "type": "SYMBOL",
-      "name": "comment"
+      "name": "single_comment"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "multi_comment"
     },
     {
       "type": "PATTERN",
