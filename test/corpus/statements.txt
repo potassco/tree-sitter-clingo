@@ -7,7 +7,23 @@ comment
 ---
 
 (source_file
-  (comment))
+  (comment
+     (single_comment)
+  )
+)
+==================
+multi comment
+==================
+
+%* Derive (varying) atoms *%
+
+---
+
+(source_file
+  (comment
+     (multi_comment)
+  )
+)
     
 ==================
 rule statements
