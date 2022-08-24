@@ -7,9 +7,7 @@ comment
 ---
 
 (source_file
-  (comment
-     (single_comment)
-  )
+  (single_comment)
 )
 ==================
 multi comment
@@ -20,9 +18,7 @@ multi comment
 ---
 
 (source_file
-  (comment
-     (multi_comment)
-  )
+  (multi_comment)
 )
     
 ==================
