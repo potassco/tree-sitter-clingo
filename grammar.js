@@ -183,6 +183,7 @@ module.exports = grammar({
       seq($.LPAREN, $.tuplevec, $.RPAREN),
       seq($._widentifier, $.RPAREN),
       seq($._widentifier, $.argvec, $.RPAREN),
+      seq($.AT, $._widentifier, $.RPAREN),
       seq($.AT, $._widentifier, $.argvec, $.RPAREN),
       seq($.VBAR, $.unaryargvec, $.VBAR),
       $.identifier,
