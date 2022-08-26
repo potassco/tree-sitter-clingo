@@ -1302,6 +1302,19 @@
             },
             {
               "type": "SYMBOL",
+              "name": "RPAREN"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_widentifier"
+            },
+            {
+              "type": "SYMBOL",
               "name": "argvec"
             },
             {

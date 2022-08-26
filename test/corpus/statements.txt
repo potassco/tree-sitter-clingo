@@ -9,6 +9,7 @@ comment
 (source_file
   (single_comment)
 )
+
 ==================
 multi comment
 ==================
@@ -20,6 +21,30 @@ multi comment
 (source_file
   (multi_comment)
 )
+
+==================
+atom
+==================
+
+atom(term()).
+
+---
+
+(source_file
+  (statement
+    (head
+      (literal
+        (atom
+          (identifier)
+          (LPAREN)
+          (argvec
+            (termvec
+              (term
+                (identifier)
+                (LPAREN)
+                (RPAREN))))
+          (RPAREN))))
+    (DOT)))
     
 ==================
 rule statements

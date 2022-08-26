@@ -181,6 +181,7 @@ module.exports = grammar({
       prec.left(1, seq($.BNOT, $.term)),
       seq($.LPAREN, $.RPAREN),
       seq($.LPAREN, $.tuplevec, $.RPAREN),
+      seq($._widentifier, $.RPAREN),
       seq($._widentifier, $.argvec, $.RPAREN),
       seq($.AT, $._widentifier, $.argvec, $.RPAREN),
       seq($.VBAR, $.unaryargvec, $.VBAR),
