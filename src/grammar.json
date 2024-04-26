@@ -1198,8 +1198,8 @@
                 "name": "term"
               },
               {
-                "type": "STRING",
-                "value": "\\\\"
+                "type": "SYMBOL",
+                "name": "MOD"
               },
               {
                 "type": "SYMBOL",

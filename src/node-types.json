@@ -1571,6 +1571,10 @@
           "named": true
         },
         {
+          "type": "MOD",
+          "named": true
+        },
+        {
           "type": "MUL",
           "named": true
         },
@@ -2664,10 +2668,6 @@
   {
     "type": "XOR",
     "named": true
-  },
-  {
-    "type": "\\\\",
-    "named": false
   },
   {
     "type": "bin",

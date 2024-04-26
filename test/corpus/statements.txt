@@ -389,3 +389,30 @@ theory atom
               (NUMBER
                 (dec)))))))
     (DOT)))
+
+==================
+term modulo operator
+==================
+
+atom(5\2).
+
+---
+(source_file
+  (statement
+    (head
+      (literal
+        (atom
+          (identifier)
+          (LPAREN)
+          (argvec
+            (termvec
+              (term
+                (term
+                  (NUMBER
+                    (dec)))
+                (MOD)
+                (term
+                  (NUMBER
+                    (dec))))))
+          (RPAREN))))
+    (DOT)))
