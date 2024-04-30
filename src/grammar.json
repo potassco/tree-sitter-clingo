@@ -1198,8 +1198,8 @@
                 "name": "term"
               },
               {
-                "type": "STRING",
-                "value": "\\\\"
+                "type": "SYMBOL",
+                "name": "MOD"
               },
               {
                 "type": "SYMBOL",
@@ -6769,7 +6769,7 @@
               },
               {
                 "type": "PATTERN",
-                "value": "u{[0-9a-fA-F]+}"
+                "value": "u\\{[0-9a-fA-F]+\\}"
               }
             ]
           }
