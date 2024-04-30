@@ -175,7 +175,7 @@ module.exports = grammar({
       prec.left(4, seq($.term, $.SUB, $.term)),
       prec.left(3, seq($.term, $.MUL, $.term)),
       prec.left(3, seq($.term, $.SLASH, $.term)),
-      prec.left(3, seq($.term, '\\\\', $.term)),
+      prec.left(3, seq($.term, $.MOD, $.term)),
       prec.right(2, seq($.term, $.POW, $.term)),
       prec.left(1, seq($.SUB, $.term)),
       prec.left(1, seq($.BNOT, $.term)),
