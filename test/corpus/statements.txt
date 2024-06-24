@@ -71,6 +71,32 @@ atom(@term()).
     (DOT)))
 
 ==================
+atom rellitvec
+==================
+
+a < b < c.
+
+---
+
+(source_file
+  (statement
+    (head
+      (literal
+        (term
+          (identifier))
+        (rellitvec
+          (rellitvec
+            (cmp
+              (LT))
+            (term
+              (identifier)))
+          (cmp
+            (LT))
+          (term
+            (identifier)))))
+    (DOT)))
+
+==================
 rule statements
 ==================
 

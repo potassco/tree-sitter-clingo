@@ -1036,11 +1036,11 @@
           "named": true
         },
         {
-          "type": "cmp",
+          "type": "csp_literal",
           "named": true
         },
         {
-          "type": "csp_literal",
+          "type": "rellitvec",
           "named": true
         },
         {
@@ -1287,6 +1287,29 @@
       "types": [
         {
           "type": "AT",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "rellitvec",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "cmp",
+          "named": true
+        },
+        {
+          "type": "rellitvec",
           "named": true
         },
         {
