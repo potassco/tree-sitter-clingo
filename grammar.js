@@ -257,6 +257,11 @@ module.exports = grammar({
       seq($.SUB, $._widentifier, $.argvec, $.RPAREN),
     ),
 
+    rellitvec: $ => choice(
+      seq($.cmp , $.term),
+      seq($.rellitvec, $.cmp, $.term)
+    ),
+
     literal: $ => choice(
       $.TRUE,
       seq($.NOT, $.TRUE),
@@ -267,9 +272,9 @@ module.exports = grammar({
       $.atom,
       seq($.NOT, $.atom),
       seq($.NOT, $.NOT, $.atom),
-      seq($.term, $.cmp, $.term),
-      seq($.NOT, $.term, $.cmp, $.term),
-      seq($.NOT, $.NOT, $.term, $.cmp, $.term),
+      seq($.term, $.rellitvec),
+      seq($.NOT, $.term, $.rellitvec),
+      seq($.NOT, $.NOT, $.term, $.rellitvec),
       $.csp_literal
     ),
 
