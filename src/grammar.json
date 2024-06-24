@@ -1779,6 +1779,41 @@
         }
       ]
     },
+    "rellitvec": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "cmp"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "term"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "rellitvec"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "cmp"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "term"
+            }
+          ]
+        }
+      ]
+    },
     "literal": {
       "type": "CHOICE",
       "members": [
@@ -1893,11 +1928,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "cmp"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "term"
+              "name": "rellitvec"
             }
           ]
         },
@@ -1914,11 +1945,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "cmp"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "term"
+              "name": "rellitvec"
             }
           ]
         },
@@ -1939,11 +1966,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "cmp"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "term"
+              "name": "rellitvec"
             }
           ]
         },
