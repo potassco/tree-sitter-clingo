@@ -192,6 +192,22 @@ show statement 1
 show statement 2
 ==================
 
+#show pred/2*1.
+
+---
+(source_file
+  (statement
+    (SHOW)
+    (identifier)
+    (SLASH)
+    (NUMBER 
+      (dec))
+    (DOT)))
+
+==================
+show statement 3
+==================
+
 #show pred(a,X).
 
 ---

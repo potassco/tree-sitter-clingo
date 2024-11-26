@@ -2,6 +2,12 @@ module.exports = grammar({
     name: 'clingo',
     extras: $ => [$.single_comment, $.multi_comment, /\s/],
 
+    // Note that the ambiguity between signature and term in show statements
+    // does not necessarily have to be resolved in the grammar. It could also
+    // be left to the user of the parser. Then, we could simply delete the
+    // "show signature" part of the statement production.
+    conflicts: $ => [[$.signature, $.term]],
+
     rules: {
 
         source_file: $ => repeat($.statement),
@@ -197,7 +203,9 @@ module.exports = grammar({
             $.FALSE,
         ),
 
-        simple_literal: $ => seq(optional(seq($.NOT, optional($.NOT))), $._simple_atom),
+        sign: $ => seq($.NOT, optional($.NOT)),
+
+        simple_literal: $ => seq(optional($.sign), $._simple_atom),
 
         literal_tuple: $ => seq($.simple_literal, repeat(seq($.COMMA, $.simple_literal))),
 
@@ -211,91 +219,39 @@ module.exports = grammar({
             $.COUNT
         ),
 
-        bodyaggrelem: $ => choice(
-            seq($.COLON,),
-            seq($.COLON, $.literal_tuple),
-            seq($.term_tuple,),
-            seq($.term_tuple, $.condition),
-        ),
-
-        bodyaggrelemvec: $ => choice(
-            $.bodyaggrelem,
-            seq($.bodyaggrelemvec, $.SEM, $.bodyaggrelem),
-        ),
-
         // Note: alternative syntax (without weight)
-        altbodyaggrelem: $ => choice(
-            seq($.simple_literal,),
-            seq($.simple_literal, $.condition),
-        ),
+        aggrelem: $ => seq($.simple_literal, optional($.condition)),
+        aggrelemvec: $ => seq($.aggrelem, repeat(seq($.SEM, $.aggrelem))),
 
-        altbodyaggrelemvec: $ => choice(
-            $.altbodyaggrelem,
-            seq($.altbodyaggrelemvec, $.SEM),
-            seq($.altbodyaggrelemvec, $.SEM, $.altbodyaggrelem),
+        bodyaggrelem: $ => choice(
+            $.condition,
+            seq($.term_tuple, optional($.condition)),
         ),
+        bodyaggrelemvec: $ => seq($.bodyaggrelem, repeat(seq($.SEM, $.bodyaggrelem))),
 
-        bodyaggregate: $ => choice(
-            seq($.LBRACE, $.RBRACE),
-            seq($.LBRACE, $.altbodyaggrelemvec, $.RBRACE),
-            seq($.aggregate_function, $.LBRACE, $.RBRACE),
-            seq($.aggregate_function, $.LBRACE, $.bodyaggrelemvec, $.RBRACE),
+        upper: $ => seq(optional($.relation), $.term),
+        lower: $ => seq($.term, optional($.relation)),
+
+        _bodyaggregate: $ => choice(
+            seq($.LBRACE, optional($.aggrelemvec), $.RBRACE),
+            seq($.aggregate_function, $.LBRACE, optional($.bodyaggrelemvec), $.RBRACE),
         ),
+        bodyaggregate: $ => seq(optional($.lower), $._bodyaggregate, optional($.upper)),
 
-        upper: $ => choice(
-            $.term,
-            seq($.relation, $.term),
-        ),
+        headaggrelem: $ => seq(optional($.term_tuple), $.COLON, $.simple_literal, optional($.condition)),
 
-        lubodyaggregate: $ => choice(
-            seq($.term, $.bodyaggregate),
-            seq($.term, $.bodyaggregate, $.upper),
-            seq($.term, $.relation, $.bodyaggregate),
-            seq($.term, $.relation, $.bodyaggregate, $.upper),
-            seq($.bodyaggregate),
-            seq($.bodyaggregate, $.upper),
-            $.theory_atom
-        ),
+        headaggrelemvec: $ => seq($.headaggrelem, repeat(seq($.SEM, $.headaggrelem))),
 
-        headaggrelemvec: $ => choice(
-            seq($.headaggrelemvec, $.SEM, $.COLON, $.simple_literal,),
-            seq($.headaggrelemvec, $.SEM, $.term_tuple, $.COLON, $.simple_literal,),
-            seq($.headaggrelemvec, $.SEM, $.COLON, $.simple_literal, $.condition),
-            seq($.headaggrelemvec, $.SEM, $.term_tuple, $.COLON, $.simple_literal, $.condition),
-            seq($.COLON, $.simple_literal,),
-            seq($.term_tuple, $.COLON, $.simple_literal,),
-            seq($.COLON, $.simple_literal, $.condition),
-            seq($.term_tuple, $.COLON, $.simple_literal, $.condition),
-        ),
-
-        altheadaggrelemvec: $ => choice(
-            seq($.simple_literal,),
-            seq($.simple_literal, $.condition),
-            seq($.altheadaggrelemvec, $.SEM, $.simple_literal,),
-            seq($.altheadaggrelemvec, $.SEM, $.simple_literal, $.condition),
+        _headaggregate: $ => choice(
+            seq($.LBRACE, optional($.aggrelemvec), $.RBRACE),
+            seq($.aggregate_function, $.LBRACE, optional($.headaggrelemvec), $.RBRACE),
         ),
 
         headaggregate: $ => choice(
-            seq($.aggregate_function, $.LBRACE, $.RBRACE),
-            seq($.aggregate_function, $.LBRACE, $.headaggrelemvec, $.RBRACE),
-            seq($.LBRACE, $.RBRACE),
-            seq($.LBRACE, $.altheadaggrelemvec, $.RBRACE),
+            seq(optional($.lower), $._headaggregate, optional($.upper)),
         ),
 
-        luheadaggregate: $ => choice(
-            seq($.term, $.headaggregate),
-            seq($.term, $.headaggregate, $.upper),
-            seq($.term, $.relation, $.headaggregate),
-            seq($.term, $.relation, $.headaggregate, $.upper),
-            seq($.headaggregate),
-            seq($.headaggregate, $.upper),
-            $.theory_atom,
-        ),
-
-        conjunction: $ => choice(
-            seq($.simple_literal, $.COLON,),
-            seq($.simple_literal, $.COLON, $.literal_tuple)
-        ),
+        conjunction: $ => seq($.simple_literal, $.condition),
 
         dsym: $ => choice(
             $.SEM,
@@ -322,96 +278,55 @@ module.exports = grammar({
             seq($.simple_literal, $.COLON, $.literal_tuple)
         ),
 
-        bodycomma: $ => choice(
-            seq($.simple_literal, $.COMMA),
-            seq($.bodycomma, $.simple_literal, $.COMMA),
-            seq($.simple_literal, $.SEM),
-            seq($.bodycomma, $.simple_literal, $.SEM),
-            seq($.lubodyaggregate, $.COMMA),
-            seq($.bodycomma, $.lubodyaggregate, $.COMMA),
-            seq($.lubodyaggregate, $.SEM),
-            seq($.bodycomma, $.lubodyaggregate, $.SEM),
-            seq($.NOT, $.lubodyaggregate, $.COMMA),
-            seq($.bodycomma, $.NOT, $.lubodyaggregate, $.COMMA),
-            seq($.NOT, $.lubodyaggregate, $.SEM),
-            seq($.bodycomma, $.NOT, $.lubodyaggregate, $.SEM),
-            seq($.NOT, $.NOT, $.lubodyaggregate, $.COMMA),
-            seq($.bodycomma, $.NOT, $.NOT, $.lubodyaggregate, $.COMMA),
-            seq($.NOT, $.NOT, $.lubodyaggregate, $.SEM),
-            seq($.bodycomma, $.NOT, $.NOT, $.lubodyaggregate, $.SEM),
+        _bodyliteral: $ => seq(optional($.sign), choice(
+            $.bodyaggregate,
+            $.theory_atom,
+            $._simple_atom
+        )),
+
+        body_literal: $ => choice(
+            seq($._bodyliteral, choice($.SEM, $.COMMA)),
             seq($.conjunction, $.SEM),
-            seq($.bodycomma, $.conjunction, $.SEM),
         ),
 
-        bodydot: $ => choice(
-            seq($.simple_literal, $.DOT),
-            seq($.bodycomma, $.simple_literal, $.DOT),
-            seq($.lubodyaggregate, $.DOT),
-            seq($.bodycomma, $.lubodyaggregate, $.DOT),
-            seq($.NOT, $.lubodyaggregate, $.DOT),
-            seq($.bodycomma, $.NOT, $.lubodyaggregate, $.DOT),
-            seq($.NOT, $.NOT, $.lubodyaggregate, $.DOT),
-            seq($.bodycomma, $.NOT, $.NOT, $.lubodyaggregate, $.DOT),
-            seq($.conjunction, $.DOT),
-            seq($.bodycomma, $.conjunction, $.DOT),
-        ),
+        body_literal_dot: $ => seq(choice($._bodyliteral, $.conjunction), $.DOT),
 
-        bodyconddot: $ => choice(
+        body: $ => choice($.DOT, seq(repeat($.body_literal), alias($.body_literal_dot, $.body_literal_dot))),
+
+        colon_body: $ => choice(
             $.DOT,
-            seq($.COLON, $.DOT),
-            seq($.COLON, $.bodydot),
+            seq($.COLON, $.body),
         ),
 
         head: $ => choice(
             $.simple_literal,
             $.disjunction,
-            $.luheadaggregate
+            $.headaggregate,
+            $.theory_atom,
         ),
+
+        signature: $ => prec.dynamic(1, seq(optional($.SUB), $.identifier, $.SLASH, $.NUMBER)),
 
         statement: $ => choice(
-            seq($.head, $.DOT),
-            seq($.head, $.IF, $.DOT),
-            seq($.head, $.IF, $.bodydot),
-            seq($.IF, $.bodydot),
-            seq($.IF, $.DOT),
-            seq($.WIF, $.bodydot, $.LBRACK, $.optimizeweight, $.RBRACK),
-            seq($.WIF, $.bodydot, $.LBRACK, $.optimizeweight, $.optimizetuple, $.RBRACK),
-            seq($.MINIMIZE, $.LBRACE, $.RBRACE, $.DOT),
-            seq($.MAXIMIZE, $.LBRACE, $.RBRACE, $.DOT),
-            seq($.MINIMIZE, $.LBRACE, $.minelemlist, $.RBRACE, $.DOT),
-            seq($.MAXIMIZE, $.LBRACE, $.maxelemlist, $.RBRACE, $.DOT),
-            prec(8, seq($.SHOW, $.identifier, $.SLASH, $.NUMBER, $.DOT)),
-            prec(8, seq($.SHOW, $.SUB, $.identifier, $.SLASH, $.NUMBER, $.DOT)),
+            seq($.head, choice($.DOT, seq($.IF, $.body))),
+            seq($.IF, $.body),
+            seq($.WIF, $.body, $.LBRACK, $.optimizeweight, optional($.optimizetuple), $.RBRACK),
+            seq(choice($.MAXIMIZE, $.MINIMIZE), $.LBRACE, optional($.opt_elems), $.RBRACE, $.DOT),
             seq($.SHOW, $.DOT),
-            seq($.SHOW, $.term, $.COLON, $.bodydot),
-            seq($.SHOW, $.term, $.DOT),
-            seq($.DEFINED, $.identifier, $.SLASH, $.NUMBER, $.DOT),
-            seq($.DEFINED, $.SUB, $.identifier, $.SLASH, $.NUMBER, $.DOT),
-            seq($.EDGE, $.LPAREN, $.term_pool_binary, $.RPAREN, $.bodyconddot),
-            seq($.HEURISTIC, $.symbolic_atom, $.bodyconddot, $.LBRACK, $.term, $.AT, $.term, $.COMMA, $.term, $.RBRACK),
-            seq($.HEURISTIC, $.symbolic_atom, $.bodyconddot, $.LBRACK, $.term, $.COMMA, $.term, $.RBRACK),
-            seq($.PROJECT, $.identifier, $.SLASH, $.NUMBER, $.DOT),
-            seq($.PROJECT, $.SUB, $.identifier, $.SLASH, $.NUMBER, $.DOT),
-            seq($.PROJECT, $.symbolic_atom, $.bodyconddot),
-            seq($.CONST, $.identifier, $.EQ, $.constterm, $.DOT),
-            seq($.CONST, $.identifier, $.EQ, $.constterm, $.DOT, $.LBRACK, $.DEFAULT, $.RBRACK),
-            seq($.CONST, $.identifier, $.EQ, $.constterm, $.DOT, $.LBRACK, $.OVERRIDE, $.RBRACK),
+            seq($.SHOW, $.term, $.colon_body),
+            seq($.SHOW, $.signature, $.DOT),
+            seq($.DEFINED, $.signature, $.DOT),
+            seq($.EDGE, $.LPAREN, $.term_pool_binary, $.RPAREN, $.colon_body),
+            seq($.HEURISTIC, $.symbolic_atom, $.colon_body, $.LBRACK, $.term, optional(seq($.AT, $.term)), $.COMMA, $.term, $.RBRACK),
+            seq($.PROJECT, $.signature, $.DOT),
+            seq($.PROJECT, $.symbolic_atom, $.colon_body),
+            seq($.CONST, $.identifier, $.EQ, $.constterm, $.DOT, optional(seq($.LBRACK, $.DEFAULT, $.RBRACK))),
             seq($.SCRIPT, $.LPAREN, $.identifier, $.RPAREN, $.CODE, $.DOT),
-            seq($.INCLUDE, $.STRING, $.DOT),
-            seq($.INCLUDE, $.LT, $.identifier, $.GT, $.DOT),
-            seq($.BLOCK, $.identifier, $.LPAREN, $.RPAREN, $.DOT),
-            seq($.BLOCK, $.identifier, $.LPAREN, $.idlist, $.RPAREN, $.DOT),
-            seq($.BLOCK, $.identifier, $.DOT),
-            seq($.EXTERNAL, $.symbolic_atom, $.COLON, $.bodydot),
-            seq($.EXTERNAL, $.symbolic_atom, $.COLON, $.DOT),
-            seq($.EXTERNAL, $.symbolic_atom, $.DOT),
-            seq($.EXTERNAL, $.symbolic_atom, $.COLON, $.bodydot, $.LBRACK, $.term, $.RBRACK),
-            seq($.EXTERNAL, $.symbolic_atom, $.COLON, $.DOT, $.LBRACK, $.term, $.RBRACK),
-            seq($.EXTERNAL, $.symbolic_atom, $.DOT, $.LBRACK, $.term, $.RBRACK),
-            seq($.THEORY, $.theory_identifier, $.LBRACE, $.RBRACE, $.DOT),
-            seq($.THEORY, $.theory_identifier, $.LBRACE, $.theory_definition_nlist, $.RBRACE, $.DOT)
+            seq($.INCLUDE, choice($.STRING, seq($.LT, $.identifier, $.GT)), $.DOT),
+            seq($.BLOCK, $.identifier, optional(seq($.LPAREN, optional($.idlist), $.RPAREN)), $.DOT),
+            seq($.EXTERNAL, $.symbolic_atom, $.colon_body, optional(seq($.LBRACK, $.term, $.RBRACK))),
+            seq($.THEORY, $.theory_identifier, $.LBRACE, optional($.theory_definition_nlist), $.RBRACE, $.DOT)
         ),
-
 
         optimizetuple: $ =>
             seq($.COMMA, $.term_tuple),
@@ -431,26 +346,15 @@ module.exports = grammar({
             $.COLON,
         ),
 
-        maxelemlist: $ => choice(
+        opt_elems: $ => choice(
             seq($.optimizeweight,),
             seq($.optimizeweight, $.optimizecond),
             seq($.optimizeweight, $.optimizetuple,),
             seq($.optimizeweight, $.optimizetuple, $.optimizecond),
-            seq($.maxelemlist, $.SEM, $.optimizeweight,),
-            seq($.maxelemlist, $.SEM, $.optimizeweight, $.optimizecond),
-            seq($.maxelemlist, $.SEM, $.optimizeweight, $.optimizetuple,),
-            seq($.maxelemlist, $.SEM, $.optimizeweight, $.optimizetuple, $.optimizecond),
-        ),
-
-        minelemlist: $ => choice(
-            seq($.optimizeweight,),
-            seq($.optimizeweight, $.optimizecond),
-            seq($.optimizeweight, $.optimizetuple,),
-            seq($.optimizeweight, $.optimizetuple, $.optimizecond),
-            seq($.minelemlist, $.SEM, $.optimizeweight,),
-            seq($.minelemlist, $.SEM, $.optimizeweight, $.optimizecond),
-            seq($.minelemlist, $.SEM, $.optimizeweight, $.optimizetuple,),
-            seq($.minelemlist, $.SEM, $.optimizeweight, $.optimizetuple, $.optimizecond),
+            seq($.opt_elems, $.SEM, $.optimizeweight,),
+            seq($.opt_elems, $.SEM, $.optimizeweight, $.optimizecond),
+            seq($.opt_elems, $.SEM, $.optimizeweight, $.optimizetuple,),
+            seq($.opt_elems, $.SEM, $.optimizeweight, $.optimizetuple, $.optimizecond),
         ),
 
         idlist: $ => choice(
