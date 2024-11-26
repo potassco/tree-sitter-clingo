@@ -42,6 +42,11 @@
     }
   },
   {
+    "type": "SEM",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "STRING",
     "named": true,
     "fields": {},
@@ -66,7 +71,7 @@
     "fields": {}
   },
   {
-    "type": "aggregatefunction",
+    "type": "aggregate_function",
     "named": true,
     "fields": {},
     "children": {
@@ -105,11 +110,11 @@
       "required": true,
       "types": [
         {
-          "type": "literal",
+          "type": "condition",
           "named": true
         },
         {
-          "type": "optcondition",
+          "type": "simple_literal",
           "named": true
         }
       ]
@@ -155,92 +160,11 @@
           "named": true
         },
         {
-          "type": "literal",
+          "type": "condition",
           "named": true
         },
         {
-          "type": "optcondition",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "argvec",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "SEM",
-          "named": true
-        },
-        {
-          "type": "argvec",
-          "named": true
-        },
-        {
-          "type": "termvec",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "atom",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "LPAREN",
-          "named": true
-        },
-        {
-          "type": "RPAREN",
-          "named": true
-        },
-        {
-          "type": "SUB",
-          "named": true
-        },
-        {
-          "type": "argvec",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "binaryargvec",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "SEM",
-          "named": true
-        },
-        {
-          "type": "binaryargvec",
-          "named": true
-        },
-        {
-          "type": "term",
+          "type": "simple_literal",
           "named": true
         }
       ]
@@ -263,7 +187,7 @@
           "named": true
         },
         {
-          "type": "aggregatefunction",
+          "type": "aggregate_function",
           "named": true
         },
         {
@@ -290,15 +214,15 @@
           "named": true
         },
         {
-          "type": "litvec",
+          "type": "condition",
           "named": true
         },
         {
-          "type": "optcondition",
+          "type": "literal_tuple",
           "named": true
         },
         {
-          "type": "termvec",
+          "type": "term_tuple",
           "named": true
         }
       ]
@@ -356,15 +280,11 @@
           "named": true
         },
         {
-          "type": "disjoint",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
           "type": "lubodyaggregate",
+          "named": true
+        },
+        {
+          "type": "simple_literal",
           "named": true
         }
       ]
@@ -418,50 +338,49 @@
           "named": true
         },
         {
-          "type": "disjoint",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
           "type": "lubodyaggregate",
+          "named": true
+        },
+        {
+          "type": "simple_literal",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "cmp",
+    "type": "comparison",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
         {
-          "type": "EQ",
+          "type": "relation",
           "named": true
         },
         {
-          "type": "GEQ",
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "condition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COLON",
           "named": true
         },
         {
-          "type": "GT",
-          "named": true
-        },
-        {
-          "type": "LEQ",
-          "named": true
-        },
-        {
-          "type": "LT",
-          "named": true
-        },
-        {
-          "type": "NEQ",
+          "type": "literal_tuple",
           "named": true
         }
       ]
@@ -480,11 +399,11 @@
           "named": true
         },
         {
-          "type": "literal",
+          "type": "literal_tuple",
           "named": true
         },
         {
-          "type": "litvec",
+          "type": "simple_literal",
           "named": true
         }
       ]
@@ -586,183 +505,9 @@
     }
   },
   {
-    "type": "csp_add_term",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "CSP_ADD",
-          "named": true
-        },
-        {
-          "type": "CSP_SUB",
-          "named": true
-        },
-        {
-          "type": "csp_add_term",
-          "named": true
-        },
-        {
-          "type": "csp_mul_term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "csp_literal",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "csp_add_term",
-          "named": true
-        },
-        {
-          "type": "csp_literal",
-          "named": true
-        },
-        {
-          "type": "csp_rel",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "csp_mul_term",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "CSP",
-          "named": true
-        },
-        {
-          "type": "CSP_MUL",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "csp_rel",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "CSP_EQ",
-          "named": true
-        },
-        {
-          "type": "CSP_GEQ",
-          "named": true
-        },
-        {
-          "type": "CSP_GT",
-          "named": true
-        },
-        {
-          "type": "CSP_LEQ",
-          "named": true
-        },
-        {
-          "type": "CSP_LT",
-          "named": true
-        },
-        {
-          "type": "CSP_NEQ",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "cspelemvec",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COLON",
-          "named": true
-        },
-        {
-          "type": "SEM",
-          "named": true
-        },
-        {
-          "type": "csp_add_term",
-          "named": true
-        },
-        {
-          "type": "cspelemvec",
-          "named": true
-        },
-        {
-          "type": "optcondition",
-          "named": true
-        },
-        {
-          "type": "termvec",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "dec",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "disjoint",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "DISJOINT",
-          "named": true
-        },
-        {
-          "type": "LBRACE",
-          "named": true
-        },
-        {
-          "type": "NOT",
-          "named": true
-        },
-        {
-          "type": "RBRACE",
-          "named": true
-        },
-        {
-          "type": "cspelemvec",
-          "named": true
-        }
-      ]
-    }
   },
   {
     "type": "disjunction",
@@ -777,19 +522,19 @@
           "named": true
         },
         {
+          "type": "condition",
+          "named": true
+        },
+        {
           "type": "disjunctionsep",
           "named": true
         },
         {
-          "type": "literal",
+          "type": "literal_tuple",
           "named": true
         },
         {
-          "type": "litvec",
-          "named": true
-        },
-        {
-          "type": "optcondition",
+          "type": "simple_literal",
           "named": true
         }
       ]
@@ -824,11 +569,11 @@
           "named": true
         },
         {
-          "type": "literal",
+          "type": "literal_tuple",
           "named": true
         },
         {
-          "type": "litvec",
+          "type": "simple_literal",
           "named": true
         }
       ]
@@ -866,11 +611,11 @@
           "named": true
         },
         {
-          "type": "literal",
+          "type": "luheadaggregate",
           "named": true
         },
         {
-          "type": "luheadaggregate",
+          "type": "simple_literal",
           "named": true
         }
       ]
@@ -893,7 +638,7 @@
           "named": true
         },
         {
-          "type": "aggregatefunction",
+          "type": "aggregate_function",
           "named": true
         },
         {
@@ -924,19 +669,19 @@
           "named": true
         },
         {
+          "type": "condition",
+          "named": true
+        },
+        {
           "type": "headaggrelemvec",
           "named": true
         },
         {
-          "type": "literal",
+          "type": "simple_literal",
           "named": true
         },
         {
-          "type": "optcondition",
-          "named": true
-        },
-        {
-          "type": "termvec",
+          "type": "term_tuple",
           "named": true
         }
       ]
@@ -966,46 +711,7 @@
     }
   },
   {
-    "type": "literal",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "FALSE",
-          "named": true
-        },
-        {
-          "type": "NOT",
-          "named": true
-        },
-        {
-          "type": "TRUE",
-          "named": true
-        },
-        {
-          "type": "atom",
-          "named": true
-        },
-        {
-          "type": "csp_literal",
-          "named": true
-        },
-        {
-          "type": "rellitvec",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "litvec",
+    "type": "literal_tuple",
     "named": true,
     "fields": {},
     "children": {
@@ -1017,11 +723,7 @@
           "named": true
         },
         {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "litvec",
+          "type": "simple_literal",
           "named": true
         }
       ]
@@ -1040,7 +742,7 @@
           "named": true
         },
         {
-          "type": "cmp",
+          "type": "relation",
           "named": true
         },
         {
@@ -1067,11 +769,11 @@
       "required": true,
       "types": [
         {
-          "type": "cmp",
+          "type": "headaggregate",
           "named": true
         },
         {
-          "type": "headaggregate",
+          "type": "relation",
           "named": true
         },
         {
@@ -1152,25 +854,6 @@
     }
   },
   {
-    "type": "optcondition",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COLON",
-          "named": true
-        },
-        {
-          "type": "litvec",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "optimizecond",
     "named": true,
     "fields": {},
@@ -1183,14 +866,14 @@
           "named": true
         },
         {
-          "type": "optimizelitvec",
+          "type": "optimizeliteral_tuple",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "optimizelitvec",
+    "type": "optimizeliteral_tuple",
     "named": true,
     "fields": {},
     "children": {
@@ -1202,11 +885,11 @@
           "named": true
         },
         {
-          "type": "literal",
+          "type": "optimizeliteral_tuple",
           "named": true
         },
         {
-          "type": "optimizelitvec",
+          "type": "simple_literal",
           "named": true
         }
       ]
@@ -1225,7 +908,7 @@
           "named": true
         },
         {
-          "type": "termvec",
+          "type": "term_tuple",
           "named": true
         }
       ]
@@ -1251,7 +934,42 @@
     }
   },
   {
-    "type": "rellitvec",
+    "type": "relation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "EQ",
+          "named": true
+        },
+        {
+          "type": "GEQ",
+          "named": true
+        },
+        {
+          "type": "GT",
+          "named": true
+        },
+        {
+          "type": "LEQ",
+          "named": true
+        },
+        {
+          "type": "LT",
+          "named": true
+        },
+        {
+          "type": "NEQ",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "simple_literal",
     "named": true,
     "fields": {},
     "children": {
@@ -1259,15 +977,23 @@
       "required": true,
       "types": [
         {
-          "type": "cmp",
+          "type": "FALSE",
           "named": true
         },
         {
-          "type": "rellitvec",
+          "type": "NOT",
           "named": true
         },
         {
-          "type": "term",
+          "type": "TRUE",
+          "named": true
+        },
+        {
+          "type": "comparison",
+          "named": true
+        },
+        {
+          "type": "symbolic_atom",
           "named": true
         }
       ]
@@ -1319,10 +1045,6 @@
         },
         {
           "type": "CONST",
-          "named": true
-        },
-        {
-          "type": "CSP",
           "named": true
         },
         {
@@ -1442,14 +1164,6 @@
           "named": true
         },
         {
-          "type": "atom",
-          "named": true
-        },
-        {
-          "type": "binaryargvec",
-          "named": true
-        },
-        {
           "type": "bodyconddot",
           "named": true
         },
@@ -1459,10 +1173,6 @@
         },
         {
           "type": "constterm",
-          "named": true
-        },
-        {
-          "type": "disjoint",
           "named": true
         },
         {
@@ -1494,7 +1204,15 @@
           "named": true
         },
         {
+          "type": "symbolic_atom",
+          "named": true
+        },
+        {
           "type": "term",
+          "named": true
+        },
+        {
+          "type": "term_pool_binary",
           "named": true
         },
         {
@@ -1503,6 +1221,29 @@
         },
         {
           "type": "theory_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "symbolic_atom",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "SUB",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "term_pool",
           "named": true
         }
       ]
@@ -1545,10 +1286,6 @@
           "named": true
         },
         {
-          "type": "LPAREN",
-          "named": true
-        },
-        {
           "type": "MOD",
           "named": true
         },
@@ -1566,10 +1303,6 @@
         },
         {
           "type": "QUESTION",
-          "named": true
-        },
-        {
-          "type": "RPAREN",
           "named": true
         },
         {
@@ -1601,10 +1334,6 @@
           "named": true
         },
         {
-          "type": "argvec",
-          "named": true
-        },
-        {
           "type": "identifier",
           "named": true
         },
@@ -1613,18 +1342,110 @@
           "named": true
         },
         {
-          "type": "tuplevec",
+          "type": "term_pool",
           "named": true
         },
         {
-          "type": "unaryargvec",
+          "type": "term_pool_trail",
+          "named": true
+        },
+        {
+          "type": "term_pool_unary",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "termvec",
+    "type": "term_pool",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "LPAREN",
+          "named": true
+        },
+        {
+          "type": "RPAREN",
+          "named": true
+        },
+        {
+          "type": "term_tuple",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "term_pool_binary",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "SEM",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "term_pool_trail",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "LPAREN",
+          "named": true
+        },
+        {
+          "type": "RPAREN",
+          "named": true
+        },
+        {
+          "type": "term_tuple_trail",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "term_pool_unary",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "SEM",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "term_tuple",
     "named": true,
     "fields": {},
     "children": {
@@ -1638,9 +1459,24 @@
         {
           "type": "term",
           "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "term_tuple_trail",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "COMMA",
+          "named": true
         },
         {
-          "type": "termvec",
+          "type": "term",
           "named": true
         }
       ]
@@ -1749,11 +1585,11 @@
           "named": true
         },
         {
-          "type": "litvec",
+          "type": "condition",
           "named": true
         },
         {
-          "type": "optcondition",
+          "type": "literal_tuple",
           "named": true
         },
         {
@@ -1795,19 +1631,11 @@
       "required": true,
       "types": [
         {
-          "type": "LPAREN",
-          "named": true
-        },
-        {
-          "type": "RPAREN",
-          "named": true
-        },
-        {
-          "type": "argvec",
-          "named": true
-        },
-        {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "term_pool",
           "named": true
         }
       ]
@@ -2201,90 +2029,6 @@
     }
   },
   {
-    "type": "tuple",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "termvec",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "tuplevec",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "tuple",
-          "named": true
-        },
-        {
-          "type": "tuplevec_sem",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "tuplevec_sem",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "SEM",
-          "named": true
-        },
-        {
-          "type": "tuple",
-          "named": true
-        },
-        {
-          "type": "tuplevec_sem",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "unaryargvec",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "SEM",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        },
-        {
-          "type": "unaryargvec",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "upper",
     "named": true,
     "fields": {},
@@ -2293,7 +2037,7 @@
       "required": true,
       "types": [
         {
-          "type": "cmp",
+          "type": "relation",
           "named": true
         },
         {
@@ -2344,7 +2088,7 @@
     "named": false
   },
   {
-    "type": "==",
+    "type": ";",
     "named": false
   },
   {
@@ -2404,46 +2148,6 @@
     "named": true
   },
   {
-    "type": "CSP",
-    "named": true
-  },
-  {
-    "type": "CSP_ADD",
-    "named": true
-  },
-  {
-    "type": "CSP_EQ",
-    "named": true
-  },
-  {
-    "type": "CSP_GEQ",
-    "named": true
-  },
-  {
-    "type": "CSP_GT",
-    "named": true
-  },
-  {
-    "type": "CSP_LEQ",
-    "named": true
-  },
-  {
-    "type": "CSP_LT",
-    "named": true
-  },
-  {
-    "type": "CSP_MUL",
-    "named": true
-  },
-  {
-    "type": "CSP_NEQ",
-    "named": true
-  },
-  {
-    "type": "CSP_SUB",
-    "named": true
-  },
-  {
     "type": "DEFAULT",
     "named": true
   },
@@ -2453,10 +2157,6 @@
   },
   {
     "type": "DIRECTIVE",
-    "named": true
-  },
-  {
-    "type": "DISJOINT",
     "named": true
   },
   {
@@ -2589,10 +2289,6 @@
   },
   {
     "type": "SCRIPT",
-    "named": true
-  },
-  {
-    "type": "SEM",
     "named": true
   },
   {
