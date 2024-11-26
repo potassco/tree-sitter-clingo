@@ -491,21 +491,6 @@
     }
   },
   {
-    "type": "constargvec",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "consttermvec",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "constterm",
     "named": true,
     "fields": {},
@@ -590,42 +575,11 @@
           "named": true
         },
         {
-          "type": "constargvec",
-          "named": true
-        },
-        {
           "type": "constterm",
-          "named": true
-        },
-        {
-          "type": "consttermvec",
           "named": true
         },
         {
           "type": "identifier",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "consttermvec",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "constterm",
-          "named": true
-        },
-        {
-          "type": "consttermvec",
           "named": true
         }
       ]
@@ -1322,6 +1276,7 @@
   {
     "type": "source_file",
     "named": true,
+    "root": true,
     "fields": {},
     "children": {
       "multiple": true,
