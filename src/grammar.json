@@ -3671,34 +3671,28 @@
     "code": {
       "type": "TOKEN",
       "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "PATTERN",
-                "value": "[^#]*"
-              },
-              {
-                "type": "PATTERN",
-                "value": "(#+[^e][^#]*)*"
-              },
-              {
-                "type": "PATTERN",
-                "value": "(#+e*[^n][^#]*)*"
-              },
-              {
-                "type": "PATTERN",
-                "value": "(#+e*n*[^d][^#]*)*"
-              },
-              {
-                "type": "STRING",
-                "value": "#end"
-              }
-            ]
-          }
-        ]
+        "type": "REPEAT",
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "[^#]"
+            },
+            {
+              "type": "PATTERN",
+              "value": "#[^e][^#]"
+            },
+            {
+              "type": "PATTERN",
+              "value": "#e[^n][^#]"
+            },
+            {
+              "type": "PATTERN",
+              "value": "#en[^d][^#]"
+            }
+          ]
+        }
       }
     },
     "script": {
@@ -3723,6 +3717,10 @@
         {
           "type": "SYMBOL",
           "name": "code"
+        },
+        {
+          "type": "STRING",
+          "value": "#end"
         },
         {
           "type": "STRING",

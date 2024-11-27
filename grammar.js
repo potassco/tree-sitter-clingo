@@ -463,11 +463,9 @@ module.exports = grammar({
 
         program: $ => seq("#program", $.identifier, optional(seq("(", optional($.identifiers), ")")), "."),
 
-        code: _$ => token(choice(
-            seq(/[^#]*/, /(#+[^e][^#]*)*/, /(#+e*[^n][^#]*)*/, /(#+e*n*[^d][^#]*)*/, '#end'),
-        )),
+        code: _$ => token(repeat(choice(/[^#]/, /#[^e][^#]/, /#e[^n][^#]/, /#en[^d][^#]/,))),
 
-        script: $ => seq("#script", "(", $.identifier, ")", $.code, "."),
+        script: $ => seq("#script", "(", $.identifier, ")", $.code, "#end", "."),
 
         const_type: _$ => choice('default', 'override'),
 

@@ -1855,6 +1855,10 @@
     "named": false
   },
   {
+    "type": "#end",
+    "named": false
+  },
+  {
     "type": "#external",
     "named": false
   },
