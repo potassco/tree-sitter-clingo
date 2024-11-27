@@ -1,6 +1,6 @@
 [
   {
-    "type": "INFIMUM",
+    "type": "AT",
     "named": true,
     "fields": {}
   },
@@ -15,60 +15,24 @@
     "fields": {}
   },
   {
-    "type": "NUMBER",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "bin",
-          "named": true
-        },
-        {
-          "type": "dec",
-          "named": true
-        },
-        {
-          "type": "hex",
-          "named": true
-        },
-        {
-          "type": "oct",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "SEM",
+    "type": "SLASH",
     "named": true,
     "fields": {}
   },
   {
-    "type": "STRING",
+    "type": "abs",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "escape_sequence",
-          "named": true
-        },
-        {
-          "type": "string_fragment",
+          "type": "term",
           "named": true
         }
       ]
     }
-  },
-  {
-    "type": "SUPREMUM",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "aggregate_function",
@@ -102,25 +66,85 @@
     }
   },
   {
+    "type": "binary",
+    "named": true,
+    "fields": {
+      "lhs": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "term",
+            "named": true
+          }
+        ]
+      },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "&",
+            "named": false
+          },
+          {
+            "type": "*",
+            "named": false
+          },
+          {
+            "type": "**",
+            "named": false
+          },
+          {
+            "type": "+",
+            "named": false
+          },
+          {
+            "type": "-",
+            "named": false
+          },
+          {
+            "type": "..",
+            "named": false
+          },
+          {
+            "type": "/",
+            "named": false
+          },
+          {
+            "type": "?",
+            "named": false
+          },
+          {
+            "type": "\\",
+            "named": false
+          },
+          {
+            "type": "^",
+            "named": false
+          }
+        ]
+      },
+      "rhs": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "term",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "body",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "DOT",
-          "named": true
-        },
-        {
-          "type": "SEM",
-          "named": true
-        },
         {
           "type": "body_literal",
           "named": true
@@ -157,10 +181,6 @@
           "named": true
         },
         {
-          "type": "set_aggregate_elements",
-          "named": true
-        },
-        {
           "type": "upper",
           "named": true
         }
@@ -170,24 +190,31 @@
   {
     "type": "body_aggregate_element",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COLON",
-          "named": true
-        },
-        {
-          "type": "literal_tuple",
-          "named": true
-        },
-        {
-          "type": "term_tuple",
-          "named": true
-        }
-      ]
+    "fields": {
+      "condition": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ":",
+            "named": false
+          },
+          {
+            "type": "literal_tuple",
+            "named": true
+          }
+        ]
+      },
+      "tuple": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "terms",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -198,10 +225,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "SEM",
-          "named": true
-        },
         {
           "type": "body_aggregate_element",
           "named": true
@@ -217,10 +240,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "COLON",
-          "named": true
-        },
         {
           "type": "body_aggregate",
           "named": true
@@ -242,6 +261,10 @@
           "named": true
         },
         {
+          "type": "set_aggregate",
+          "named": true
+        },
+        {
           "type": "sign",
           "named": true
         },
@@ -259,21 +282,12 @@
   {
     "type": "boolean_constant",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "FALSE",
-          "named": true
-        },
-        {
-          "type": "TRUE",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
+  },
+  {
+    "type": "classical_negation",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "comparison",
@@ -303,10 +317,6 @@
       "required": true,
       "types": [
         {
-          "type": "COLON",
-          "named": true
-        },
-        {
           "type": "literal",
           "named": true
         },
@@ -318,26 +328,7 @@
     }
   },
   {
-    "type": "const_term_tuple_comma",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "dec",
+    "type": "default_negation",
     "named": true,
     "fields": {}
   },
@@ -350,18 +341,6 @@
       "required": true,
       "types": [
         {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "SEM",
-          "named": true
-        },
-        {
-          "type": "VBAR",
-          "named": true
-        },
-        {
           "type": "conditional_literal",
           "named": true
         },
@@ -370,6 +349,70 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "external_function",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "pool",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "pool",
+            "named": true
+          },
+          {
+            "type": "terms",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -390,6 +433,10 @@
         },
         {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "set_aggregate",
           "named": true
         },
         {
@@ -428,10 +475,6 @@
           "named": true
         },
         {
-          "type": "set_aggregate_elements",
-          "named": true
-        },
-        {
           "type": "upper",
           "named": true
         }
@@ -441,28 +484,41 @@
   {
     "type": "head_aggregate_element",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COLON",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "literal_tuple",
-          "named": true
-        },
-        {
-          "type": "term_tuple",
-          "named": true
-        }
-      ]
+    "fields": {
+      "condition": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ":",
+            "named": false
+          },
+          {
+            "type": "literal_tuple",
+            "named": true
+          }
+        ]
+      },
+      "literal": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "literal",
+            "named": true
+          }
+        ]
+      },
+      "tuple": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "terms",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -473,10 +529,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "SEM",
-          "named": true
-        },
         {
           "type": "head_aggregate_element",
           "named": true
@@ -493,15 +545,16 @@
       "required": true,
       "types": [
         {
-          "type": "COMMA",
-          "named": true
-        },
-        {
           "type": "identifier",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "infimum",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "literal",
@@ -539,10 +592,6 @@
       "required": true,
       "types": [
         {
-          "type": "COMMA",
-          "named": true
-        },
-        {
           "type": "literal",
           "named": true
         }
@@ -569,38 +618,56 @@
     }
   },
   {
+    "type": "number",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "optimize_element",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "AT",
-          "named": true
-        },
-        {
-          "type": "COLON",
-          "named": true
-        },
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "literal_tuple",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        },
-        {
-          "type": "term_tuple",
-          "named": true
-        }
-      ]
+    "fields": {
+      "condition": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ":",
+            "named": false
+          },
+          {
+            "type": "literal_tuple",
+            "named": true
+          }
+        ]
+      },
+      "tuple": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": "terms",
+            "named": true
+          }
+        ]
+      },
+      "weight": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "AT",
+            "named": true
+          },
+          {
+            "type": "term",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -612,11 +679,37 @@
       "required": true,
       "types": [
         {
-          "type": "SEM",
-          "named": true
-        },
-        {
           "type": "optimize_element",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "pool",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "terms",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "pool_binary",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "term",
           "named": true
         }
       ]
@@ -658,7 +751,7 @@
     }
   },
   {
-    "type": "set_aggregate_element",
+    "type": "set_aggregate",
     "named": true,
     "fields": {},
     "children": {
@@ -666,18 +759,56 @@
       "required": true,
       "types": [
         {
-          "type": "COLON",
+          "type": "LBRACE",
           "named": true
         },
         {
-          "type": "literal",
+          "type": "RBRACE",
           "named": true
         },
         {
-          "type": "literal_tuple",
+          "type": "lower",
+          "named": true
+        },
+        {
+          "type": "set_aggregate_elements",
+          "named": true
+        },
+        {
+          "type": "upper",
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "set_aggregate_element",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ":",
+            "named": false
+          },
+          {
+            "type": "literal_tuple",
+            "named": true
+          }
+        ]
+      },
+      "literal": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "literal",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -688,10 +819,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "SEM",
-          "named": true
-        },
         {
           "type": "set_aggregate_element",
           "named": true
@@ -708,7 +835,7 @@
       "required": true,
       "types": [
         {
-          "type": "NOT",
+          "type": "default_negation",
           "named": true
         }
       ]
@@ -723,19 +850,19 @@
       "required": true,
       "types": [
         {
-          "type": "NUMBER",
-          "named": true
-        },
-        {
           "type": "SLASH",
           "named": true
         },
         {
-          "type": "SUB",
+          "type": "classical_negation",
           "named": true
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
           "named": true
         }
       ]
@@ -778,14 +905,6 @@
           "named": true
         },
         {
-          "type": "COLON",
-          "named": true
-        },
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
           "type": "CONST",
           "named": true
         },
@@ -795,10 +914,6 @@
         },
         {
           "type": "DEFINED",
-          "named": true
-        },
-        {
-          "type": "DOT",
           "named": true
         },
         {
@@ -838,10 +953,6 @@
           "named": true
         },
         {
-          "type": "LPAREN",
-          "named": true
-        },
-        {
           "type": "LT",
           "named": true
         },
@@ -866,19 +977,11 @@
           "named": true
         },
         {
-          "type": "RPAREN",
-          "named": true
-        },
-        {
           "type": "SCRIPT",
           "named": true
         },
         {
           "type": "SHOW",
-          "named": true
-        },
-        {
-          "type": "STRING",
           "named": true
         },
         {
@@ -910,7 +1013,15 @@
           "named": true
         },
         {
+          "type": "pool_binary",
+          "named": true
+        },
+        {
           "type": "signature",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         },
         {
@@ -922,11 +1033,7 @@
           "named": true
         },
         {
-          "type": "term_pool_binary",
-          "named": true
-        },
-        {
-          "type": "term_tuple",
+          "type": "terms",
           "named": true
         },
         {
@@ -941,26 +1048,63 @@
     }
   },
   {
-    "type": "symbolic_atom",
+    "type": "string",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
-          "type": "SUB",
+          "type": "escape_sequence",
           "named": true
         },
         {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "term_pool",
+          "type": "string_fragment",
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "supremum",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "symbolic_atom",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "pool": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "pool",
+            "named": true
+          }
+        ]
+      },
+      "sign": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "classical_negation",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -968,247 +1112,68 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "ADD",
+          "type": "abs",
           "named": true
         },
         {
-          "type": "AND",
+          "type": "anonymous",
           "named": true
         },
         {
-          "type": "ANONYMOUS",
+          "type": "binary",
           "named": true
         },
         {
-          "type": "AT",
+          "type": "external_function",
           "named": true
         },
         {
-          "type": "BNOT",
+          "type": "function",
           "named": true
         },
         {
-          "type": "DOTS",
+          "type": "infimum",
           "named": true
         },
         {
-          "type": "INFIMUM",
+          "type": "number",
           "named": true
         },
         {
-          "type": "LPAREN",
+          "type": "string",
           "named": true
         },
         {
-          "type": "MOD",
+          "type": "supremum",
           "named": true
         },
         {
-          "type": "MUL",
+          "type": "tuple",
           "named": true
         },
         {
-          "type": "NUMBER",
+          "type": "unary",
           "named": true
         },
         {
-          "type": "POW",
-          "named": true
-        },
-        {
-          "type": "QUESTION",
-          "named": true
-        },
-        {
-          "type": "RPAREN",
-          "named": true
-        },
-        {
-          "type": "SLASH",
-          "named": true
-        },
-        {
-          "type": "STRING",
-          "named": true
-        },
-        {
-          "type": "SUB",
-          "named": true
-        },
-        {
-          "type": "SUPREMUM",
-          "named": true
-        },
-        {
-          "type": "VARIABLE",
-          "named": true
-        },
-        {
-          "type": "VBAR",
-          "named": true
-        },
-        {
-          "type": "XOR",
-          "named": true
-        },
-        {
-          "type": "const_term_tuple_comma",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        },
-        {
-          "type": "term_pool",
-          "named": true
-        },
-        {
-          "type": "term_pool_trail",
-          "named": true
-        },
-        {
-          "type": "term_pool_unary",
-          "named": true
-        },
-        {
-          "type": "term_tuple",
-          "named": true
-        },
-        {
-          "type": "term_tuple_trail",
+          "type": "variable",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "term_pool",
+    "type": "terms",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "LPAREN",
-          "named": true
-        },
-        {
-          "type": "RPAREN",
-          "named": true
-        },
-        {
-          "type": "term_tuple",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "term_pool_binary",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "SEM",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "term_pool_trail",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "LPAREN",
-          "named": true
-        },
-        {
-          "type": "RPAREN",
-          "named": true
-        },
-        {
-          "type": "term_tuple_trail",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "term_pool_unary",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "SEM",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "term_tuple",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "term_tuple_trail",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
         {
           "type": "term",
           "named": true
@@ -1225,10 +1190,6 @@
       "required": true,
       "types": [
         {
-          "type": "AND",
-          "named": true
-        },
-        {
           "type": "LBRACE",
           "named": true
         },
@@ -1237,15 +1198,15 @@
           "named": true
         },
         {
-          "type": "THEORY_OP",
-          "named": true
-        },
-        {
           "type": "theory_atom_name",
           "named": true
         },
         {
           "type": "theory_elements",
+          "named": true
+        },
+        {
+          "type": "theory_op",
           "named": true
         },
         {
@@ -1264,23 +1225,7 @@
       "required": true,
       "types": [
         {
-          "type": "AND",
-          "named": true
-        },
-        {
-          "type": "COLON",
-          "named": true
-        },
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
           "type": "LBRACE",
-          "named": true
-        },
-        {
-          "type": "NUMBER",
           "named": true
         },
         {
@@ -1293,6 +1238,10 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
           "named": true
         },
         {
@@ -1315,10 +1264,6 @@
       "required": true,
       "types": [
         {
-          "type": "SEM",
-          "named": true
-        },
-        {
           "type": "theory_atom_definition",
           "named": true
         }
@@ -1331,12 +1276,8 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "COLON",
-          "named": true
-        },
         {
           "type": "literal_tuple",
           "named": true
@@ -1361,7 +1302,7 @@
           "named": true
         },
         {
-          "type": "term_pool",
+          "type": "pool",
           "named": true
         }
       ]
@@ -1403,15 +1344,16 @@
       "required": true,
       "types": [
         {
-          "type": "SEM",
-          "named": true
-        },
-        {
           "type": "theory_atom_element",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "theory_op",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "theory_op_list",
@@ -1422,7 +1364,7 @@
       "required": true,
       "types": [
         {
-          "type": "THEORY_OP",
+          "type": "theory_op",
           "named": true
         },
         {
@@ -1445,19 +1387,7 @@
           "named": true
         },
         {
-          "type": "COLON",
-          "named": true
-        },
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
           "type": "LEFT",
-          "named": true
-        },
-        {
-          "type": "NUMBER",
           "named": true
         },
         {
@@ -1465,11 +1395,15 @@
           "named": true
         },
         {
-          "type": "THEORY_OP",
+          "type": "UNARY",
           "named": true
         },
         {
-          "type": "UNARY",
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "theory_op",
           "named": true
         }
       ]
@@ -1483,10 +1417,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "SEM",
-          "named": true
-        },
         {
           "type": "theory_operator_definition",
           "named": true
@@ -1503,11 +1433,7 @@
       "required": true,
       "types": [
         {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "THEORY_OP",
+          "type": "theory_op",
           "named": true
         }
       ]
@@ -1545,10 +1471,6 @@
       "required": true,
       "types": [
         {
-          "type": "COMMA",
-          "named": true
-        },
-        {
           "type": "theory_opterm",
           "named": true
         },
@@ -1565,30 +1487,14 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "INFIMUM",
-          "named": true
-        },
         {
           "type": "LBRACE",
           "named": true
         },
         {
           "type": "LBRACK",
-          "named": true
-        },
-        {
-          "type": "LPAREN",
-          "named": true
-        },
-        {
-          "type": "NUMBER",
           "named": true
         },
         {
@@ -1600,23 +1506,23 @@
           "named": true
         },
         {
-          "type": "RPAREN",
-          "named": true
-        },
-        {
-          "type": "STRING",
-          "named": true
-        },
-        {
-          "type": "SUPREMUM",
-          "named": true
-        },
-        {
-          "type": "VARIABLE",
-          "named": true
-        },
-        {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infimum",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "supremum",
           "named": true
         },
         {
@@ -1625,6 +1531,10 @@
         },
         {
           "type": "theory_opterm_nlist",
+          "named": true
+        },
+        {
+          "type": "variable",
           "named": true
         }
       ]
@@ -1658,6 +1568,51 @@
     }
   },
   {
+    "type": "tuple",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "terms",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "unary",
+    "named": true,
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "-",
+            "named": false
+          },
+          {
+            "type": "~",
+            "named": false
+          }
+        ]
+      },
+      "rhs": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "term",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "upper",
     "named": true,
     "fields": {},
@@ -1678,6 +1633,10 @@
   },
   {
     "type": "\"",
+    "named": false
+  },
+  {
+    "type": "#false",
     "named": false
   },
   {
@@ -1713,7 +1672,59 @@
     "named": false
   },
   {
+    "type": "#true",
+    "named": false
+  },
+  {
+    "type": "&",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": "*",
+    "named": false
+  },
+  {
+    "type": "**",
+    "named": false
+  },
+  {
+    "type": "+",
+    "named": false
+  },
+  {
+    "type": ",",
+    "named": false
+  },
+  {
+    "type": "-",
+    "named": false
+  },
+  {
+    "type": ".",
+    "named": false
+  },
+  {
+    "type": "..",
+    "named": false
+  },
+  {
+    "type": "/",
+    "named": false
+  },
+  {
     "type": "0",
+    "named": false
+  },
+  {
+    "type": ":",
     "named": false
   },
   {
@@ -1721,23 +1732,15 @@
     "named": false
   },
   {
-    "type": "ADD",
-    "named": true
+    "type": "?",
+    "named": false
   },
   {
-    "type": "AND",
-    "named": true
-  },
-  {
-    "type": "ANONYMOUS",
-    "named": true
+    "type": "@",
+    "named": false
   },
   {
     "type": "ANY",
-    "named": true
-  },
-  {
-    "type": "AT",
     "named": true
   },
   {
@@ -1749,23 +1752,11 @@
     "named": true
   },
   {
-    "type": "BNOT",
-    "named": true
-  },
-  {
     "type": "BODY",
     "named": true
   },
   {
     "type": "CODE",
-    "named": true
-  },
-  {
-    "type": "COLON",
-    "named": true
-  },
-  {
-    "type": "COMMA",
     "named": true
   },
   {
@@ -1789,14 +1780,6 @@
     "named": true
   },
   {
-    "type": "DOT",
-    "named": true
-  },
-  {
-    "type": "DOTS",
-    "named": true
-  },
-  {
     "type": "EDGE",
     "named": true
   },
@@ -1806,10 +1789,6 @@
   },
   {
     "type": "EXTERNAL",
-    "named": true
-  },
-  {
-    "type": "FALSE",
     "named": true
   },
   {
@@ -1853,10 +1832,6 @@
     "named": true
   },
   {
-    "type": "LPAREN",
-    "named": true
-  },
-  {
     "type": "LT",
     "named": true
   },
@@ -1869,31 +1844,11 @@
     "named": true
   },
   {
-    "type": "MOD",
-    "named": true
-  },
-  {
-    "type": "MUL",
-    "named": true
-  },
-  {
     "type": "NEQ",
     "named": true
   },
   {
-    "type": "NOT",
-    "named": true
-  },
-  {
-    "type": "POW",
-    "named": true
-  },
-  {
     "type": "PROJECT",
-    "named": true
-  },
-  {
-    "type": "QUESTION",
     "named": true
   },
   {
@@ -1909,23 +1864,11 @@
     "named": true
   },
   {
-    "type": "RPAREN",
-    "named": true
-  },
-  {
     "type": "SCRIPT",
     "named": true
   },
   {
     "type": "SHOW",
-    "named": true
-  },
-  {
-    "type": "SLASH",
-    "named": true
-  },
-  {
-    "type": "SUB",
     "named": true
   },
   {
@@ -1941,23 +1884,7 @@
     "named": true
   },
   {
-    "type": "THEORY_OP",
-    "named": true
-  },
-  {
-    "type": "TRUE",
-    "named": true
-  },
-  {
     "type": "UNARY",
-    "named": true
-  },
-  {
-    "type": "VARIABLE",
-    "named": true
-  },
-  {
-    "type": "VBAR",
     "named": true
   },
   {
@@ -1965,11 +1892,15 @@
     "named": true
   },
   {
-    "type": "XOR",
-    "named": true
+    "type": "\\",
+    "named": false
   },
   {
-    "type": "bin",
+    "type": "^",
+    "named": false
+  },
+  {
+    "type": "anonymous",
     "named": true
   },
   {
@@ -1981,10 +1912,6 @@
     "named": true
   },
   {
-    "type": "hex",
-    "named": true
-  },
-  {
     "type": "identifier",
     "named": true
   },
@@ -1993,11 +1920,23 @@
     "named": true
   },
   {
-    "type": "oct",
-    "named": true
+    "type": "not",
+    "named": false
   },
   {
     "type": "string_fragment",
     "named": true
+  },
+  {
+    "type": "variable",
+    "named": true
+  },
+  {
+    "type": "|",
+    "named": false
+  },
+  {
+    "type": "~",
+    "named": false
   }
 ]
