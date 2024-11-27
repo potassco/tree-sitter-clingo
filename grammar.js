@@ -435,8 +435,9 @@ module.exports = grammar({
         rule: $ => seq($.head, choice(".", seq(":-", $.body))),
         integrity_constraint: $ => seq(":-", $.body),
 
+        priority: $ => seq("@", $.term),
         _optimize_tuple: $ => seq(",", $.terms),
-        _optimize_weight: $ => seq($.term, optional(seq("@", $.term))),
+        _optimize_weight: $ => seq($.term, optional($.priority)),
 
         optimize_element: $ => seq(
             field("weight", $._optimize_weight),
@@ -445,7 +446,7 @@ module.exports = grammar({
         ),
         optimize_elements: $ => seq($.optimize_element, repeat(seq(";", $.optimize_element))),
 
-        weak_constraint: $ => seq(":~", $.body, "{", $._optimize_weight, optional($._optimize_tuple), "]"),
+        weak_constraint: $ => seq(":~", $.body, "[", $._optimize_weight, optional($._optimize_tuple), "]"),
         maximize: $ => seq(choice("#maximize", "#maximise"), "{", optional($.optimize_elements), "}", "."),
         minimize: $ => seq(choice("#minimize", "#minimise"), "{", optional($.optimize_elements), "}", "."),
 
@@ -456,7 +457,7 @@ module.exports = grammar({
         show_signature: $ => seq("#show", $.signature, "."),
         defined: $ => seq("#defined", $.signature, "."),
         project_signatrue: $ => seq("#project", $.signature, "."),
-        project_term: $ => seq("#project", $.symbolic_atom, $._colon_body),
+        project_atom: $ => seq("#project", $.symbolic_atom, $._colon_body),
 
         identifiers: $ => seq($.identifier, repeat(seq(",", $.identifier))),
 
@@ -474,11 +475,21 @@ module.exports = grammar({
 
         edge: $ => seq("#edge", "(", $.pool_binary, ")", $._colon_body),
 
-        heuristic: $ => seq("#heuristic", $.symbolic_atom, $._colon_body, "[", $.term, optional(seq("@", $.term)), ",", $.term, "]"),
+        heuristic: $ => seq(
+            "#heuristic",
+            field("atom", $.symbolic_atom),
+            field("body", $._colon_body),
+            "[",
+            field("weight", $.term),
+            field("priority", optional($.priority)),
+            ",",
+            field("type", $.term),
+            "]"
+        ),
 
         include: $ => seq("#include", choice($.string, seq("<", $.identifier, ">")), "."),
 
-        external: $ => seq("external", $.symbolic_atom, $._colon_body, optional(seq("[", $.term, "]"))),
+        external: $ => seq("#external", $.symbolic_atom, $._colon_body, optional(seq("[", $.term, "]"))),
 
         theory_operator_arity: _$ => "unary",
         theory_operator_arity_binary: _$ => "binary",
@@ -537,9 +548,7 @@ module.exports = grammar({
             $.edge,
             $.heuristic,
             $.project_signatrue,
-            $.project_term,
-            $.const,
-            $.script,
+            $.project_atom,
             $.const,
             $.script,
             $.include,

@@ -3236,6 +3236,19 @@
         }
       ]
     },
+    "priority": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "term"
+        }
+      ]
+    },
     "_optimize_tuple": {
       "type": "SEQ",
       "members": [
@@ -3260,17 +3273,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": "@"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "term"
-                }
-              ]
+              "type": "SYMBOL",
+              "name": "priority"
             },
             {
               "type": "BLANK"
@@ -3362,7 +3366,7 @@
         },
         {
           "type": "STRING",
-          "value": "{"
+          "value": "["
         },
         {
           "type": "SYMBOL",
@@ -3572,7 +3576,7 @@
         }
       ]
     },
-    "project_term": {
+    "project_atom": {
       "type": "SEQ",
       "members": [
         {
@@ -3822,49 +3826,60 @@
           "value": "#heuristic"
         },
         {
-          "type": "SYMBOL",
-          "name": "symbolic_atom"
+          "type": "FIELD",
+          "name": "atom",
+          "content": {
+            "type": "SYMBOL",
+            "name": "symbolic_atom"
+          }
         },
         {
-          "type": "SYMBOL",
-          "name": "_colon_body"
+          "type": "FIELD",
+          "name": "body",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_colon_body"
+          }
         },
         {
           "type": "STRING",
           "value": "["
         },
         {
-          "type": "SYMBOL",
-          "name": "term"
+          "type": "FIELD",
+          "name": "weight",
+          "content": {
+            "type": "SYMBOL",
+            "name": "term"
+          }
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": "@"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "term"
-                }
-              ]
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "FIELD",
+          "name": "priority",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "priority"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
         },
         {
           "type": "STRING",
           "value": ","
         },
         {
-          "type": "SYMBOL",
-          "name": "term"
+          "type": "FIELD",
+          "name": "type",
+          "content": {
+            "type": "SYMBOL",
+            "name": "term"
+          }
         },
         {
           "type": "STRING",
@@ -3916,7 +3931,7 @@
       "members": [
         {
           "type": "STRING",
-          "value": "external"
+          "value": "#external"
         },
         {
           "type": "SYMBOL",
@@ -4406,15 +4421,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "project_term"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "const"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "script"
+          "name": "project_atom"
         },
         {
           "type": "SYMBOL",

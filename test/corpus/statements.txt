@@ -1,0 +1,602 @@
+==================
+comments
+==================
+
+% foo
+%* 
+ * bar
+ *%
+
+---
+
+(source_file
+  (line_comment)
+  (block_comment))
+
+==================
+rules
+==================
+
+head.
+head :-  body.
+:- body.
+:- .
+
+---
+
+(source_file
+  (statement
+    (rule
+      (head
+        (literal
+          (symbolic_atom
+            (identifier))))))
+  (statement
+    (rule
+      (head
+        (literal
+          (symbolic_atom
+            (identifier))))
+      (body
+        (body_literal
+          (symbolic_atom
+            (identifier))))))
+  (statement
+    (integrity_constraint
+      (body
+        (body_literal
+          (symbolic_atom
+            (identifier))))))
+  (statement
+    (integrity_constraint
+      (body))))
+
+==================
+constraints
+==================
+
+head.
+head :-  body.
+:- body.
+:- .
+
+---
+
+(source_file
+  (statement
+    (rule
+      (head
+        (literal
+          (symbolic_atom
+            (identifier))))))
+  (statement
+    (rule
+      (head
+        (literal
+          (symbolic_atom
+            (identifier))))
+      (body
+        (body_literal
+          (symbolic_atom
+            (identifier))))))
+  (statement
+    (integrity_constraint
+      (body
+        (body_literal
+          (symbolic_atom
+            (identifier))))))
+  (statement
+    (integrity_constraint
+      (body))))
+
+==================
+weak constraint
+==================
+
+:~ a, b. [1@2,1,2,3]
+:~ . [0]
+
+---
+
+(source_file
+  (statement
+    (weak_constraint
+      (body
+        (body_literal
+          (symbolic_atom
+            (identifier)))
+        (body_literal
+          (symbolic_atom
+            (identifier))))
+      (term
+        (number))
+      (priority
+        (term
+          (number)))
+      (terms
+        (term
+          (number))
+        (term
+          (number))
+        (term
+          (number)))))
+  (statement
+    (weak_constraint
+      (body)
+      (term
+        (number)))))
+
+==================
+minimize
+==================
+
+#minimize{ 1@3: a; 1: b; 2,3: b,c  }.
+
+---
+
+(source_file
+  (statement
+    (minimize
+      (optimize_elements
+        (optimize_element
+          (term
+            (number))
+          (priority
+            (term
+              (number)))
+          (literal_tuple
+            (literal
+              (symbolic_atom
+                (identifier)))))
+        (optimize_element
+          (term
+            (number))
+          (literal_tuple
+            (literal
+              (symbolic_atom
+                (identifier)))))
+        (optimize_element
+          (term
+            (number))
+          (terms
+            (term
+              (number)))
+          (literal_tuple
+            (literal
+              (symbolic_atom
+                (identifier)))
+            (literal
+              (symbolic_atom
+                (identifier)))))))))
+
+==================
+maximize
+==================
+
+#maximize{ }.
+
+---
+
+(source_file
+  (statement
+    (maximize)))
+
+==================
+show
+==================
+
+#show.
+#show a/2.
+#show -a/2.
+#show a/2+1.
+#show -p(X) : q(), c(X).
+#show a.
+
+---
+
+(source_file
+  (statement
+    (show))
+  (statement
+    (show_signature
+      (signature
+        (identifier)
+        (number))))
+  (statement
+    (show_signature
+      (signature
+        (negative_identifier)
+        (number))))
+  (statement
+    (show_term
+      (term
+        (binary
+          (term
+            (function
+              (identifier)))
+          (term
+            (binary
+              (term
+                (number))
+              (term
+                (number))))))
+      (body)))
+  (statement
+    (show_term
+      (term
+        (function
+          (negative_identifier)
+          (pool
+            (terms
+              (term
+                (variable))))))
+      (body
+        (body_literal
+          (symbolic_atom
+            (identifier)
+            (pool
+              (terms))))
+        (body_literal
+          (symbolic_atom
+            (identifier)
+            (pool
+              (terms
+                (term
+                  (variable)))))))))
+  (statement
+    (show_term
+      (term
+        (function
+          (identifier)))
+      (body))))
+
+==================
+defined
+==================
+
+#defined a/2.
+#defined -a/2.
+
+---
+
+(source_file
+  (statement
+    (defined
+      (signature
+        (identifier)
+        (number))))
+  (statement
+    (defined
+      (signature
+        (negative_identifier)
+        (number)))))
+
+==================
+project
+==================
+
+#project a/2.
+#project -a/2.
+#project a.
+#project a : .
+#project a : b.
+
+---
+
+(source_file
+  (statement
+    (project_signatrue
+      (signature
+        (identifier)
+        (number))))
+  (statement
+    (project_signatrue
+      (signature
+        (negative_identifier)
+        (number))))
+  (statement
+    (project_atom
+      (symbolic_atom
+        (identifier))
+      (body)))
+  (statement
+    (project_atom
+      (symbolic_atom
+        (identifier))
+      (body)))
+  (statement
+    (project_atom
+      (symbolic_atom
+        (identifier))
+      (body
+        (body_literal
+          (symbolic_atom
+            (identifier)))))))
+
+==================
+const
+==================
+
+#const x = 1.
+
+---
+
+(source_file
+  (statement
+    (const
+      (identifier)
+      (term
+        (number)))))
+
+==================
+const
+==================
+
+#const x = f((), |x|).
+#const x = 1. [default]
+#const x = 2. [override]
+
+---
+
+(source_file
+  (statement
+    (const
+      (identifier)
+      (term
+        (function
+          (identifier)
+          (pool
+            (terms
+              (term
+                (tuple
+                  (terms)))
+              (term
+                (abs
+                  (term
+                    (function
+                      (identifier)))))))))))
+  (statement
+    (const
+      (identifier)
+      (term
+        (number))
+      (const_type)))
+  (statement
+    (const
+      (identifier)
+      (term
+        (number))
+      (const_type))))
+
+==================
+script
+==================
+
+#script (python)
+
+def main(ctl):
+  ctl.ground()
+
+#end.
+
+---
+
+(source_file
+  (statement
+    (script
+      (identifier)
+      (code))))
+
+==================
+include
+==================
+
+#include "a".
+#include <b>.
+
+---
+
+(source_file
+  (statement
+    (include
+      (string
+        (string_fragment))))
+  (statement
+    (include
+      (identifier))))
+
+==================
+program
+==================
+
+#program base.
+#program base().
+#program acid(a, b).
+
+---
+
+(source_file
+  (statement
+    (program
+      (identifier)))
+  (statement
+    (program
+      (identifier)))
+  (statement
+    (program
+      (identifier)
+      (identifiers
+        (identifier)
+        (identifier)))))
+
+==================
+external
+==================
+
+#external a.
+#external -a.
+#external a : b.
+#external a(X) : p(B). [X]
+
+---
+
+(source_file
+  (statement
+    (external
+      (symbolic_atom
+        (identifier))
+      (body)))
+  (statement
+    (external
+      (symbolic_atom
+        (negative_identifier))
+      (body)))
+  (statement
+    (external
+      (symbolic_atom
+        (identifier))
+      (body
+        (body_literal
+          (symbolic_atom
+            (identifier))))))
+  (statement
+    (external
+      (symbolic_atom
+        (identifier)
+        (pool
+          (terms
+            (term
+              (variable)))))
+      (body
+        (body_literal
+          (symbolic_atom
+            (identifier)
+            (pool
+              (terms
+                (term
+                  (variable)))))))
+      (term
+        (variable)))))
+
+==================
+edge
+==================
+
+#edge (a,b).
+#edge (a,b; b, c).
+#edge (a,b; b, c) : q.
+
+---
+
+(source_file
+  (statement
+    (edge
+      (pool_binary
+        (term
+          (function
+            (identifier)))
+        (term
+          (function
+            (identifier))))
+      (body)))
+  (statement
+    (edge
+      (pool_binary
+        (term
+          (function
+            (identifier)))
+        (term
+          (function
+            (identifier)))
+        (term
+          (function
+            (identifier)))
+        (term
+          (function
+            (identifier))))
+      (body)))
+  (statement
+    (edge
+      (pool_binary
+        (term
+          (function
+            (identifier)))
+        (term
+          (function
+            (identifier)))
+        (term
+          (function
+            (identifier)))
+        (term
+          (function
+            (identifier))))
+      (body
+        (body_literal
+          (symbolic_atom
+            (identifier)))))))
+
+==================
+heuristic
+==================
+
+#heuristic a(). [true,blub]
+#heuristic a(). [true@10,blub]
+#heuristic a(X) : q(X). [true@X,blub]
+
+---
+
+(source_file
+  (statement
+    (heuristic
+      (symbolic_atom
+        (identifier)
+        (pool
+          (terms)))
+      (body)
+      (term
+        (function
+          (identifier)))
+      (term
+        (function
+          (identifier)))))
+  (statement
+    (heuristic
+      (symbolic_atom
+        (identifier)
+        (pool
+          (terms)))
+      (body)
+      (term
+        (function
+          (identifier)))
+      (priority
+        (term
+          (number)))
+      (term
+        (function
+          (identifier)))))
+  (statement
+    (heuristic
+      (symbolic_atom
+        (identifier)
+        (pool
+          (terms
+            (term
+              (variable)))))
+      (body
+        (body_literal
+          (symbolic_atom
+            (identifier)
+            (pool
+              (terms
+                (term
+                  (variable)))))))
+      (term
+        (function
+          (identifier)))
+      (priority
+        (term
+          (variable)))
+      (term
+        (function
+          (identifier))))))

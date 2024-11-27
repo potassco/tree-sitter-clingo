@@ -545,24 +545,61 @@
   {
     "type": "heuristic",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "body",
-          "named": true
-        },
-        {
-          "type": "symbolic_atom",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
+    "fields": {
+      "atom": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "symbolic_atom",
+            "named": true
+          }
+        ]
+      },
+      "body": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": ":",
+            "named": false
+          },
+          {
+            "type": "body",
+            "named": true
+          }
+        ]
+      },
+      "priority": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "priority",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "term",
+            "named": true
+          }
+        ]
+      },
+      "weight": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "term",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -772,8 +809,8 @@
         "required": true,
         "types": [
           {
-            "type": "@",
-            "named": false
+            "type": "priority",
+            "named": true
           },
           {
             "type": "term",
@@ -829,6 +866,21 @@
     }
   },
   {
+    "type": "priority",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "program",
     "named": true,
     "fields": {},
@@ -848,22 +900,7 @@
     }
   },
   {
-    "type": "project_signatrue",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "signature",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "project_term",
+    "type": "project_atom",
     "named": true,
     "fields": {},
     "children": {
@@ -876,6 +913,21 @@
         },
         {
           "type": "symbolic_atom",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "project_signatrue",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "signature",
           "named": true
         }
       ]
@@ -1134,11 +1186,11 @@
           "named": true
         },
         {
-          "type": "project_signatrue",
+          "type": "project_atom",
           "named": true
         },
         {
-          "type": "project_term",
+          "type": "project_signatrue",
           "named": true
         },
         {
@@ -1764,6 +1816,10 @@
           "named": true
         },
         {
+          "type": "priority",
+          "named": true
+        },
+        {
           "type": "term",
           "named": true
         },
@@ -1796,6 +1852,10 @@
   },
   {
     "type": "#edge",
+    "named": false
+  },
+  {
+    "type": "#external",
     "named": false
   },
   {
@@ -2021,10 +2081,6 @@
   {
     "type": "escape_sequence",
     "named": true
-  },
-  {
-    "type": "external",
-    "named": false
   },
   {
     "type": "head",
