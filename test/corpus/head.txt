@@ -1,5 +1,5 @@
 ==================
-symbol literal
+symbolic literal
 ==================
 
 not p.

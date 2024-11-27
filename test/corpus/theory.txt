@@ -313,3 +313,63 @@ theory unparsed
                       (operator))
                     (theory_term
                       (number))))))))))))
+
+==================
+theory definition
+==================
+
+#theory lp { 
+    lin_term {
+    + : 0, binary, left;
+    + : 1, binary, right;
+    + : 2, unary
+    };
+    bounds{ };
+
+    &op/0   : lin_term, any;
+    &op/1   : lin_term, { <=, >=, <, >, !=, = }, bounds, any
+}.
+
+---
+
+(source_file
+  (statement
+    (theory
+      (identifier)
+      (theory_term_definition
+        (identifier)
+        (theory_operator_definitions
+          (theory_operator_definition
+            (operator)
+            (number)
+            (theory_operator_arity)
+            (theory_operator_associativity))
+          (theory_operator_definition
+            (operator)
+            (number)
+            (theory_operator_arity)
+            (theory_operator_associativity))
+          (theory_operator_definition
+            (operator)
+            (number)
+            (theory_operator_arity))))
+      (theory_term_definition
+        (identifier))
+      (theory_atom_definition
+        (identifier)
+        (number)
+        (identifier)
+        (theory_atom_type))
+      (theory_atom_definition
+        (identifier)
+        (number)
+        (identifier)
+        (operators
+          (operator)
+          (operator)
+          (operator)
+          (operator)
+          (operator)
+          (operator))
+        (identifier)
+        (theory_atom_type)))))

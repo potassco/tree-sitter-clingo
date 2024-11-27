@@ -38,16 +38,56 @@ module.exports = grammar({
             ),
         ),
 
+        // terms
+
         // the stunt here is meant to exclude not
-        identifier: _$ => choice(
+        identifier: _$ => token(choice(
             /[_']+[a-z][A-Za-z0-9_']*/,
             /[a-m,o-z][A-Za-z0-9_']*/,
             /n[a-n,p-z][A-Za-z0-9_']*/,
             /no[a-s,u-z][A-Za-z0-9_']*/,
             /not[A-Za-z0-9_']+/
+        )),
+
+        // Tree sitter (imo incorrectly) applies precedences out of scope. We
+        // simply workaround this issue by making classical negation part of
+        // the identifier token. In practice, this should work well.
+        negative_identifier: _$ => token(choice(
+            /-[ ]*[_']+[a-z][A-Za-z0-9_']*/,
+            /-[ ]*[a-m,o-z][A-Za-z0-9_']*/,
+            /-[ ]*n[a-n,p-z][A-Za-z0-9_']*/,
+            /-[ ]*no[a-s,u-z][A-Za-z0-9_']*/,
+            /-[ ]*not[A-Za-z0-9_']+/
+        )),
+
+        // TODO: clingo does something simpler!
+        string: $ => choice(
+            seq(
+                '"',
+                repeat(choice(
+                    alias($.unescaped_double_string_fragment, $.string_fragment),
+                    $.escape_sequence
+                )),
+                '"'
+            )
         ),
 
-        // terms
+        // Workaround to https://github.com/tree-sitter/tree-sitter/issues/1156
+        // We give names to the token() constructs containing a regexp
+        // so as to obtain a node in the CST.
+        unescaped_double_string_fragment: _$ =>
+            token.immediate(prec(1, /[^"\\]+/)),
+
+        escape_sequence: _$ => token.immediate(seq(
+            '\\',
+            choice(
+                /[^xu0-7]/,
+                /[0-7]{1,3}/,
+                /x[0-9a-fA-F]{2}/,
+                /u[0-9a-fA-F]{4}/,
+                /u\{[0-9a-fA-F]+\}/
+            )
+        )),
 
         supremum: _$ => choice(
             '#sup',
@@ -110,8 +150,13 @@ module.exports = grammar({
         ),
         const_pool: $ => seq(alias($.const_terms, $.terms), ")"),
 
+        _classical_identifier: $ => choice(
+            $.negative_identifier,
+            $.identifier,
+        ),
+
         const_function: $ => seq(
-            field("name", $.identifier),
+            field("name", $._classical_identifier),
             field('arguments', optional(alias($.const_pool, $.pool))),
         ),
 
@@ -122,21 +167,6 @@ module.exports = grammar({
         ))),
 
         const_tuple: $ => seq(alias($.const_terms_trail, $.terms), ")"),
-
-        term: $ => choice(
-            $.infimum,
-            $.supremum,
-            $.number,
-            $.string,
-            $.anonymous,
-            $.variable,
-            $.binary,
-            $.unary,
-            $.abs,
-            $.function,
-            $.external_function,
-            $.tuple,
-        ),
 
         binary: $ => choice(
             binary_expression(8, $.term, "..", $.term),
@@ -184,7 +214,7 @@ module.exports = grammar({
 
 
         function: $ => seq(
-            field("name", $.identifier),
+            field("name", $._classical_identifier),
             field('arguments', optional($.pool)),
         ),
         external_function: $ => seq(
@@ -209,26 +239,74 @@ module.exports = grammar({
             ")"
         ),
 
+        term: $ => choice(
+            $.infimum,
+            $.supremum,
+            $.number,
+            $.string,
+            $.anonymous,
+            $.variable,
+            $.binary,
+            $.unary,
+            $.abs,
+            $.function,
+            $.external_function,
+            $.tuple,
+        ),
+
+        // theory terms
+
+        operator: _$ => choice(
+            /[/!<=>+\-*\\?&@|:;~\^\.]+/,
+            "not"
+        ),
+        operators: $ => repeat1($.operator),
+
+        _theory_terms: $ => seq($.theory_term, repeat(seq(",", $.theory_term))),
+        theory_terms: $ => $._theory_terms,
+
+        theory_function: $ => seq($.identifier, optional(seq("(", optional($.theory_terms), ")"))),
+
+        _theory_terms_trail: $ => choice(",", seq($.theory_term, repeat(seq(",", $.theory_term)), optional(","))),
+
+        theory_tuple: $ => seq("(", optional($._theory_terms_trail), ")"),
+        theory_list: $ => seq("[", optional($._theory_terms), "]"),
+        theory_set: $ => seq("{", optional($._theory_terms), "}"),
+
+        theory_unparsed_term: $ => choice(
+            repeat1(seq($.operators, alias($.theory_root_term, $.theory_term))),
+            seq(alias($.theory_root_term, $.theory_term), repeat1(seq($.operators, alias($.theory_root_term, $.theory_term)))),
+        ),
+
+        theory_term: $ => choice(
+            $.theory_unparsed_term,
+            $._theory_root_term,
+        ),
+
+        _theory_root_term: $ => choice(
+            $.theory_function,
+            $.theory_tuple,
+            $.theory_list,
+            $.theory_set,
+            $.number,
+            $.string,
+            $.infimum,
+            $.supremum,
+            $.variable,
+            $.anonymous,
+        ),
+        theory_root_term: $ => $._theory_root_term,
+
         // Literals
 
         boolean_constant: _$ => choice("#true", "#false"),
 
-        classical_negation: _$ => "-",
-
         symbolic_atom: $ => seq(
-            field("sign", optional($.classical_negation)),
-            field("name", $.identifier),
+            field("name", $._classical_identifier),
             field("pool", optional($.pool)),
         ),
 
-        relation: $ => choice(
-            ">",
-            "<",
-            ">=",
-            "<=",
-            "=",
-            "!="
-        ),
+        relation: _$ => choice(">", "<", ">=", "<=", "=", "!="),
 
         comparison: $ => seq($.term, $.relation, $.term, repeat(seq($.relation, $.term))),
 
@@ -250,7 +328,7 @@ module.exports = grammar({
 
         _condition: $ => seq(":", optional($.literal_tuple)),
 
-        aggregate_function: $ => choice(
+        aggregate_function: _$ => choice(
             "#sum",
             "#sum+",
             "#min",
@@ -268,6 +346,19 @@ module.exports = grammar({
 
         _set_aggregate: $ => seq("{", optional($.set_aggregate_elements), "}"),
         set_aggregate: $ => seq(optional($.lower), $._set_aggregate, optional($.upper)),
+
+        // theory atoms
+
+        theory_element: $ => choice(
+            seq($.theory_terms, optional($._condition)),
+            seq($._condition),
+        ),
+
+        theory_elements: $ => seq($.theory_element, repeat(seq(";", $.theory_element))),
+
+        theory_atom_name: $ => seq($.identifier, optional($.pool)),
+
+        theory_atom: $ => seq("&", $.theory_atom_name, optional(seq("{", optional($.theory_elements), "}")), optional(seq($.operator, $.theory_term))),
 
         // body literals
 
@@ -287,12 +378,14 @@ module.exports = grammar({
             $._simple_atom
         )),
 
+        body_literal_conditional: $ => $.conditional_literal,
+
         _body_literal_sep: $ => choice(
             seq($.body_literal, choice(";", ",")),
-            seq(alias($.conditional_literal, $.body_literal), ";"),
+            seq(alias($.body_literal_conditional, $.body_literal), ";"),
         ),
 
-        _body_literal: $ => choice($.body_literal, alias($.conditional_literal, $.body_literal)),
+        _body_literal: $ => choice($.body_literal, alias($.body_literal_conditional, $.body_literal)),
 
         body: $ => seq(optional(seq(repeat($._body_literal_sep), $._body_literal)), "."),
         body_0: _$ => ".",
@@ -339,7 +432,8 @@ module.exports = grammar({
 
         // statements
 
-        signature: $ => prec.dynamic(1, seq(optional($.classical_negation), $.identifier, "/", $.number)),
+        rule: $ => seq($.head, choice(".", seq(":-", $.body))),
+        integrity_constraint: $ => seq(":-", $.body),
 
         _optimize_tuple: $ => seq(",", $.terms),
         _optimize_weight: $ => seq($.term, optional(seq("@", $.term))),
@@ -351,33 +445,83 @@ module.exports = grammar({
         ),
         optimize_elements: $ => seq($.optimize_element, repeat(seq(";", $.optimize_element))),
 
+        weak_constraint: $ => seq(":~", $.body, "{", $._optimize_weight, optional($._optimize_tuple), "]"),
+        maximize: $ => seq(choice("#maximize", "#maximise"), "{", optional($.optimize_elements), "}", "."),
+        minimize: $ => seq(choice("#minimize", "#minimise"), "{", optional($.optimize_elements), "}", "."),
+
+        signature: $ => prec.dynamic(1, seq($._classical_identifier, "/", $.number)),
+
+        show: _$ => seq("#show", "."),
+        show_term: $ => seq("#show", $.term, $._colon_body),
+        show_signature: $ => seq("#show", $.signature, "."),
+        defined: $ => seq("#defined", $.signature, "."),
+        project_signatrue: $ => seq("#project", $.signature, "."),
+        project_term: $ => seq("#project", $.symbolic_atom, $._colon_body),
+
         identifiers: $ => seq($.identifier, repeat(seq(",", $.identifier))),
+
+        program: $ => seq("#program", $.identifier, optional(seq("(", optional($.identifiers), ")")), "."),
 
         code: _$ => token(choice(
             seq(/[^#]*/, /(#+[^e][^#]*)*/, /(#+e*[^n][^#]*)*/, /(#+e*n*[^d][^#]*)*/, '#end'),
         )),
 
+        script: $ => seq("#script", "(", $.identifier, ")", $.code, "."),
+
         const_type: _$ => choice('default', 'override'),
 
-        rule: $ => seq($.head, choice(".", seq(":-", $.body))),
-        integrity_constraint: $ => seq(":-", $.body),
-        weak_constraint: $ => seq(":~", $.body, "{", $._optimize_weight, optional($._optimize_tuple), "]"),
-        maximize: $ => seq(choice("#maximize", "#maximise"), "{", optional($.optimize_elements), "}", "."),
-        minimize: $ => seq(choice("#minimize", "#minimise"), "{", optional($.optimize_elements), "}", "."),
-        show: _$ => seq("#show", "."),
-        show_term: $ => seq("#show", $.term, $._colon_body),
-        show_signature: $ => seq("#show", $.signature, "."),
-        defined: $ => seq("#defined", $.signature, "."),
-        edge: $ => seq("#edge", "(", $.pool_binary, ")", $._colon_body),
-        heuristic: $ => seq("#heuristic", $.symbolic_atom, $._colon_body, "[", $.term, optional(seq("@", $.term)), ",", $.term, "]"),
-        project_signatrue: $ => seq("#project", $.signature, "."),
-        project_term: $ => seq("#project", $.symbolic_atom, $._colon_body),
-
         const: $ => seq("#const", $.identifier, "=", $._const_term, ".", optional(seq("[", $.const_type, "]"))),
-        script: $ => seq("#script", "(", $.identifier, ")", $.code, "."),
+
+        edge: $ => seq("#edge", "(", $.pool_binary, ")", $._colon_body),
+
+        heuristic: $ => seq("#heuristic", $.symbolic_atom, $._colon_body, "[", $.term, optional(seq("@", $.term)), ",", $.term, "]"),
+
         include: $ => seq("#include", choice($.string, seq("<", $.identifier, ">")), "."),
-        program: $ => seq("#program", $.identifier, optional(seq("(", optional($.identifiers), ")")), "."),
+
         external: $ => seq("external", $.symbolic_atom, $._colon_body, optional(seq("[", $.term, "]"))),
+
+        theory_operator_arity: _$ => "unary",
+        theory_operator_arity_binary: _$ => "binary",
+
+        theory_operator_associativity: _$ => choice("left", "right"),
+
+        theory_operator_definition: $ => choice(
+            seq($.operator, ":", $.number, ",", $.theory_operator_arity),
+            seq($.operator, ":", $.number, ",", alias($.theory_operator_arity_binary, $.theory_operator_arity), ",", $.theory_operator_associativity),
+        ),
+
+        theory_operator_definitions: $ => seq($.theory_operator_definition, repeat(seq(";", $.theory_operator_definition))),
+
+        theory_term_definition: $ => seq($.identifier, "{", optional($.theory_operator_definitions), "}"),
+
+        theory_atom_type: _$ => choice("head", "body", "any", "directive"),
+
+        operators_sep: $ => seq($.operator, repeat(seq(",", $.operator))),
+
+        theory_atom_definition: $ => seq(
+            "&",
+            field("name", $.identifier),
+            "/",
+            $.number,
+            ":",
+            field("term", $.identifier),
+            ",",
+            optional(seq(
+                "{",
+                optional(alias($.operators_sep, $.operators)),
+                "}",
+                ",",
+                field("guard", $.identifier),
+                ","
+            )),
+            field("type", $.theory_atom_type)
+        ),
+
+        _theory_definitions: $ => choice(
+            seq($.theory_atom_definition, repeat(seq(";", $.theory_atom_definition))),
+            seq($.theory_term_definition, repeat(seq(";", $.theory_term_definition)), repeat(seq(";", $.theory_atom_definition))),
+        ),
+
         theory: $ => seq("#theory", $.identifier, "{", optional($._theory_definitions), "}", "."),
 
         statement: $ => choice(
@@ -403,110 +547,5 @@ module.exports = grammar({
             $.external,
             $.theory
         ),
-
-        operator: _$ => choice(
-            /[/!<=>+\-*\\?&@|:;~\^\.]+/,
-            "not"
-        ),
-        operators: $ => repeat1($.operator),
-
-        theory_function: $ => seq($.identifier, optional(seq("(", optional($.theory_terms), ")"))),
-
-        theory_tuple: $ => seq("(", optional($._theory_terms_trail), ")"),
-        theory_list: $ => seq("[", optional($._theory_terms), "]"),
-        theory_set: $ => seq("{", optional($._theory_terms), "}"),
-
-        _theory_root_term: $ => choice(
-            $.theory_function,
-            $.theory_tuple,
-            $.theory_list,
-            $.theory_set,
-            $.number,
-            $.string,
-            $.infimum,
-            $.supremum,
-            $.variable,
-            $.anonymous,
-        ),
-        theory_root_term: $ => $._theory_root_term,
-
-        theory_unparsed_term: $ => choice(
-            repeat1(seq($.operators, alias($.theory_root_term, $.theory_term))),
-            seq(alias($.theory_root_term, $.theory_term), repeat1(seq($.operators, alias($.theory_root_term, $.theory_term)))),
-        ),
-
-        theory_term: $ => choice(
-            $.theory_unparsed_term,
-            $._theory_root_term,
-        ),
-        _theory_terms: $ => seq($.theory_term, repeat(seq(",", $.theory_term))),
-        theory_terms: $ => $._theory_terms,
-        _theory_terms_trail: $ => choice(",", seq($.theory_term, repeat(seq(",", $.theory_term)), optional(","))),
-
-        theory_element: $ => choice(
-            seq($.theory_terms, optional($._condition)),
-            seq($._condition),
-        ),
-
-        theory_elements: $ => seq($.theory_element, repeat(seq(";", $.theory_element))),
-
-        theory_atom_name: $ => seq($.identifier, optional($.pool)),
-
-        theory_atom: $ => seq("&", $.theory_atom_name, optional(seq("{", optional($.theory_elements), "}")), optional(seq($.operator, $.theory_term))),
-
-        theory_operator_arity: _$ => "unary",
-        theory_operator_arity_binary: _$ => "binary",
-
-        theory_operator_associativity: _$ => choice("left", "right"),
-
-        theory_operator_definition: $ => choice(
-            seq($.operator, ":", $.number, ",", $.theory_operator_arity),
-            seq($.operator, ":", $.number, ",", alias($.theory_operator_arity_binary, $.theory_operator_arity), ",", $.theory_operator_associativity),
-        ),
-
-        theory_operator_definitions: $ => seq($.theory_operator_definition, repeat(seq(";", $.theory_operator_definition))),
-
-        theory_term_definition: $ => seq($.identifier, "{", optional($.theory_operator_definitions), "}"),
-        theory_term_definitions: $ => seq($.theory_term_definition, repeat(seq(";", $.theory_term_definition))),
-
-        theory_atom_type: $ => choice("head", "body", "any", "directive"),
-
-        theory_atom_definition: $ => seq("&", $.identifier, "/", $.number, ":", $.identifier, ",", optional(seq("{", optional($.operators), "}", ",", $.identifier, ",")), $.theory_atom_type),
-        theory_atom_definitions: $ => seq($.theory_atom_definition, repeat(seq(";", $.theory_atom_definition))),
-
-
-        _theory_definitions: $ => choice(
-            seq($.theory_atom_definitions),
-            seq($.theory_term_definition, optional($.theory_atom_definitions)),
-        ),
-
-        // TODO: clingo does something simpler!
-        string: $ => choice(
-            seq(
-                '"',
-                repeat(choice(
-                    alias($.unescaped_double_string_fragment, $.string_fragment),
-                    $.escape_sequence
-                )),
-                '"'
-            )
-        ),
-
-        // Workaround to https://github.com/tree-sitter/tree-sitter/issues/1156
-        // We give names to the token() constructs containing a regexp
-        // so as to obtain a node in the CST.
-        unescaped_double_string_fragment: _$ =>
-            token.immediate(prec(1, /[^"\\]+/)),
-
-        escape_sequence: _$ => token.immediate(seq(
-            '\\',
-            choice(
-                /[^xu0-7]/,
-                /[0-7]{1,3}/,
-                /x[0-9a-fA-F]{2}/,
-                /u[0-9a-fA-F]{4}/,
-                /u\{[0-9a-fA-F]+\}/
-            )
-        )),
     }
 });

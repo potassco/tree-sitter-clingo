@@ -199,11 +199,7 @@
           "named": true
         },
         {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "literal_tuple",
+          "type": "conditional_literal",
           "named": true
         },
         {
@@ -227,11 +223,6 @@
   },
   {
     "type": "boolean_constant",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "classical_negation",
     "named": true,
     "fields": {}
   },
@@ -429,6 +420,10 @@
           {
             "type": "identifier",
             "named": true
+          },
+          {
+            "type": "negative_identifier",
+            "named": true
           }
         ]
       }
@@ -569,11 +564,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "identifier",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "identifiers",
@@ -1065,11 +1055,11 @@
       "required": true,
       "types": [
         {
-          "type": "classical_negation",
+          "type": "identifier",
           "named": true
         },
         {
-          "type": "identifier",
+          "type": "negative_identifier",
           "named": true
         },
         {
@@ -1217,6 +1207,10 @@
           {
             "type": "identifier",
             "named": true
+          },
+          {
+            "type": "negative_identifier",
+            "named": true
           }
         ]
       },
@@ -1226,16 +1220,6 @@
         "types": [
           {
             "type": "pool",
-            "named": true
-          }
-        ]
-      },
-      "sign": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "classical_negation",
             "named": true
           }
         ]
@@ -1329,7 +1313,7 @@
           "named": true
         },
         {
-          "type": "theory_atom_definitions",
+          "type": "theory_atom_definition",
           "named": true
         },
         {
@@ -1369,40 +1353,58 @@
   {
     "type": "theory_atom_definition",
     "named": true,
-    "fields": {},
+    "fields": {
+      "guard": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "term": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "theory_atom_type",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
         {
           "type": "number",
           "named": true
         },
         {
           "type": "operators",
-          "named": true
-        },
-        {
-          "type": "theory_atom_type",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "theory_atom_definitions",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "theory_atom_definition",
           "named": true
         }
       ]
@@ -2029,11 +2031,19 @@
     "named": false
   },
   {
+    "type": "identifier",
+    "named": true
+  },
+  {
     "type": "left",
     "named": false
   },
   {
     "type": "line_comment",
+    "named": true
+  },
+  {
+    "type": "negative_identifier",
     "named": true
   },
   {
