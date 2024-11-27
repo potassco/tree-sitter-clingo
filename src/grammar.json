@@ -3559,7 +3559,7 @@
         }
       ]
     },
-    "project_signatrue": {
+    "project_signature": {
       "type": "SEQ",
       "members": [
         {
@@ -4415,7 +4415,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "project_signatrue"
+          "name": "project_signature"
         },
         {
           "type": "SYMBOL",

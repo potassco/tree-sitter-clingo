@@ -919,7 +919,7 @@
     }
   },
   {
-    "type": "project_signatrue",
+    "type": "project_signature",
     "named": true,
     "fields": {},
     "children": {
@@ -1190,7 +1190,7 @@
           "named": true
         },
         {
-          "type": "project_signatrue",
+          "type": "project_signature",
           "named": true
         },
         {

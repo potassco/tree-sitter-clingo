@@ -456,7 +456,7 @@ module.exports = grammar({
         show_term: $ => seq("#show", $.term, $._colon_body),
         show_signature: $ => seq("#show", $.signature, "."),
         defined: $ => seq("#defined", $.signature, "."),
-        project_signatrue: $ => seq("#project", $.signature, "."),
+        project_signature: $ => seq("#project", $.signature, "."),
         project_atom: $ => seq("#project", $.symbolic_atom, $._colon_body),
 
         identifiers: $ => seq($.identifier, repeat(seq(",", $.identifier))),
@@ -545,7 +545,7 @@ module.exports = grammar({
             $.defined,
             $.edge,
             $.heuristic,
-            $.project_signatrue,
+            $.project_signature,
             $.project_atom,
             $.const,
             $.script,

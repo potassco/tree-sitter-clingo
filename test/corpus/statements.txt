@@ -256,12 +256,12 @@ project
 
 (source_file
   (statement
-    (project_signatrue
+    (project_signature
       (signature
         (identifier)
         (number))))
   (statement
-    (project_signatrue
+    (project_signature
       (signature
         (negative_identifier)
         (number))))
