@@ -15,11 +15,6 @@
     "fields": {}
   },
   {
-    "type": "SLASH",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "abs",
     "named": true,
     "fields": {},
@@ -37,33 +32,7 @@
   {
     "type": "aggregate_function",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "COUNT",
-          "named": true
-        },
-        {
-          "type": "MAX",
-          "named": true
-        },
-        {
-          "type": "MIN",
-          "named": true
-        },
-        {
-          "type": "SUM",
-          "named": true
-        },
-        {
-          "type": "SUMP",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "binary",
@@ -382,23 +351,11 @@
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
             "type": "pool",
-            "named": true
-          },
-          {
-            "type": "terms",
             "named": true
           }
         ]
@@ -718,37 +675,7 @@
   {
     "type": "relation",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "EQ",
-          "named": true
-        },
-        {
-          "type": "GEQ",
-          "named": true
-        },
-        {
-          "type": "GT",
-          "named": true
-        },
-        {
-          "type": "LEQ",
-          "named": true
-        },
-        {
-          "type": "LT",
-          "named": true
-        },
-        {
-          "type": "NEQ",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "set_aggregate",
@@ -850,10 +777,6 @@
       "required": true,
       "types": [
         {
-          "type": "SLASH",
-          "named": true
-        },
-        {
           "type": "classical_negation",
           "named": true
         },
@@ -921,15 +844,7 @@
           "named": true
         },
         {
-          "type": "EQ",
-          "named": true
-        },
-        {
           "type": "EXTERNAL",
-          "named": true
-        },
-        {
-          "type": "GT",
           "named": true
         },
         {
@@ -950,10 +865,6 @@
         },
         {
           "type": "LBRACK",
-          "named": true
-        },
-        {
-          "type": "LT",
           "named": true
         },
         {
@@ -1230,10 +1141,6 @@
         },
         {
           "type": "RBRACE",
-          "named": true
-        },
-        {
-          "type": "SLASH",
           "named": true
         },
         {
@@ -1573,7 +1480,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "terms",
@@ -1632,7 +1539,15 @@
     }
   },
   {
+    "type": "!=",
+    "named": false
+  },
+  {
     "type": "\"",
+    "named": false
+  },
+  {
+    "type": "#count",
     "named": false
   },
   {
@@ -1648,6 +1563,10 @@
     "named": false
   },
   {
+    "type": "#max",
+    "named": false
+  },
+  {
     "type": "#maximise",
     "named": false
   },
@@ -1656,11 +1575,23 @@
     "named": false
   },
   {
+    "type": "#min",
+    "named": false
+  },
+  {
     "type": "#minimise",
     "named": false
   },
   {
     "type": "#minimize",
+    "named": false
+  },
+  {
+    "type": "#sum",
+    "named": false
+  },
+  {
+    "type": "#sum+",
     "named": false
   },
   {
@@ -1732,6 +1663,26 @@
     "named": false
   },
   {
+    "type": "<",
+    "named": false
+  },
+  {
+    "type": "<=",
+    "named": false
+  },
+  {
+    "type": "=",
+    "named": false
+  },
+  {
+    "type": ">",
+    "named": false
+  },
+  {
+    "type": ">=",
+    "named": false
+  },
+  {
     "type": "?",
     "named": false
   },
@@ -1764,10 +1715,6 @@
     "named": true
   },
   {
-    "type": "COUNT",
-    "named": true
-  },
-  {
     "type": "DEFAULT",
     "named": true
   },
@@ -1784,19 +1731,7 @@
     "named": true
   },
   {
-    "type": "EQ",
-    "named": true
-  },
-  {
     "type": "EXTERNAL",
-    "named": true
-  },
-  {
-    "type": "GEQ",
-    "named": true
-  },
-  {
-    "type": "GT",
     "named": true
   },
   {
@@ -1828,26 +1763,6 @@
     "named": true
   },
   {
-    "type": "LEQ",
-    "named": true
-  },
-  {
-    "type": "LT",
-    "named": true
-  },
-  {
-    "type": "MAX",
-    "named": true
-  },
-  {
-    "type": "MIN",
-    "named": true
-  },
-  {
-    "type": "NEQ",
-    "named": true
-  },
-  {
     "type": "PROJECT",
     "named": true
   },
@@ -1869,14 +1784,6 @@
   },
   {
     "type": "SHOW",
-    "named": true
-  },
-  {
-    "type": "SUM",
-    "named": true
-  },
-  {
-    "type": "SUMP",
     "named": true
   },
   {
