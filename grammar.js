@@ -23,6 +23,8 @@ module.exports = grammar({
     rules: {
         source_file: $ => repeat($.statement),
 
+        // comments
+
         line_comment: _$ => token(choice(
             /%[^*].*/,
             '%'
@@ -36,57 +38,14 @@ module.exports = grammar({
             ),
         ),
 
-        // TODO: looking at other grammars it does not seem like tokens are
-        // represented explicitely
-        AT: _$ => '@',
-        CONST: _$ => '#const',
-        EXTERNAL: _$ => '#external',
-        DEFINED: _$ => '#defined',
-        IF: _$ => ':-',
-        INCLUDE: _$ => '#include',
-        LBRACE: _$ => '{',
-        LBRACK: _$ => '[',
-        MAXIMIZE: _$ => choice(
-            '#maximize',
-            '#maximise'
-        ),
-        MINIMIZE: _$ => choice(
-            '#minimize',
-            '#minimise'
-        ),
-        RBRACE: _$ => '}',
-        RBRACK: _$ => ']',
-        SHOW: _$ => '#show',
-        EDGE: _$ => '#edge',
-        PROJECT: _$ => '#project',
-        HEURISTIC: _$ => '#heuristic',
-        BLOCK: _$ => '#program',
-        WIF: _$ => ':~',
-        ANY: _$ => 'any',
-        UNARY: _$ => 'unary',
-        BINARY: _$ => 'binary',
-        LEFT: _$ => 'left',
-        RIGHT: _$ => 'right',
-        HEAD: _$ => 'head',
-        BODY: _$ => 'body',
-        DIRECTIVE: _$ => 'directive',
-        THEORY: _$ => '#theory',
-
         // the stunt here is meant to exclude not
-        identifier: _$ => token(seq(
-            choice(
-                /[_']+[a-z]/,
-                /[a-m,o-z]/,
-                /[a-z][a-n,p-z]/,
-                /[a-z][a-z][a-s,u-z]/),
-            /[A-Za-z0-9_']*/)),
-
-        SCRIPT: _$ => '#script',
-        CODE: _$ => token(choice(
-            seq(/[^#]*/, /(#+[^e][^#]*)*/, /(#+e*[^n][^#]*)*/, /(#+e*n*[^d][^#]*)*/, '#end'),
-        )),
-        DEFAULT: _$ => 'default',
-        OVERRIDE: _$ => 'override',
+        identifier: _$ => choice(
+            /[_']+[a-z][A-Za-z0-9_']*/,
+            /[a-m,o-z][A-Za-z0-9_']*/,
+            /n[a-n,p-z][A-Za-z0-9_']*/,
+            /no[a-s,u-z][A-Za-z0-9_']*/,
+            /not[A-Za-z0-9_']+/
+        ),
 
         // terms
 
@@ -105,7 +64,7 @@ module.exports = grammar({
             token(seq('0b', /([0-1]+)/)),
         ),
         anonymous: _$ => '_',
-        variable: _$ => token(seq(repeat('_'), /[A-Z]/, repeat(/[A-Za-z0-9_']/))),
+        variable: _$ => /[_']*[A-Z][A-Za-z0-9_']*/,
 
         const_term: $ => choice(
             $.infimum,
@@ -307,7 +266,7 @@ module.exports = grammar({
             field("condition", optional($._condition))),
         set_aggregate_elements: $ => seq($.set_aggregate_element, repeat(seq(";", $.set_aggregate_element))),
 
-        _set_aggregate: $ => seq($.LBRACE, optional($.set_aggregate_elements), $.RBRACE),
+        _set_aggregate: $ => seq("{", optional($.set_aggregate_elements), "}"),
         set_aggregate: $ => seq(optional($.lower), $._set_aggregate, optional($.upper)),
 
         // body literals
@@ -318,7 +277,7 @@ module.exports = grammar({
         ),
         body_aggregate_elements: $ => seq($.body_aggregate_element, repeat(seq(";", $.body_aggregate_element))),
 
-        _body_aggregate: $ => seq($.aggregate_function, $.LBRACE, optional($.body_aggregate_elements), $.RBRACE),
+        _body_aggregate: $ => seq($.aggregate_function, "{", optional($.body_aggregate_elements), "}"),
         body_aggregate: $ => seq(optional($.lower), $._body_aggregate, optional($.upper)),
 
         body_literal: $ => seq(optional($.sign), choice(
@@ -352,7 +311,7 @@ module.exports = grammar({
             field("condition", optional($._condition))),
         head_aggregate_elements: $ => seq($.head_aggregate_element, repeat(seq(";", $.head_aggregate_element))),
 
-        _head_aggregate: $ => seq($.aggregate_function, $.LBRACE, optional($.head_aggregate_elements), $.RBRACE),
+        _head_aggregate: $ => seq($.aggregate_function, "{", optional($.head_aggregate_elements), "}"),
         head_aggregate: $ => seq(optional($.lower), $._head_aggregate, optional($.upper)),
 
         conditional_literal: $ => seq($.literal, $._condition),
@@ -383,7 +342,7 @@ module.exports = grammar({
         signature: $ => prec.dynamic(1, seq(optional($.classical_negation), $.identifier, "/", $.number)),
 
         _optimize_tuple: $ => seq(",", $.terms),
-        _optimize_weight: $ => seq($.term, optional(seq($.AT, $.term))),
+        _optimize_weight: $ => seq($.term, optional(seq("@", $.term))),
 
         optimize_element: $ => seq(
             field("weight", $._optimize_weight),
@@ -394,90 +353,125 @@ module.exports = grammar({
 
         identifiers: $ => seq($.identifier, repeat(seq(",", $.identifier))),
 
+        code: _$ => token(choice(
+            seq(/[^#]*/, /(#+[^e][^#]*)*/, /(#+e*[^n][^#]*)*/, /(#+e*n*[^d][^#]*)*/, '#end'),
+        )),
+
+        const_type: _$ => choice('default', 'override'),
+
+        rule: $ => seq($.head, choice(".", seq(":-", $.body))),
+        integrity_constraint: $ => seq(":-", $.body),
+        weak_constraint: $ => seq(":~", $.body, "{", $._optimize_weight, optional($._optimize_tuple), "]"),
+        maximize: $ => seq(choice("#maximize", "#maximise"), "{", optional($.optimize_elements), "}", "."),
+        minimize: $ => seq(choice("#minimize", "#minimise"), "{", optional($.optimize_elements), "}", "."),
+        show: _$ => seq("#show", "."),
+        show_term: $ => seq("#show", $.term, $._colon_body),
+        show_signature: $ => seq("#show", $.signature, "."),
+        defined: $ => seq("#defined", $.signature, "."),
+        edge: $ => seq("#edge", "(", $.pool_binary, ")", $._colon_body),
+        heuristic: $ => seq("#heuristic", $.symbolic_atom, $._colon_body, "[", $.term, optional(seq("@", $.term)), ",", $.term, "]"),
+        project_signatrue: $ => seq("#project", $.signature, "."),
+        project_term: $ => seq("#project", $.symbolic_atom, $._colon_body),
+
+        const: $ => seq("#const", $.identifier, "=", $._const_term, ".", optional(seq("[", $.const_type, "]"))),
+        script: $ => seq("#script", "(", $.identifier, ")", $.code, "."),
+        include: $ => seq("#include", choice($.string, seq("<", $.identifier, ">")), "."),
+        program: $ => seq("#program", $.identifier, optional(seq("(", optional($.identifiers), ")")), "."),
+        external: $ => seq("external", $.symbolic_atom, $._colon_body, optional(seq("[", $.term, "]"))),
+        theory: $ => seq("#theory", $.identifier, "{", optional($._theory_definitions), "}", "."),
+
         statement: $ => choice(
-            seq($.head, choice(".", seq($.IF, $.body))),
-            seq($.IF, $.body),
-            seq($.WIF, $.body, $.LBRACK, $._optimize_weight, optional($._optimize_tuple), $.RBRACK),
-            seq(choice($.MAXIMIZE, $.MINIMIZE), $.LBRACE, optional($.optimize_elements), $.RBRACE, "."),
-            seq($.SHOW, "."),
-            seq($.SHOW, $.term, $._colon_body),
-            seq($.SHOW, $.signature, "."),
-            seq($.DEFINED, $.signature, "."),
-            seq($.EDGE, "(", $.pool_binary, ")", $._colon_body),
-            seq($.HEURISTIC, $.symbolic_atom, $._colon_body, $.LBRACK, $.term, optional(seq($.AT, $.term)), ",", $.term, $.RBRACK),
-            seq($.PROJECT, $.signature, "."),
-            seq($.PROJECT, $.symbolic_atom, $._colon_body),
-            seq($.CONST, $.identifier, "=", $._const_term, ".", optional(seq($.LBRACK, $.DEFAULT, $.RBRACK))),
-            seq($.SCRIPT, "(", $.identifier, ")", $.CODE, "."),
-            seq($.INCLUDE, choice($.string, seq("<", $.identifier, ">")), "."),
-            seq($.BLOCK, $.identifier, optional(seq("(", optional($.identifiers), ")")), "."),
-            seq($.EXTERNAL, $.symbolic_atom, $._colon_body, optional(seq($.LBRACK, $.term, $.RBRACK))),
-            seq($.THEORY, $.identifier, $.LBRACE, optional($._theory_definitions), $.RBRACE, ".")
+            $.rule,
+            $.integrity_constraint,
+            $.weak_constraint,
+            $.minimize,
+            $.maximize,
+            $.show,
+            $.show_term,
+            $.show_signature,
+            $.defined,
+            $.edge,
+            $.heuristic,
+            $.project_signatrue,
+            $.project_term,
+            $.const,
+            $.script,
+            $.const,
+            $.script,
+            $.include,
+            $.program,
+            $.external,
+            $.theory
         ),
 
-        // TODO: align with https://github.com/potassco/guide/issues/25
-        theory_op: _$ => choice(
+        operator: _$ => choice(
             /[/!<=>+\-*\\?&@|:;~\^\.]+/,
             "not"
         ),
+        operators: $ => repeat1($.operator),
 
-        theory_op_list: $ => choice(
-            seq($.theory_op_list, $.theory_op),
-            $.theory_op
-        ),
+        theory_function: $ => seq($.identifier, optional(seq("(", optional($.theory_terms), ")"))),
 
-        theory_term: $ => choice(
-            seq($.LBRACE, optional($.theory_opterm_nlist), $.RBRACE),
-            seq($.LBRACK, optional($.theory_opterm_nlist), $.RBRACK),
-            seq("(", optional(seq($.theory_opterm, optional(seq(",", optional($.theory_opterm_nlist))))), ")"),
-            seq($.identifier, "(", optional($.theory_opterm_nlist), ")"),
-            $.identifier,
+        theory_tuple: $ => seq("(", optional($._theory_terms_trail), ")"),
+        theory_list: $ => seq("[", optional($._theory_terms), "]"),
+        theory_set: $ => seq("{", optional($._theory_terms), "}"),
+
+        _theory_root_term: $ => choice(
+            $.theory_function,
+            $.theory_tuple,
+            $.theory_list,
+            $.theory_set,
             $.number,
             $.string,
             $.infimum,
             $.supremum,
             $.variable,
+            $.anonymous,
+        ),
+        theory_root_term: $ => $._theory_root_term,
+
+        theory_unparsed_term: $ => choice(
+            repeat1(seq($.operators, alias($.theory_root_term, $.theory_term))),
+            seq(alias($.theory_root_term, $.theory_term), repeat1(seq($.operators, alias($.theory_root_term, $.theory_term)))),
         ),
 
-        // TODO: rename
-        theory_opterm: $ => choice(
-            seq($.theory_opterm, $.theory_op_list, $.theory_term),
-            seq($.theory_op_list, $.theory_term),
-            $.theory_term
+        theory_term: $ => choice(
+            $.theory_unparsed_term,
+            $._theory_root_term,
         ),
+        _theory_terms: $ => seq($.theory_term, repeat(seq(",", $.theory_term))),
+        theory_terms: $ => $._theory_terms,
+        _theory_terms_trail: $ => choice(",", seq($.theory_term, repeat(seq(",", $.theory_term)), optional(","))),
 
-        // TODO: rename
-        theory_opterm_nlist: $ => choice(
-            seq($.theory_opterm_nlist, ",", $.theory_opterm),
-            $.theory_opterm
-        ),
-
-        theory_atom_element: $ => choice(
-            seq($.theory_opterm_nlist, optional($._condition)),
+        theory_element: $ => choice(
+            seq($.theory_terms, optional($._condition)),
             seq($._condition),
         ),
 
-        theory_elements: $ => seq($.theory_atom_element, repeat(seq(";", $.theory_atom_element))),
+        theory_elements: $ => seq($.theory_element, repeat(seq(";", $.theory_element))),
 
         theory_atom_name: $ => seq($.identifier, optional($.pool)),
 
-        theory_atom: $ => seq("&", $.theory_atom_name, optional(seq($.LBRACE, optional($.theory_elements), $.RBRACE, optional(seq($.theory_op, $.theory_opterm))))),
+        theory_atom: $ => seq("&", $.theory_atom_name, optional(seq("{", optional($.theory_elements), "}")), optional(seq($.operator, $.theory_term))),
 
-        theory_operators: $ => seq($.theory_op, repeat(seq(",", $.theory_op))),
+        theory_operator_arity: _$ => "unary",
+        theory_operator_arity_binary: _$ => "binary",
+
+        theory_operator_associativity: _$ => choice("left", "right"),
 
         theory_operator_definition: $ => choice(
-            seq($.theory_op, ":", $.number, ",", $.UNARY),
-            seq($.theory_op, ":", $.number, ",", $.BINARY, ",", choice($.LEFT, $.RIGHT)),
+            seq($.operator, ":", $.number, ",", $.theory_operator_arity),
+            seq($.operator, ":", $.number, ",", alias($.theory_operator_arity_binary, $.theory_operator_arity), ",", $.theory_operator_associativity),
         ),
 
         theory_operator_definitions: $ => seq($.theory_operator_definition, repeat(seq(";", $.theory_operator_definition))),
 
-        theory_term_definition: $ => seq($.identifier, $.LBRACE, optional($.theory_operator_definitions), $.RBRACE),
+        theory_term_definition: $ => seq($.identifier, "{", optional($.theory_operator_definitions), "}"),
         theory_term_definitions: $ => seq($.theory_term_definition, repeat(seq(";", $.theory_term_definition))),
 
-        theory_atom_type: $ => choice($.HEAD, $.BODY, $.ANY, $.DIRECTIVE),
+        theory_atom_type: $ => choice("head", "body", "any", "directive"),
 
-        theory_atom_definition: $ => seq("&", $.identifier, "/", $.number, ":", $.identifier, ",", optional(seq($.LBRACE, optional($.theory_operators), $.RBRACE, ",", $.identifier, ",")), $.theory_atom_type),
+        theory_atom_definition: $ => seq("&", $.identifier, "/", $.number, ":", $.identifier, ",", optional(seq("{", optional($.operators), "}", ",", $.identifier, ",")), $.theory_atom_type),
         theory_atom_definitions: $ => seq($.theory_atom_definition, repeat(seq(";", $.theory_atom_definition))),
 
 

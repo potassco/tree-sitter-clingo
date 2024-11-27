@@ -1,20 +1,5 @@
 [
   {
-    "type": "AT",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "MAXIMIZE",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "MINIMIZE",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "abs",
     "named": true,
     "fields": {},
@@ -129,14 +114,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "LBRACE",
-          "named": true
-        },
-        {
-          "type": "RBRACE",
-          "named": true
-        },
         {
           "type": "aggregate_function",
           "named": true
@@ -297,9 +274,52 @@
     }
   },
   {
+    "type": "const",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "const_type",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "const_type",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "default_negation",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "defined",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "signature",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "disjunction",
@@ -315,6 +335,48 @@
         },
         {
           "type": "literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "edge",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "body",
+          "named": true
+        },
+        {
+          "type": "pool_binary",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "external",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "body",
+          "named": true
+        },
+        {
+          "type": "symbolic_atom",
+          "named": true
+        },
+        {
+          "type": "term",
           "named": true
         }
       ]
@@ -412,14 +474,6 @@
       "required": true,
       "types": [
         {
-          "type": "LBRACE",
-          "named": true
-        },
-        {
-          "type": "RBRACE",
-          "named": true
-        },
-        {
           "type": "aggregate_function",
           "named": true
         },
@@ -494,6 +548,34 @@
     }
   },
   {
+    "type": "heuristic",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "body",
+          "named": true
+        },
+        {
+          "type": "symbolic_atom",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "identifier",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "identifiers",
     "named": true,
     "fields": {},
@@ -509,9 +591,43 @@
     }
   },
   {
+    "type": "include",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "infimum",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "integrity_constraint",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "body",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "literal",
@@ -575,9 +691,59 @@
     }
   },
   {
+    "type": "maximize",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "optimize_elements",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "minimize",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "optimize_elements",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "number",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "operator",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "operators",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "operator",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "optimize_element",
@@ -616,8 +782,8 @@
         "required": true,
         "types": [
           {
-            "type": "AT",
-            "named": true
+            "type": "@",
+            "named": false
           },
           {
             "type": "term",
@@ -673,12 +839,7 @@
     }
   },
   {
-    "type": "relation",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "set_aggregate",
+    "type": "program",
     "named": true,
     "fields": {},
     "children": {
@@ -686,13 +847,101 @@
       "required": true,
       "types": [
         {
-          "type": "LBRACE",
+          "type": "identifier",
           "named": true
         },
         {
-          "type": "RBRACE",
+          "type": "identifiers",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "project_signatrue",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "signature",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "project_term",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "body",
           "named": true
         },
+        {
+          "type": "symbolic_atom",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "relation",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "rule",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "body",
+          "named": true
+        },
+        {
+          "type": "head",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "script",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "set_aggregate",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
         {
           "type": "lower",
           "named": true
@@ -748,6 +997,45 @@
       "types": [
         {
           "type": "set_aggregate_element",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "show",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "show_signature",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "signature",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "show_term",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "body",
+          "named": true
+        },
+        {
+          "type": "term",
           "named": true
         }
       ]
@@ -812,147 +1100,83 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "AT",
+          "type": "const",
           "named": true
         },
         {
-          "type": "BLOCK",
+          "type": "defined",
           "named": true
         },
         {
-          "type": "CODE",
+          "type": "edge",
           "named": true
         },
         {
-          "type": "CONST",
+          "type": "external",
           "named": true
         },
         {
-          "type": "DEFAULT",
+          "type": "heuristic",
           "named": true
         },
         {
-          "type": "DEFINED",
+          "type": "include",
           "named": true
         },
         {
-          "type": "EDGE",
+          "type": "integrity_constraint",
           "named": true
         },
         {
-          "type": "EXTERNAL",
+          "type": "maximize",
           "named": true
         },
         {
-          "type": "HEURISTIC",
+          "type": "minimize",
           "named": true
         },
         {
-          "type": "IF",
+          "type": "program",
           "named": true
         },
         {
-          "type": "INCLUDE",
+          "type": "project_signatrue",
           "named": true
         },
         {
-          "type": "LBRACE",
+          "type": "project_term",
           "named": true
         },
         {
-          "type": "LBRACK",
+          "type": "rule",
           "named": true
         },
         {
-          "type": "MAXIMIZE",
+          "type": "script",
           "named": true
         },
         {
-          "type": "MINIMIZE",
+          "type": "show",
           "named": true
         },
         {
-          "type": "PROJECT",
+          "type": "show_signature",
           "named": true
         },
         {
-          "type": "RBRACE",
+          "type": "show_term",
           "named": true
         },
         {
-          "type": "RBRACK",
+          "type": "theory",
           "named": true
         },
         {
-          "type": "SCRIPT",
-          "named": true
-        },
-        {
-          "type": "SHOW",
-          "named": true
-        },
-        {
-          "type": "THEORY",
-          "named": true
-        },
-        {
-          "type": "WIF",
-          "named": true
-        },
-        {
-          "type": "body",
-          "named": true
-        },
-        {
-          "type": "head",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "identifiers",
-          "named": true
-        },
-        {
-          "type": "optimize_elements",
-          "named": true
-        },
-        {
-          "type": "pool_binary",
-          "named": true
-        },
-        {
-          "type": "signature",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "symbolic_atom",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        },
-        {
-          "type": "terms",
-          "named": true
-        },
-        {
-          "type": "theory_atom_definitions",
-          "named": true
-        },
-        {
-          "type": "theory_term_definition",
+          "type": "weak_constraint",
           "named": true
         }
       ]
@@ -1093,6 +1317,29 @@
     }
   },
   {
+    "type": "theory",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "theory_atom_definitions",
+          "named": true
+        },
+        {
+          "type": "theory_term_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "theory_atom",
     "named": true,
     "fields": {},
@@ -1101,11 +1348,7 @@
       "required": true,
       "types": [
         {
-          "type": "LBRACE",
-          "named": true
-        },
-        {
-          "type": "RBRACE",
+          "type": "operator",
           "named": true
         },
         {
@@ -1117,11 +1360,7 @@
           "named": true
         },
         {
-          "type": "theory_op",
-          "named": true
-        },
-        {
-          "type": "theory_opterm",
+          "type": "theory_term",
           "named": true
         }
       ]
@@ -1136,14 +1375,6 @@
       "required": true,
       "types": [
         {
-          "type": "LBRACE",
-          "named": true
-        },
-        {
-          "type": "RBRACE",
-          "named": true
-        },
-        {
           "type": "identifier",
           "named": true
         },
@@ -1152,11 +1383,11 @@
           "named": true
         },
         {
-          "type": "theory_atom_type",
+          "type": "operators",
           "named": true
         },
         {
-          "type": "theory_operators",
+          "type": "theory_atom_type",
           "named": true
         }
       ]
@@ -1172,25 +1403,6 @@
       "types": [
         {
           "type": "theory_atom_definition",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "theory_atom_element",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "literal_tuple",
-          "named": true
-        },
-        {
-          "type": "theory_opterm_nlist",
           "named": true
         }
       ]
@@ -1218,25 +1430,22 @@
   {
     "type": "theory_atom_type",
     "named": true,
+    "fields": {}
+  },
+  {
+    "type": "theory_element",
+    "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": true,
+      "multiple": true,
+      "required": false,
       "types": [
         {
-          "type": "ANY",
+          "type": "literal_tuple",
           "named": true
         },
         {
-          "type": "BODY",
-          "named": true
-        },
-        {
-          "type": "DIRECTIVE",
-          "named": true
-        },
-        {
-          "type": "HEAD",
+          "type": "theory_terms",
           "named": true
         }
       ]
@@ -1251,19 +1460,14 @@
       "required": true,
       "types": [
         {
-          "type": "theory_atom_element",
+          "type": "theory_element",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "theory_op",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "theory_op_list",
+    "type": "theory_function",
     "named": true,
     "fields": {},
     "children": {
@@ -1271,15 +1475,35 @@
       "required": true,
       "types": [
         {
-          "type": "theory_op",
+          "type": "identifier",
           "named": true
         },
         {
-          "type": "theory_op_list",
+          "type": "theory_terms",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "theory_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "theory_term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_operator_associativity",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "theory_operator_definition",
@@ -1290,27 +1514,19 @@
       "required": true,
       "types": [
         {
-          "type": "BINARY",
-          "named": true
-        },
-        {
-          "type": "LEFT",
-          "named": true
-        },
-        {
-          "type": "RIGHT",
-          "named": true
-        },
-        {
-          "type": "UNARY",
-          "named": true
-        },
-        {
           "type": "number",
           "named": true
         },
         {
-          "type": "theory_op",
+          "type": "operator",
+          "named": true
+        },
+        {
+          "type": "theory_operator_arity",
+          "named": true
+        },
+        {
+          "type": "theory_operator_associativity",
           "named": true
         }
       ]
@@ -1332,57 +1548,15 @@
     }
   },
   {
-    "type": "theory_operators",
+    "type": "theory_set",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "theory_op",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "theory_opterm",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "theory_op_list",
-          "named": true
-        },
-        {
-          "type": "theory_opterm",
-          "named": true
-        },
         {
           "type": "theory_term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "theory_opterm_nlist",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "theory_opterm",
-          "named": true
-        },
-        {
-          "type": "theory_opterm_nlist",
           "named": true
         }
       ]
@@ -1393,27 +1567,11 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
-      "required": false,
+      "multiple": false,
+      "required": true,
       "types": [
         {
-          "type": "LBRACE",
-          "named": true
-        },
-        {
-          "type": "LBRACK",
-          "named": true
-        },
-        {
-          "type": "RBRACE",
-          "named": true
-        },
-        {
-          "type": "RBRACK",
-          "named": true
-        },
-        {
-          "type": "identifier",
+          "type": "anonymous",
           "named": true
         },
         {
@@ -1433,11 +1591,23 @@
           "named": true
         },
         {
-          "type": "theory_opterm",
+          "type": "theory_function",
           "named": true
         },
         {
-          "type": "theory_opterm_nlist",
+          "type": "theory_list",
+          "named": true
+        },
+        {
+          "type": "theory_set",
+          "named": true
+        },
+        {
+          "type": "theory_tuple",
+          "named": true
+        },
+        {
+          "type": "theory_unparsed_term",
           "named": true
         },
         {
@@ -1456,19 +1626,60 @@
       "required": true,
       "types": [
         {
-          "type": "LBRACE",
-          "named": true
-        },
-        {
-          "type": "RBRACE",
-          "named": true
-        },
-        {
           "type": "identifier",
           "named": true
         },
         {
           "type": "theory_operator_definitions",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_terms",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "theory_term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_tuple",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "theory_term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_unparsed_term",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "operators",
+          "named": true
+        },
+        {
+          "type": "theory_term",
           "named": true
         }
       ]
@@ -1539,6 +1750,29 @@
     }
   },
   {
+    "type": "weak_constraint",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "body",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        },
+        {
+          "type": "terms",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "!=",
     "named": false
   },
@@ -1547,11 +1781,31 @@
     "named": false
   },
   {
+    "type": "#const",
+    "named": false
+  },
+  {
     "type": "#count",
     "named": false
   },
   {
+    "type": "#defined",
+    "named": false
+  },
+  {
+    "type": "#edge",
+    "named": false
+  },
+  {
     "type": "#false",
+    "named": false
+  },
+  {
+    "type": "#heuristic",
+    "named": false
+  },
+  {
+    "type": "#include",
     "named": false
   },
   {
@@ -1587,6 +1841,22 @@
     "named": false
   },
   {
+    "type": "#program",
+    "named": false
+  },
+  {
+    "type": "#project",
+    "named": false
+  },
+  {
+    "type": "#script",
+    "named": false
+  },
+  {
+    "type": "#show",
+    "named": false
+  },
+  {
     "type": "#sum",
     "named": false
   },
@@ -1600,6 +1870,10 @@
   },
   {
     "type": "#supremum",
+    "named": false
+  },
+  {
+    "type": "#theory",
     "named": false
   },
   {
@@ -1659,6 +1933,14 @@
     "named": false
   },
   {
+    "type": ":-",
+    "named": false
+  },
+  {
+    "type": ":~",
+    "named": false
+  },
+  {
     "type": ";",
     "named": false
   },
@@ -1691,115 +1973,15 @@
     "named": false
   },
   {
-    "type": "ANY",
-    "named": true
-  },
-  {
-    "type": "BINARY",
-    "named": true
-  },
-  {
-    "type": "BLOCK",
-    "named": true
-  },
-  {
-    "type": "BODY",
-    "named": true
-  },
-  {
-    "type": "CODE",
-    "named": true
-  },
-  {
-    "type": "CONST",
-    "named": true
-  },
-  {
-    "type": "DEFAULT",
-    "named": true
-  },
-  {
-    "type": "DEFINED",
-    "named": true
-  },
-  {
-    "type": "DIRECTIVE",
-    "named": true
-  },
-  {
-    "type": "EDGE",
-    "named": true
-  },
-  {
-    "type": "EXTERNAL",
-    "named": true
-  },
-  {
-    "type": "HEAD",
-    "named": true
-  },
-  {
-    "type": "HEURISTIC",
-    "named": true
-  },
-  {
-    "type": "IF",
-    "named": true
-  },
-  {
-    "type": "INCLUDE",
-    "named": true
-  },
-  {
-    "type": "LBRACE",
-    "named": true
-  },
-  {
-    "type": "LBRACK",
-    "named": true
-  },
-  {
-    "type": "LEFT",
-    "named": true
-  },
-  {
-    "type": "PROJECT",
-    "named": true
-  },
-  {
-    "type": "RBRACE",
-    "named": true
-  },
-  {
-    "type": "RBRACK",
-    "named": true
-  },
-  {
-    "type": "RIGHT",
-    "named": true
-  },
-  {
-    "type": "SCRIPT",
-    "named": true
-  },
-  {
-    "type": "SHOW",
-    "named": true
-  },
-  {
-    "type": "THEORY",
-    "named": true
-  },
-  {
-    "type": "UNARY",
-    "named": true
-  },
-  {
-    "type": "WIF",
-    "named": true
+    "type": "[",
+    "named": false
   },
   {
     "type": "\\",
+    "named": false
+  },
+  {
+    "type": "]",
     "named": false
   },
   {
@@ -1811,16 +1993,44 @@
     "named": true
   },
   {
+    "type": "any",
+    "named": false
+  },
+  {
     "type": "block_comment",
     "named": true
+  },
+  {
+    "type": "body",
+    "named": false
+  },
+  {
+    "type": "code",
+    "named": true
+  },
+  {
+    "type": "default",
+    "named": false
+  },
+  {
+    "type": "directive",
+    "named": false
   },
   {
     "type": "escape_sequence",
     "named": true
   },
   {
-    "type": "identifier",
-    "named": true
+    "type": "external",
+    "named": false
+  },
+  {
+    "type": "head",
+    "named": false
+  },
+  {
+    "type": "left",
+    "named": false
   },
   {
     "type": "line_comment",
@@ -1831,7 +2041,19 @@
     "named": false
   },
   {
+    "type": "override",
+    "named": false
+  },
+  {
+    "type": "right",
+    "named": false
+  },
+  {
     "type": "string_fragment",
+    "named": true
+  },
+  {
+    "type": "theory_operator_arity",
     "named": true
   },
   {
@@ -1839,7 +2061,15 @@
     "named": true
   },
   {
+    "type": "{",
+    "named": false
+  },
+  {
     "type": "|",
+    "named": false
+  },
+  {
+    "type": "}",
     "named": false
   },
   {
