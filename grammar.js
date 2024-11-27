@@ -290,7 +290,7 @@ module.exports = grammar({
             $.boolean_constant,
         ),
 
-        default_negation: $ => "not",
+        default_negation: _$ => "not",
 
         sign: $ => seq($.default_negation, optional($.default_negation)),
 
