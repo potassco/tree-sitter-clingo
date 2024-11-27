@@ -1,6 +1,6 @@
 module.exports = grammar({
     name: 'clingo',
-    extras: $ => [$.single_comment, $.multi_comment, /\s/],
+    extras: $ => [$.line_comment, $.block_comment, /\s/],
 
     // Note that the ambiguity between signature and term in show statements
     // does not necessarily have to be resolved in the grammar. It could also
@@ -14,12 +14,12 @@ module.exports = grammar({
 
         // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
         // Taken from tree-sitter-prolog
-        single_comment: _$ => token(choice(
+        line_comment: _$ => token(choice(
             seq('%', /[^*]/, /.*/),
             '%'
         )),
         // TODO: clingo counts nested %* *% blocks
-        multi_comment: _$ => token(
+        block_comment: _$ => token(
             seq(
                 '%*',
                 /[^*]*\*+([^%*][^*]*\*+)*/,
@@ -112,7 +112,15 @@ module.exports = grammar({
         bin: _$ => token(seq('0b', /([0-1]+)/)),
 
         ANONYMOUS: _$ => '_',
-        identifier: _$ => token(seq(repeat('_'), /[a-z']/, repeat(/[A-Za-z0-9_']/))),
+
+        // the stunt here is meant to exclude not
+        identifier: _$ => token(seq(
+            choice(
+                /[_']+[a-z]/,
+                /[a-m,o-z]/,
+                /[a-z][a-n,p-z]/,
+                /[a-z][a-z][a-s,u-z]/),
+            /[A-Za-z0-9_']*/)),
 
         SCRIPT: _$ => '#script',
         CODE: _$ => token(choice(
@@ -292,11 +300,19 @@ module.exports = grammar({
 
         signature: $ => prec.dynamic(1, seq(optional($.SUB), $.identifier, $.SLASH, $.NUMBER)),
 
+        _optimize_tuple: $ => seq($.COMMA, $.term_tuple),
+        _optimize_weight: $ => seq($.term, optional(seq($.AT, $.term))),
+
+        optimize_element: $ => seq($._optimize_weight, optional($._optimize_tuple), optional($._condition)),
+        optimize_elements: $ => seq($.optimize_element, repeat(seq($.SEM, $.optimize_element))),
+
+        identifiers: $ => seq($.identifier, repeat(seq($.COMMA, $.identifier))),
+
         statement: $ => choice(
             seq($.head, choice($.DOT, seq($.IF, $.body))),
             seq($.IF, $.body),
-            seq($.WIF, $.body, $.LBRACK, $.optimizeweight, optional($.optimizetuple), $.RBRACK),
-            seq(choice($.MAXIMIZE, $.MINIMIZE), $.LBRACE, optional($.opt_elems), $.RBRACE, $.DOT),
+            seq($.WIF, $.body, $.LBRACK, $._optimize_weight, optional($._optimize_tuple), $.RBRACK),
+            seq(choice($.MAXIMIZE, $.MINIMIZE), $.LBRACE, optional($.optimize_elements), $.RBRACE, $.DOT),
             seq($.SHOW, $.DOT),
             seq($.SHOW, $.term, $._colon_body),
             seq($.SHOW, $.signature, $.DOT),
@@ -308,68 +324,27 @@ module.exports = grammar({
             seq($.CONST, $.identifier, $.EQ, $.constterm, $.DOT, optional(seq($.LBRACK, $.DEFAULT, $.RBRACK))),
             seq($.SCRIPT, $.LPAREN, $.identifier, $.RPAREN, $.CODE, $.DOT),
             seq($.INCLUDE, choice($.STRING, seq($.LT, $.identifier, $.GT)), $.DOT),
-            seq($.BLOCK, $.identifier, optional(seq($.LPAREN, optional($.idlist), $.RPAREN)), $.DOT),
+            seq($.BLOCK, $.identifier, optional(seq($.LPAREN, optional($.identifiers), $.RPAREN)), $.DOT),
             seq($.EXTERNAL, $.symbolic_atom, $._colon_body, optional(seq($.LBRACK, $.term, $.RBRACK))),
-            seq($.THEORY, $.theory_identifier, $.LBRACE, optional($.theory_definition_nlist), $.RBRACE, $.DOT)
+            seq($.THEORY, $.identifier, $.LBRACE, optional($._theory_definitions), $.RBRACE, $.DOT)
         ),
 
-        optimizetuple: $ =>
-            seq($.COMMA, $.term_tuple),
-
-        optimizeweight: $ => choice(
-            seq($.term, $.AT, $.term),
-            $.term
-        ),
-
-        optimizeliteral_tuple: $ => choice(
-            $.literal,
-            seq($.optimizeliteral_tuple, $.COMMA, $.literal),
-        ),
-
-        optimizecond: $ => choice(
-            seq($.COLON, $.optimizeliteral_tuple),
-            $.COLON,
-        ),
-
-        opt_elems: $ => choice(
-            seq($.optimizeweight,),
-            seq($.optimizeweight, $.optimizecond),
-            seq($.optimizeweight, $.optimizetuple,),
-            seq($.optimizeweight, $.optimizetuple, $.optimizecond),
-            seq($.opt_elems, $.SEM, $.optimizeweight,),
-            seq($.opt_elems, $.SEM, $.optimizeweight, $.optimizecond),
-            seq($.opt_elems, $.SEM, $.optimizeweight, $.optimizetuple,),
-            seq($.opt_elems, $.SEM, $.optimizeweight, $.optimizetuple, $.optimizecond),
-        ),
-
-        idlist: $ => choice(
-            seq($.idlist, $.COMMA, $.identifier),
-            $.identifier,
-        ),
-
-        theory_identifier: $ => $.identifier,
-
-        theory_op: $ => choice(
+        // TODO: align with https://github.com/potassco/guide/issues/25
+        _theory_op: $ => choice(
             $.THEORY_OP,
-            $.NOT
+            alias($.NOT, $.THEORY_OP)
         ),
 
         theory_op_list: $ => choice(
-            seq($.theory_op_list, $.theory_op),
-            $.theory_op
+            seq($.theory_op_list, $._theory_op),
+            $._theory_op
         ),
 
         theory_term: $ => choice(
-            seq($.LBRACE, $.RBRACE),
-            seq($.LBRACE, $.theory_opterm_nlist, $.RBRACE),
-            seq($.LBRACK, $.RBRACK),
-            seq($.LBRACK, $.theory_opterm_nlist, $.RBRACK),
-            seq($.LPAREN, $.RPAREN),
-            seq($.LPAREN, $.theory_opterm, $.RPAREN),
-            seq($.LPAREN, $.theory_opterm, $.COMMA, $.RPAREN),
-            seq($.LPAREN, $.theory_opterm, $.COMMA, $.theory_opterm_nlist, $.RPAREN),
-            seq($.identifier, $.LPAREN, $.RPAREN),
-            seq($.identifier, $.LPAREN, $.theory_opterm_nlist, $.RPAREN),
+            seq($.LBRACE, optional($.theory_opterm_nlist), $.RBRACE),
+            seq($.LBRACK, optional($.theory_opterm_nlist), $.RBRACK),
+            seq($.LPAREN, optional(seq($.theory_opterm, optional(seq($.COMMA, optional($.theory_opterm_nlist))))), $.RPAREN),
+            seq($.identifier, $.LPAREN, optional($.theory_opterm_nlist), $.RPAREN),
             $.identifier,
             $.NUMBER,
             $.STRING,
@@ -378,89 +353,51 @@ module.exports = grammar({
             $.VARIABLE,
         ),
 
+        // TODO: rename
         theory_opterm: $ => choice(
             seq($.theory_opterm, $.theory_op_list, $.theory_term),
             seq($.theory_op_list, $.theory_term),
             $.theory_term
         ),
 
+        // TODO: rename
         theory_opterm_nlist: $ => choice(
             seq($.theory_opterm_nlist, $.COMMA, $.theory_opterm),
             $.theory_opterm
         ),
 
         theory_atom_element: $ => choice(
-            seq($.theory_opterm_nlist),
-            seq($.theory_opterm_nlist, $._condition),
-            seq($.COLON),
-            seq($.COLON, $.literal_tuple),
+            seq($.theory_opterm_nlist, optional($._condition)),
+            seq($._condition),
         ),
 
-        theory_atom_element_nlist: $ => choice(
-            seq($.theory_atom_element_nlist, $.SEM, $.theory_atom_element),
-            $.theory_atom_element,
-        ),
+        theory_elements: $ => seq($.theory_atom_element, repeat(seq($.SEM, $.theory_atom_element))),
 
         theory_atom_name: $ => seq($.identifier, optional($.term_pool)),
 
-        theory_atom: $ => choice(
-            seq($.AND, $.theory_atom_name),
-            seq($.AND, $.theory_atom_name, $.LBRACE, $.RBRACE),
-            seq($.AND, $.theory_atom_name, $.LBRACE, $.theory_atom_element_nlist, $.RBRACE),
-            seq($.AND, $.theory_atom_name, $.LBRACE, $.RBRACE, $.theory_op, $.theory_opterm),
-            seq($.AND, $.theory_atom_name, $.LBRACE, $.theory_atom_element_nlist, $.RBRACE, $.theory_op, $.theory_opterm),
-        ),
+        theory_atom: $ => seq($.AND, $.theory_atom_name, optional(seq($.LBRACE, optional($.theory_elements), $.RBRACE, optional(seq($._theory_op, $.theory_opterm))))),
 
-        theory_operator_nlist: $ => choice(
-            $.theory_op,
-            seq($.theory_operator_nlist, $.COMMA, $.theory_op)
-        ),
+        theory_operators: $ => seq($._theory_op, repeat(seq($.COMMA, $._theory_op))),
 
         theory_operator_definition: $ => choice(
-            seq($.theory_op, $.COLON, $.NUMBER, $.COMMA, $.UNARY),
-            seq($.theory_op, $.COLON, $.NUMBER, $.COMMA, $.BINARY, $.COMMA, $.LEFT),
-            seq($.theory_op, $.COLON, $.NUMBER, $.COMMA, $.BINARY, $.COMMA, $.RIGHT),
+            seq($._theory_op, $.COLON, $.NUMBER, $.COMMA, $.UNARY),
+            seq($._theory_op, $.COLON, $.NUMBER, $.COMMA, $.BINARY, $.COMMA, choice($.LEFT, $.RIGHT)),
         ),
 
-        theory_operator_definition_nlist: $ => choice(
-            $.theory_operator_definition,
-            seq($.theory_operator_definition_nlist, $.SEM, $.theory_operator_definition)
-        ),
+        theory_operator_definitions: $ => seq($.theory_operator_definition, repeat(seq($.SEM, $.theory_operator_definition))),
 
-        theory_definition_identifier: $ => choice(
-            $.identifier,
-            $.LEFT,
-            $.RIGHT,
-            $.UNARY,
-            $.BINARY,
-            $.HEAD,
-            $.BODY,
-            $.ANY,
-            $.DIRECTIVE
-        ),
+        theory_term_definition: $ => seq($.identifier, $.LBRACE, optional($.theory_operator_definitions), $.RBRACE),
+        theory_term_definitions: $ => seq($.theory_term_definition, repeat(seq($.SEM, $.theory_term_definition))),
 
-        theory_term_definition: $ => choice(
-            seq($.theory_definition_identifier, $.LBRACE, $.RBRACE),
-            seq($.theory_definition_identifier, $.LBRACE, $.theory_operator_definition_nlist, $.RBRACE)),
+        theory_atom_type: $ => choice($.HEAD, $.BODY, $.ANY, $.DIRECTIVE),
 
-        theory_atom_type: $ => choice(
-            $.HEAD,
-            $.BODY,
-            $.ANY,
-            $.DIRECTIVE
-        ),
+        theory_atom_definition: $ => seq($.AND, $.identifier, $.SLASH, $.NUMBER, $.COLON, $.identifier, $.COMMA, optional(seq($.LBRACE, optional($.theory_operators), $.RBRACE, $.COMMA, $.identifier, $.COMMA)), $.theory_atom_type),
+        theory_atom_definitions: $ => seq($.theory_atom_definition, repeat(seq($.SEM, $.theory_atom_definition))),
 
-        theory_atom_definition: $ => choice(
-            seq($.AND, $.theory_definition_identifier, $.SLASH, $.NUMBER, $.COLON, $.theory_definition_identifier, $.COMMA, $.LBRACE, $.RBRACE, $.COMMA, $.theory_definition_identifier, $.COMMA, $.theory_atom_type),
-            seq($.AND, $.theory_definition_identifier, $.SLASH, $.NUMBER, $.COLON, $.theory_definition_identifier, $.COMMA, $.LBRACE, $.theory_operator_nlist, $.RBRACE, $.COMMA, $.theory_definition_identifier, $.COMMA, $.theory_atom_type),
-            seq($.AND, $.theory_definition_identifier, $.SLASH, $.NUMBER, $.COLON, $.theory_definition_identifier, $.COMMA, $.theory_atom_type)
-        ),
 
-        theory_definition_nlist: $ => choice(
-            $.theory_atom_definition,
-            $.theory_term_definition,
-            seq($.theory_atom_definition, $.SEM, $.theory_definition_nlist),
-            seq($.theory_term_definition, $.SEM, $.theory_definition_nlist),
+        _theory_definitions: $ => choice(
+            seq($.theory_atom_definitions),
+            seq($.theory_term_definition, optional($.theory_atom_definitions)),
         ),
 
         ////////// TODO: This is taken from tree-sitter-java! ////////////

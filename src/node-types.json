@@ -561,7 +561,7 @@
     }
   },
   {
-    "type": "idlist",
+    "type": "identifiers",
     "named": true,
     "fields": {},
     "children": {
@@ -574,10 +574,6 @@
         },
         {
           "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "idlist",
           "named": true
         }
       ]
@@ -649,99 +645,7 @@
     }
   },
   {
-    "type": "opt_elems",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "SEM",
-          "named": true
-        },
-        {
-          "type": "opt_elems",
-          "named": true
-        },
-        {
-          "type": "optimizecond",
-          "named": true
-        },
-        {
-          "type": "optimizetuple",
-          "named": true
-        },
-        {
-          "type": "optimizeweight",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "optimizecond",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COLON",
-          "named": true
-        },
-        {
-          "type": "optimizeliteral_tuple",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "optimizeliteral_tuple",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "optimizeliteral_tuple",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "optimizetuple",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "COMMA",
-          "named": true
-        },
-        {
-          "type": "term_tuple",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "optimizeweight",
+    "type": "optimize_element",
     "named": true,
     "fields": {},
     "children": {
@@ -753,7 +657,42 @@
           "named": true
         },
         {
+          "type": "COLON",
+          "named": true
+        },
+        {
+          "type": "COMMA",
+          "named": true
+        },
+        {
+          "type": "literal_tuple",
+          "named": true
+        },
+        {
           "type": "term",
+          "named": true
+        },
+        {
+          "type": "term_tuple",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "optimize_elements",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "SEM",
+          "named": true
+        },
+        {
+          "type": "optimize_element",
           "named": true
         }
       ]
@@ -1043,19 +982,11 @@
           "named": true
         },
         {
-          "type": "idlist",
+          "type": "identifiers",
           "named": true
         },
         {
-          "type": "opt_elems",
-          "named": true
-        },
-        {
-          "type": "optimizetuple",
-          "named": true
-        },
-        {
-          "type": "optimizeweight",
+          "type": "optimize_elements",
           "named": true
         },
         {
@@ -1075,11 +1006,15 @@
           "named": true
         },
         {
-          "type": "theory_definition_nlist",
+          "type": "term_tuple",
           "named": true
         },
         {
-          "type": "theory_identifier",
+          "type": "theory_atom_definitions",
+          "named": true
+        },
+        {
+          "type": "theory_term_definition",
           "named": true
         }
       ]
@@ -1362,7 +1297,7 @@
           "named": true
         },
         {
-          "type": "theory_atom_element_nlist",
+          "type": "THEORY_OP",
           "named": true
         },
         {
@@ -1370,7 +1305,7 @@
           "named": true
         },
         {
-          "type": "theory_op",
+          "type": "theory_elements",
           "named": true
         },
         {
@@ -1417,15 +1352,34 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "theory_atom_type",
           "named": true
         },
         {
-          "type": "theory_definition_identifier",
+          "type": "theory_operators",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "theory_atom_definitions",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "SEM",
           "named": true
         },
         {
-          "type": "theory_operator_nlist",
+          "type": "theory_atom_definition",
           "named": true
         }
       ]
@@ -1449,29 +1403,6 @@
         },
         {
           "type": "theory_opterm_nlist",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "theory_atom_element_nlist",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "SEM",
-          "named": true
-        },
-        {
-          "type": "theory_atom_element",
-          "named": true
-        },
-        {
-          "type": "theory_atom_element_nlist",
           "named": true
         }
       ]
@@ -1524,54 +1455,7 @@
     }
   },
   {
-    "type": "theory_definition_identifier",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "ANY",
-          "named": true
-        },
-        {
-          "type": "BINARY",
-          "named": true
-        },
-        {
-          "type": "BODY",
-          "named": true
-        },
-        {
-          "type": "DIRECTIVE",
-          "named": true
-        },
-        {
-          "type": "HEAD",
-          "named": true
-        },
-        {
-          "type": "LEFT",
-          "named": true
-        },
-        {
-          "type": "RIGHT",
-          "named": true
-        },
-        {
-          "type": "UNARY",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "theory_definition_nlist",
+    "type": "theory_elements",
     "named": true,
     "fields": {},
     "children": {
@@ -1583,49 +1467,7 @@
           "named": true
         },
         {
-          "type": "theory_atom_definition",
-          "named": true
-        },
-        {
-          "type": "theory_definition_nlist",
-          "named": true
-        },
-        {
-          "type": "theory_term_definition",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "theory_identifier",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "theory_op",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "NOT",
-          "named": true
-        },
-        {
-          "type": "THEORY_OP",
+          "type": "theory_atom_element",
           "named": true
         }
       ]
@@ -1640,7 +1482,7 @@
       "required": true,
       "types": [
         {
-          "type": "theory_op",
+          "type": "THEORY_OP",
           "named": true
         },
         {
@@ -1683,18 +1525,18 @@
           "named": true
         },
         {
-          "type": "UNARY",
+          "type": "THEORY_OP",
           "named": true
         },
         {
-          "type": "theory_op",
+          "type": "UNARY",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "theory_operator_definition_nlist",
+    "type": "theory_operator_definitions",
     "named": true,
     "fields": {},
     "children": {
@@ -1708,16 +1550,12 @@
         {
           "type": "theory_operator_definition",
           "named": true
-        },
-        {
-          "type": "theory_operator_definition_nlist",
-          "named": true
         }
       ]
     }
   },
   {
-    "type": "theory_operator_nlist",
+    "type": "theory_operators",
     "named": true,
     "fields": {},
     "children": {
@@ -1729,11 +1567,7 @@
           "named": true
         },
         {
-          "type": "theory_op",
-          "named": true
-        },
-        {
-          "type": "theory_operator_nlist",
+          "type": "THEORY_OP",
           "named": true
         }
       ]
@@ -1873,11 +1707,11 @@
           "named": true
         },
         {
-          "type": "theory_definition_identifier",
+          "type": "identifier",
           "named": true
         },
         {
-          "type": "theory_operator_definition_nlist",
+          "type": "theory_operator_definitions",
           "named": true
         }
       ]
@@ -2199,6 +2033,10 @@
     "named": true
   },
   {
+    "type": "block_comment",
+    "named": true
+  },
+  {
     "type": "escape_sequence",
     "named": true
   },
@@ -2211,15 +2049,11 @@
     "named": true
   },
   {
-    "type": "multi_comment",
+    "type": "line_comment",
     "named": true
   },
   {
     "type": "oct",
-    "named": true
-  },
-  {
-    "type": "single_comment",
     "named": true
   },
   {
