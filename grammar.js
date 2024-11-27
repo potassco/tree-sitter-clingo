@@ -22,7 +22,8 @@ module.exports = grammar({
             ),
         ),
 
-        // tokens
+        // TODO: looking at other grammars it does not seem like tokens are
+        // represented explicitely
         ADD: _$ => '+',
         AND: _$ => '&',
         EQ: _$ => '=',
