@@ -19,8 +19,6 @@ rules
 
 head.
 head :-  body.
-:- body.
-:- .
 
 ---
 
@@ -40,45 +38,18 @@ head :-  body.
       (body
         (body_literal
           (symbolic_atom
-            (identifier))))))
-  (statement
-    (integrity_constraint
-      (body
-        (body_literal
-          (symbolic_atom
-            (identifier))))))
-  (statement
-    (integrity_constraint
-      (body))))
+            (identifier)))))))
 
 ==================
 constraints
 ==================
 
-head.
-head :-  body.
 :- body.
 :- .
 
 ---
 
 (source_file
-  (statement
-    (rule
-      (head
-        (literal
-          (symbolic_atom
-            (identifier))))))
-  (statement
-    (rule
-      (head
-        (literal
-          (symbolic_atom
-            (identifier))))
-      (body
-        (body_literal
-          (symbolic_atom
-            (identifier))))))
   (statement
     (integrity_constraint
       (body
@@ -318,6 +289,9 @@ const
 ==================
 
 #const x = 1.
+#const x = f((), |x|).
+#const x = 1. [default]
+#const x = 2. [override]
 
 ---
 
@@ -326,19 +300,7 @@ const
     (const
       (identifier)
       (term
-        (number)))))
-
-==================
-const
-==================
-
-#const x = f((), |x|).
-#const x = 1. [default]
-#const x = 2. [override]
-
----
-
-(source_file
+        (number))))
   (statement
     (const
       (identifier)
