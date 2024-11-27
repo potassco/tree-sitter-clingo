@@ -1,21 +1,16 @@
 module.exports = grammar({
     name: 'clingo',
     extras: $ => [$.line_comment, $.block_comment, /\s/],
-
     // Note that the ambiguity between signature and term in show statements
     // does not necessarily have to be resolved in the grammar. It could also
     // be left to the user of the parser. Then, we could simply delete the
     // "show signature" part of the statement production.
     conflicts: $ => [[$.signature, $.term]],
-
     rules: {
-
         source_file: $ => repeat($.statement),
 
-        // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
-        // Taken from tree-sitter-prolog
         line_comment: _$ => token(choice(
-            seq('%', /[^*]/, /.*/),
+            /%[^*].*/,
             '%'
         )),
         // TODO: clingo counts nested %* *% blocks
@@ -132,30 +127,32 @@ module.exports = grammar({
         DEFAULT: _$ => 'default',
         OVERRIDE: _$ => 'override',
 
-        constterm: $ => choice(
-            prec.left(7, seq($.constterm, $.XOR, $.constterm)),
-            prec.left(6, seq($.constterm, $.QUESTION, $.constterm)),
-            prec.left(5, seq($.constterm, $.AND, $.constterm)),
-            prec.left(4, seq($.constterm, $.ADD, $.constterm)),
-            prec.left(4, seq($.constterm, $.SUB, $.constterm)),
-            prec.left(3, seq($.constterm, $.MUL, $.constterm)),
-            prec.left(3, seq($.constterm, $.SLASH, $.constterm)),
-            prec.left(3, seq($.constterm, $.MOD, $.constterm)),
-            prec.right(2, seq($.constterm, $.POW, $.constterm)),
-            prec.left(1, seq($.SUB, $.constterm)),
-            prec.left(1, seq($.BNOT, $.constterm)),
-            seq($.identifier, optional(seq($.LPAREN, optional($._constterm_tuple), $.RPAREN))),
-            seq($.LPAREN, optional($._constterm_tuple_comma), $.RPAREN),
-            seq($.AT, $.identifier, optional(seq($.LPAREN, optional($._constterm_tuple), $.RPAREN))),
-            seq($.VBAR, $.constterm, $.VBAR),
+        const_term: $ => choice(
+            prec.left(7, seq($._const_term, $.XOR, $._const_term)),
+            prec.left(6, seq($._const_term, $.QUESTION, $._const_term)),
+            prec.left(5, seq($._const_term, $.AND, $._const_term)),
+            prec.left(4, seq($._const_term, $.ADD, $._const_term)),
+            prec.left(4, seq($._const_term, $.SUB, $._const_term)),
+            prec.left(3, seq($._const_term, $.MUL, $._const_term)),
+            prec.left(3, seq($._const_term, $.SLASH, $._const_term)),
+            prec.left(3, seq($._const_term, $.MOD, $._const_term)),
+            prec.right(2, seq($._const_term, $.POW, $._const_term)),
+            prec.left(1, seq($.SUB, $._const_term)),
+            prec.left(1, seq($.BNOT, $._const_term)),
+            seq($.identifier, optional(seq($.LPAREN, optional(alias($.const_term_tuple, $.term_tuple)), $.RPAREN))),
+            seq($.LPAREN, optional($.const_term_tuple_comma), $.RPAREN),
+            seq($.AT, $.identifier, optional(seq($.LPAREN, optional(alias($.const_term_tuple, $.term_tuple_trail)), $.RPAREN))),
+            seq($.VBAR, $._const_term, $.VBAR),
             $.NUMBER,
             $.STRING,
             $.INFIMUM,
             $.SUPREMUM,
         ),
 
-        _constterm_tuple: $ => seq($.constterm, repeat(seq($.COMMA, $.constterm))),
-        _constterm_tuple_comma: $ => seq($.constterm, repeat(seq($.COMMA, $.constterm)), optional($.COMMA)),
+        _const_term: $ => alias($.const_term, $.term),
+
+        const_term_tuple: $ => seq($._const_term, repeat(seq($.COMMA, $._const_term))),
+        const_term_tuple_comma: $ => seq($._const_term, repeat(seq($.COMMA, $._const_term)), optional($.COMMA)),
 
         term: $ => choice(
             prec.left(8, seq($.term, $.DOTS, $.term)),
@@ -321,7 +318,7 @@ module.exports = grammar({
             seq($.HEURISTIC, $.symbolic_atom, $._colon_body, $.LBRACK, $.term, optional(seq($.AT, $.term)), $.COMMA, $.term, $.RBRACK),
             seq($.PROJECT, $.signature, $.DOT),
             seq($.PROJECT, $.symbolic_atom, $._colon_body),
-            seq($.CONST, $.identifier, $.EQ, $.constterm, $.DOT, optional(seq($.LBRACK, $.DEFAULT, $.RBRACK))),
+            seq($.CONST, $.identifier, $.EQ, $._const_term, $.DOT, optional(seq($.LBRACK, $.DEFAULT, $.RBRACK))),
             seq($.SCRIPT, $.LPAREN, $.identifier, $.RPAREN, $.CODE, $.DOT),
             seq($.INCLUDE, choice($.STRING, seq($.LT, $.identifier, $.GT)), $.DOT),
             seq($.BLOCK, $.identifier, optional(seq($.LPAREN, optional($.identifiers), $.RPAREN)), $.DOT),
@@ -400,13 +397,7 @@ module.exports = grammar({
             seq($.theory_term_definition, optional($.theory_atom_definitions)),
         ),
 
-        ////////// TODO: This is taken from tree-sitter-java! ////////////
-        // Here we tolerate unescaped newlines in double-quoted and
-        // single-quoted string literals.
-        // This is legal in typescript as jsx/tsx attribute values (as of
-        // 2020), and perhaps will be valid in javascript as well in the
-        // future.
-        //
+        // TODO: clingo does something simpler!
         STRING: $ => choice(
             seq(
                 '"',
@@ -421,7 +412,6 @@ module.exports = grammar({
         // Workaround to https://github.com/tree-sitter/tree-sitter/issues/1156
         // We give names to the token() constructs containing a regexp
         // so as to obtain a node in the CST.
-        //
         unescaped_double_string_fragment: _$ =>
             token.immediate(prec(1, /[^"\\]+/)),
 

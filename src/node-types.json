@@ -318,7 +318,7 @@
     }
   },
   {
-    "type": "constterm",
+    "type": "const_term_tuple_comma",
     "named": true,
     "fields": {},
     "children": {
@@ -326,87 +326,11 @@
       "required": true,
       "types": [
         {
-          "type": "ADD",
-          "named": true
-        },
-        {
-          "type": "AND",
-          "named": true
-        },
-        {
-          "type": "AT",
-          "named": true
-        },
-        {
-          "type": "BNOT",
-          "named": true
-        },
-        {
           "type": "COMMA",
           "named": true
         },
         {
-          "type": "INFIMUM",
-          "named": true
-        },
-        {
-          "type": "LPAREN",
-          "named": true
-        },
-        {
-          "type": "MOD",
-          "named": true
-        },
-        {
-          "type": "MUL",
-          "named": true
-        },
-        {
-          "type": "NUMBER",
-          "named": true
-        },
-        {
-          "type": "POW",
-          "named": true
-        },
-        {
-          "type": "QUESTION",
-          "named": true
-        },
-        {
-          "type": "RPAREN",
-          "named": true
-        },
-        {
-          "type": "SLASH",
-          "named": true
-        },
-        {
-          "type": "STRING",
-          "named": true
-        },
-        {
-          "type": "SUB",
-          "named": true
-        },
-        {
-          "type": "SUPREMUM",
-          "named": true
-        },
-        {
-          "type": "VBAR",
-          "named": true
-        },
-        {
-          "type": "XOR",
-          "named": true
-        },
-        {
-          "type": "constterm",
-          "named": true
-        },
-        {
-          "type": "identifier",
+          "type": "term",
           "named": true
         }
       ]
@@ -970,10 +894,6 @@
           "named": true
         },
         {
-          "type": "constterm",
-          "named": true
-        },
-        {
           "type": "head",
           "named": true
         },
@@ -1080,6 +1000,10 @@
           "named": true
         },
         {
+          "type": "LPAREN",
+          "named": true
+        },
+        {
           "type": "MOD",
           "named": true
         },
@@ -1097,6 +1021,10 @@
         },
         {
           "type": "QUESTION",
+          "named": true
+        },
+        {
+          "type": "RPAREN",
           "named": true
         },
         {
@@ -1128,6 +1056,10 @@
           "named": true
         },
         {
+          "type": "const_term_tuple_comma",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
@@ -1145,6 +1077,14 @@
         },
         {
           "type": "term_pool_unary",
+          "named": true
+        },
+        {
+          "type": "term_tuple",
+          "named": true
+        },
+        {
+          "type": "term_tuple_trail",
           "named": true
         }
       ]
