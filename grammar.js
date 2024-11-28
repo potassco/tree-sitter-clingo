@@ -43,20 +43,24 @@ module.exports = grammar({
         // the stunt here is meant to exclude not
         identifier: _$ => token(choice(
             /[_']+[a-z][A-Za-z0-9_']*/,
-            /[a-m,o-z][A-Za-z0-9_']*/,
-            /n[a-n,p-z][A-Za-z0-9_']*/,
-            /no[a-s,u-z][A-Za-z0-9_']*/,
-            /not[A-Za-z0-9_']+/
+            /[a-mo-z][A-Za-z0-9_']*/,
+            /n[A-Za-np-z0-9_'][A-Za-z0-9_']*/,
+            /no[A-Za-su-z0-9_'][A-Za-z0-9_']*/,
+            /not[A-Za-z0-9_']+/,
+            /n/,
+            /no/,
         )),
 
         // Tree sitter (imo incorrectly) applies precedences out of scope. We
         // simply workaround this issue by making classical negation part of
         // the identifier token. In practice, this should work well.
         negative_identifier: _$ => token(choice(
+            /-[ ]*n/,
+            /-[ ]*no/,
             /-[ ]*[_']+[a-z][A-Za-z0-9_']*/,
-            /-[ ]*[a-m,o-z][A-Za-z0-9_']*/,
-            /-[ ]*n[a-n,p-z][A-Za-z0-9_']*/,
-            /-[ ]*no[a-s,u-z][A-Za-z0-9_']*/,
+            /-[ ]*[a-mo-z][A-Za-z0-9_']*/,
+            /-[ ]*n[A-Za-np-z0-9_'][A-Za-z0-9_']*/,
+            /-[ ]*no[A-Za-su-z0-9_'][A-Za-z0-9_']*/,
             /-[ ]*not[A-Za-z0-9_']+/
         )),
 

@@ -233,7 +233,7 @@ p(f(),g,h(;1;1,2),@g).
 tuple
 ==================
 
-p((),(,),(;a;a,;,;a,b;a,b,)).
+p((),(;a;a,;;a,b;a,b,)).
 
 ---
 
@@ -251,12 +251,6 @@ p((),(,),(;a;a,;,;a,b;a,b,)).
                     (terms)))
                 (term
                   (tuple
-                    (terms
-                      (term
-                        (function
-                          (identifier))))))
-                (term
-                  (tuple
                     (terms)
                     (terms
                       (term
@@ -266,10 +260,7 @@ p((),(,),(;a;a,;,;a,b;a,b,)).
                       (term
                         (function
                           (identifier))))
-                    (terms
-                      (term
-                        (function
-                          (identifier))))
+                    (terms)
                     (terms
                       (term
                         (function
@@ -284,3 +275,45 @@ p((),(,),(;a;a,;,;a,b;a,b,)).
                       (term
                         (function
                           (identifier))))))))))))))
+
+==================
+identifier
+==================
+
+p(n, no, noxt, a, -n, -no, -noxt, -a).
+
+---
+
+(source_file
+  (statement
+    (rule
+      (head
+        (literal
+          (symbolic_atom
+            (identifier)
+            (pool
+              (terms
+                (term
+                  (function
+                    (identifier)))
+                (term
+                  (function
+                    (identifier)))
+                (term
+                  (function
+                    (identifier)))
+                (term
+                  (function
+                    (identifier)))
+                (term
+                  (function
+                    (negative_identifier)))
+                (term
+                  (function
+                    (negative_identifier)))
+                (term
+                  (function
+                    (negative_identifier)))
+                (term
+                  (function
+                    (negative_identifier)))))))))))

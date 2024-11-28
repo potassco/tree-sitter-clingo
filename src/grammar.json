@@ -56,19 +56,27 @@
           },
           {
             "type": "PATTERN",
-            "value": "[a-m,o-z][A-Za-z0-9_']*"
+            "value": "[a-mo-z][A-Za-z0-9_']*"
           },
           {
             "type": "PATTERN",
-            "value": "n[a-n,p-z][A-Za-z0-9_']*"
+            "value": "n[A-Za-np-z0-9_'][A-Za-z0-9_']*"
           },
           {
             "type": "PATTERN",
-            "value": "no[a-s,u-z][A-Za-z0-9_']*"
+            "value": "no[A-Za-su-z0-9_'][A-Za-z0-9_']*"
           },
           {
             "type": "PATTERN",
             "value": "not[A-Za-z0-9_']+"
+          },
+          {
+            "type": "PATTERN",
+            "value": "n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "no"
           }
         ]
       }
@@ -80,19 +88,27 @@
         "members": [
           {
             "type": "PATTERN",
+            "value": "-[ ]*n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "-[ ]*no"
+          },
+          {
+            "type": "PATTERN",
             "value": "-[ ]*[_']+[a-z][A-Za-z0-9_']*"
           },
           {
             "type": "PATTERN",
-            "value": "-[ ]*[a-m,o-z][A-Za-z0-9_']*"
+            "value": "-[ ]*[a-mo-z][A-Za-z0-9_']*"
           },
           {
             "type": "PATTERN",
-            "value": "-[ ]*n[a-n,p-z][A-Za-z0-9_']*"
+            "value": "-[ ]*n[A-Za-np-z0-9_'][A-Za-z0-9_']*"
           },
           {
             "type": "PATTERN",
-            "value": "-[ ]*no[a-s,u-z][A-Za-z0-9_']*"
+            "value": "-[ ]*no[A-Za-su-z0-9_'][A-Za-z0-9_']*"
           },
           {
             "type": "PATTERN",
