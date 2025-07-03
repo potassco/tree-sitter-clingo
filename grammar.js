@@ -26,9 +26,29 @@ module.exports = grammar({
         // comments
 
         line_comment: _$ => token(choice(
-            /%[^*].*/,
+            /%[^*^s].*/,
+            /%s[^i].*/,
+            /%si[^g].*/,
+            /%sig[^:].*/,
             '%'
         )),
+        type_comment: $ => choice(
+          $.type_constant,
+          $.type_predicate,
+        ),
+        type_constant: $ => seq("%sig", ":", $.identifier, ":", "Constant"),
+        type_predicate: $ => seq("%sig", ":", $.identifier, "(", $.type_terms, ")"),
+
+        type_terms: $ => seq($.type_term, repeat(seq(",", $.type_term))),
+
+        type_term: $ => choice(
+            $.identifier,
+            $.string_type,
+            $.integer_type
+        ),
+        string_type: _$ => token("String"),
+        integer_type: _$ => token("Integer"),
+
         // TODO: clingo counts nested %* *% blocks
         block_comment: _$ => token(
             seq(
@@ -538,6 +558,7 @@ module.exports = grammar({
         theory: $ => seq("#theory", $.identifier, "{", optional($._theory_definitions), "}", "."),
 
         statement: $ => choice(
+            $.type_comment,
             $.rule,
             $.integrity_constraint,
             $.weak_constraint,

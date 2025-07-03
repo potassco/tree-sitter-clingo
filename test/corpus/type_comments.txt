@@ -1,0 +1,83 @@
+==================
+incomplete type comment
+==================
+
+%sig: bla
+---
+
+(source_file
+  (ERROR))
+
+==================
+type comment: declare Constant
+==================
+
+%sig: x: Constant
+---
+
+(source_file
+  (statement
+    (type_comment
+        (type_constant
+          (identifier)))))
+
+
+==================
+type comment: valid signature
+==================
+
+%sig: f(bla,x)
+---
+
+(source_file
+  (statement
+    (type_comment
+      (type_predicate
+        (identifier)
+        (type_terms
+          (type_term
+            (identifier))
+          (type_term
+            (identifier)))))))
+
+
+==================
+type comment: valid signature with String
+==================
+
+%sig: h(t1,String,t2)
+---
+
+(source_file
+  (statement
+    (type_comment
+      (type_predicate
+        (identifier)
+        (type_terms
+          (type_term
+            (identifier))
+          (type_term
+            (string_type))
+          (type_term
+            (identifier)))))))
+
+
+==================
+type comment: valid signature with Integer
+==================
+
+%sig: h(t1,Integer,t2)
+---
+
+(source_file
+  (statement
+    (type_comment
+      (type_predicate
+        (identifier)
+        (type_terms
+          (type_term
+            (identifier))
+          (type_term
+            (integer_type))
+          (type_term
+            (identifier)))))))

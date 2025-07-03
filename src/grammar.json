@@ -16,13 +16,148 @@
         "members": [
           {
             "type": "PATTERN",
-            "value": "%[^*].*"
+            "value": "%[^*^s].*"
+          },
+          {
+            "type": "PATTERN",
+            "value": "%s[^i].*"
+          },
+          {
+            "type": "PATTERN",
+            "value": "%si[^g].*"
+          },
+          {
+            "type": "PATTERN",
+            "value": "%sig[^:].*"
           },
           {
             "type": "STRING",
             "value": "%"
           }
         ]
+      }
+    },
+    "type_comment": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "type_constant"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_predicate"
+        }
+      ]
+    },
+    "type_constant": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "%sig"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "STRING",
+          "value": "Constant"
+        }
+      ]
+    },
+    "type_predicate": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "%sig"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_terms"
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "type_terms": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "type_term"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": ","
+              },
+              {
+                "type": "SYMBOL",
+                "name": "type_term"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "type_term": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "string_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "integer_type"
+        }
+      ]
+    },
+    "string_type": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "String"
+      }
+    },
+    "integer_type": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "Integer"
       }
     },
     "block_comment": {
@@ -4385,6 +4520,10 @@
     "statement": {
       "type": "CHOICE",
       "members": [
+        {
+          "type": "SYMBOL",
+          "name": "type_comment"
+        },
         {
           "type": "SYMBOL",
           "name": "rule"
