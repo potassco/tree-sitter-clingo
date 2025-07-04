@@ -6,7 +6,8 @@ incomplete type comment
 ---
 
 (source_file
-  (ERROR))
+  (ERROR
+      (identifier)))
 
 ==================
 type comment: declare Constant
@@ -81,3 +82,4 @@ type comment: valid signature with Integer
             (integer_type))
           (type_term
             (identifier)))))))
+
