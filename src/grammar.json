@@ -62,8 +62,12 @@
           "value": ":"
         },
         {
-          "type": "SYMBOL",
-          "name": "identifier"
+          "type": "FIELD",
+          "name": "typename",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
         },
         {
           "type": "STRING",
@@ -87,16 +91,24 @@
           "value": ":"
         },
         {
-          "type": "SYMBOL",
-          "name": "identifier"
+          "type": "FIELD",
+          "name": "predicate_name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
         },
         {
           "type": "STRING",
           "value": "("
         },
         {
-          "type": "SYMBOL",
-          "name": "type_terms"
+          "type": "FIELD",
+          "name": "type_terms",
+          "content": {
+            "type": "SYMBOL",
+            "name": "type_terms"
+          }
         },
         {
           "type": "STRING",

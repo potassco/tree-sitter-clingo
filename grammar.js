@@ -36,8 +36,21 @@ module.exports = grammar({
           $.type_constant,
           $.type_predicate,
         ),
-        type_constant: $ => seq("%sig", ":", $.identifier, ":", "Constant"),
-        type_predicate: $ => seq("%sig", ":", $.identifier, "(", $.type_terms, ")"),
+        type_constant: $ => seq(
+            "%sig",
+            ":",
+            field("typename", $.identifier),
+            ":",
+            "Constant"
+        ),
+        type_predicate: $ => seq(
+            "%sig",
+            ":", 
+            field("predicate_name", $.identifier),
+            "(",
+            field("type_terms", $.type_terms),
+            ")"
+        ),
 
         type_terms: $ => seq($.type_term, repeat(seq(",", $.type_term))),
 
