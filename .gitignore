@@ -5,4 +5,11 @@ build
 package-lock.json
 example*
 /target/
-~
+
+# Emacs
+*~
+\#*\#
+*.elc
+auto-save-list
+tramp
+.\#*
