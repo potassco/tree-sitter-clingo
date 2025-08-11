@@ -4,4 +4,12 @@ build
 *.log
 package-lock.json
 example*
-/target/ 
+/target/
+
+# Emacs
+*~
+\#*\#
+*.elc
+auto-save-list
+tramp
+.\#*
