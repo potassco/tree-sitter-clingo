@@ -25,12 +25,12 @@ module.exports = grammar({
 
         // comments
 
-        line_comment: _$ => token(choice(
+        line_comment: $ => token(choice(
             /%[^*].*/,
             '%'
         )),
         // TODO: clingo counts nested %* *% blocks
-        block_comment: _$ => token(
+        block_comment: $ => token(
             seq(
                 '%*',
                 /[^*]*\*+([^%*][^*]*\*+)*/,
@@ -79,10 +79,10 @@ module.exports = grammar({
         // Workaround to https://github.com/tree-sitter/tree-sitter/issues/1156
         // We give names to the token() constructs containing a regexp
         // so as to obtain a node in the CST.
-        unescaped_double_string_fragment: _$ =>
+        unescaped_double_string_fragment: $ =>
             token.immediate(prec(1, /[^"\\]+/)),
 
-        escape_sequence: _$ => token.immediate(seq(
+        escape_sequence: $ => token.immediate(seq(
             '\\',
             choice(
                 /[^xu0-7]/,
@@ -93,22 +93,22 @@ module.exports = grammar({
             )
         )),
 
-        supremum: _$ => choice(
+        supremum: $ => choice(
             '#sup',
             '#supremum'
         ),
-        infimum: _$ => choice(
+        infimum: $ => choice(
             '#inf',
             '#infimum'
         ),
-        number: _$ => choice(
+        number: $ => choice(
             choice('0', /([1-9][0-9]*)/),
             token(seq('0x', /([0-9A-Fa-f]+)/)),
             token(seq('0o', /([1-7]+)/)),
             token(seq('0b', /([0-1]+)/)),
         ),
-        anonymous: _$ => '_',
-        variable: _$ => /[_']*[A-Z][A-Za-z0-9_']*/,
+        anonymous: $ => '_',
+        variable: $ => /[_']*[A-Z][A-Za-z0-9_']*/,
 
         const_term: $ => choice(
             $.infimum,
@@ -260,7 +260,7 @@ module.exports = grammar({
 
         // theory terms
 
-        operator: _$ => choice(
+        operator: $ => choice(
             /[/!<=>+\-*\\?&@|:;~\^\.]+/,
             "not"
         ),
@@ -303,14 +303,14 @@ module.exports = grammar({
 
         // Literals
 
-        boolean_constant: _$ => choice("#true", "#false"),
+        boolean_constant: $ => choice("#true", "#false"),
 
         symbolic_atom: $ => seq(
             field("name", $._classical_identifier),
             field("pool", optional($.pool)),
         ),
 
-        relation: _$ => choice(">", "<", ">=", "<=", "=", "!="),
+        relation: $ => choice(">", "<", ">=", "<=", "=", "!="),
 
         comparison: $ => seq($.term, $.relation, $.term, repeat(seq($.relation, $.term))),
 
@@ -320,7 +320,7 @@ module.exports = grammar({
             $.boolean_constant,
         ),
 
-        default_negation: _$ => "not",
+        default_negation: $ => "not",
 
         sign: $ => seq($.default_negation, optional($.default_negation)),
 
@@ -332,7 +332,7 @@ module.exports = grammar({
 
         _condition: $ => seq(":", optional($.literal_tuple)),
 
-        aggregate_function: _$ => choice(
+        aggregate_function: $ => choice(
             "#sum",
             "#sum+",
             "#min",
@@ -392,7 +392,7 @@ module.exports = grammar({
         _body_literal: $ => choice($.body_literal, alias($.body_literal_conditional, $.body_literal)),
 
         body: $ => seq(optional(seq(repeat($._body_literal_sep), $._body_literal)), "."),
-        body_0: _$ => ".",
+        body_0: $ => ".",
 
         _colon_body: $ => choice(
             alias($.body_0, $.body),
@@ -456,7 +456,7 @@ module.exports = grammar({
 
         signature: $ => prec.dynamic(1, seq($._classical_identifier, "/", $.number)),
 
-        show: _$ => seq("#show", "."),
+        show: $ => seq("#show", "."),
         show_term: $ => seq("#show", $.term, $._colon_body),
         show_signature: $ => seq("#show", $.signature, "."),
         defined: $ => seq("#defined", $.signature, "."),
@@ -467,11 +467,11 @@ module.exports = grammar({
 
         program: $ => seq("#program", $.identifier, optional(seq("(", optional($.identifiers), ")")), "."),
 
-        code: _$ => token(repeat(choice(/[^#]/, /#[^e][^#]/, /#e[^n][^#]/, /#en[^d][^#]/,))),
+        code: $ => token(repeat(choice(/[^#]/, /#[^e][^#]/, /#e[^n][^#]/, /#en[^d][^#]/,))),
 
         script: $ => seq("#script", "(", $.identifier, ")", $.code, "#end", "."),
 
-        const_type: _$ => choice('default', 'override'),
+        const_type: $ => choice('default', 'override'),
 
         const: $ => seq("#const", $.identifier, "=", $._const_term, ".", optional(seq("[", $.const_type, "]"))),
 
@@ -493,10 +493,10 @@ module.exports = grammar({
 
         external: $ => seq("#external", $.symbolic_atom, $._colon_body, optional(seq("[", $.term, "]"))),
 
-        theory_operator_arity: _$ => "unary",
-        theory_operator_arity_binary: _$ => "binary",
+        theory_operator_arity: $ => "unary",
+        theory_operator_arity_binary: $ => "binary",
 
-        theory_operator_associativity: _$ => choice("left", "right"),
+        theory_operator_associativity: $ => choice("left", "right"),
 
         theory_operator_definition: $ => choice(
             seq($.operator, ":", $.number, ",", $.theory_operator_arity),
@@ -507,7 +507,7 @@ module.exports = grammar({
 
         theory_term_definition: $ => seq($.identifier, "{", optional($.theory_operator_definitions), "}"),
 
-        theory_atom_type: _$ => choice("head", "body", "any", "directive"),
+        theory_atom_type: $ => choice("head", "body", "any", "directive"),
 
         operators_sep: $ => seq($.operator, repeat(seq(",", $.operator))),
 
