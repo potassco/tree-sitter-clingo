@@ -1,5 +1,259 @@
 [
   {
+    "type": "_head",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "disjunction",
+        "named": true
+      },
+      {
+        "type": "head_aggregate",
+        "named": true
+      },
+      {
+        "type": "literal",
+        "named": true
+      },
+      {
+        "type": "set_aggregate",
+        "named": true
+      },
+      {
+        "type": "theory_atom",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "_literal_sign",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "default_negation",
+        "named": true
+      },
+      {
+        "type": "double_default_negation",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "_simple_atom",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "boolean_constant",
+        "named": true
+      },
+      {
+        "type": "comparison",
+        "named": true
+      },
+      {
+        "type": "symbolic_atom",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "_statement",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "const",
+        "named": true
+      },
+      {
+        "type": "defined",
+        "named": true
+      },
+      {
+        "type": "edge",
+        "named": true
+      },
+      {
+        "type": "external",
+        "named": true
+      },
+      {
+        "type": "heuristic",
+        "named": true
+      },
+      {
+        "type": "include",
+        "named": true
+      },
+      {
+        "type": "integrity_constraint",
+        "named": true
+      },
+      {
+        "type": "maximize",
+        "named": true
+      },
+      {
+        "type": "minimize",
+        "named": true
+      },
+      {
+        "type": "program",
+        "named": true
+      },
+      {
+        "type": "project_atom",
+        "named": true
+      },
+      {
+        "type": "project_signature",
+        "named": true
+      },
+      {
+        "type": "rule",
+        "named": true
+      },
+      {
+        "type": "script",
+        "named": true
+      },
+      {
+        "type": "show_nothing",
+        "named": true
+      },
+      {
+        "type": "show_signature",
+        "named": true
+      },
+      {
+        "type": "show_term",
+        "named": true
+      },
+      {
+        "type": "theory",
+        "named": true
+      },
+      {
+        "type": "weak_constraint",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "_term",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "abs",
+        "named": true
+      },
+      {
+        "type": "anonymous",
+        "named": true
+      },
+      {
+        "type": "binary_operation",
+        "named": true
+      },
+      {
+        "type": "external_function",
+        "named": true
+      },
+      {
+        "type": "function",
+        "named": true
+      },
+      {
+        "type": "infimum",
+        "named": true
+      },
+      {
+        "type": "number",
+        "named": true
+      },
+      {
+        "type": "string",
+        "named": true
+      },
+      {
+        "type": "supremum",
+        "named": true
+      },
+      {
+        "type": "tuple",
+        "named": true
+      },
+      {
+        "type": "unary_operation",
+        "named": true
+      },
+      {
+        "type": "variable",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "_theory_root_term",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "anonymous",
+        "named": true
+      },
+      {
+        "type": "infimum",
+        "named": true
+      },
+      {
+        "type": "number",
+        "named": true
+      },
+      {
+        "type": "string",
+        "named": true
+      },
+      {
+        "type": "supremum",
+        "named": true
+      },
+      {
+        "type": "theory_function",
+        "named": true
+      },
+      {
+        "type": "theory_list",
+        "named": true
+      },
+      {
+        "type": "theory_set",
+        "named": true
+      },
+      {
+        "type": "theory_tuple",
+        "named": true
+      },
+      {
+        "type": "variable",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "_theory_term",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "_theory_root_term",
+        "named": true
+      },
+      {
+        "type": "theory_unparsed_term",
+        "named": true
+      }
+    ]
+  },
+  {
     "type": "abs",
     "named": true,
     "fields": {},
@@ -8,32 +262,57 @@
       "required": true,
       "types": [
         {
-          "type": "term",
+          "type": "_term",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "aggregate_function",
+    "type": "arc",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "_term",
+          "named": true
+        }
+      ]
+    }
   },
   {
-    "type": "binary",
+    "type": "arc_pool",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "arc",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "binary_operation",
     "named": true,
     "fields": {
-      "lhs": {
+      "left": {
         "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "term",
+            "type": "_term",
             "named": true
           }
         ]
       },
-      "op": {
+      "operator": {
         "multiple": false,
         "required": true,
         "types": [
@@ -79,12 +358,12 @@
           }
         ]
       },
-      "rhs": {
+      "right": {
         "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "term",
+            "type": "_term",
             "named": true
           }
         ]
@@ -97,10 +376,14 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "body_literal",
+          "named": true
+        },
+        {
+          "type": "conditional_literal",
           "named": true
         }
       ]
@@ -109,28 +392,55 @@
   {
     "type": "body_aggregate",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "aggregate_function",
-          "named": true
-        },
-        {
-          "type": "body_aggregate_elements",
-          "named": true
-        },
-        {
-          "type": "lower",
-          "named": true
-        },
-        {
-          "type": "upper",
-          "named": true
-        }
-      ]
+    "fields": {
+      "elements": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "body_aggregate_elements",
+            "named": true
+          },
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      },
+      "function": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "aggregate_function",
+            "named": true
+          }
+        ]
+      },
+      "left": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "lower",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "upper",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -146,12 +456,12 @@
             "named": false
           },
           {
-            "type": "literal_tuple",
+            "type": "literals",
             "named": true
           }
         ]
       },
-      "tuple": {
+      "terms": {
         "multiple": false,
         "required": false,
         "types": [
@@ -181,48 +491,43 @@
   {
     "type": "body_literal",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "body_aggregate",
-          "named": true
-        },
-        {
-          "type": "boolean_constant",
-          "named": true
-        },
-        {
-          "type": "comparison",
-          "named": true
-        },
-        {
-          "type": "conditional_literal",
-          "named": true
-        },
-        {
-          "type": "set_aggregate",
-          "named": true
-        },
-        {
-          "type": "sign",
-          "named": true
-        },
-        {
-          "type": "symbolic_atom",
-          "named": true
-        },
-        {
-          "type": "theory_atom",
-          "named": true
-        }
-      ]
+    "fields": {
+      "atom": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_simple_atom",
+            "named": true
+          },
+          {
+            "type": "body_aggregate",
+            "named": true
+          },
+          {
+            "type": "set_aggregate",
+            "named": true
+          },
+          {
+            "type": "theory_atom",
+            "named": true
+          }
+        ]
+      },
+      "sign": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "_literal_sign",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
-    "type": "boolean_constant",
+    "type": "classical_negation",
     "named": true,
     "fields": {}
   },
@@ -235,11 +540,11 @@
       "required": true,
       "types": [
         {
-          "type": "relation",
+          "type": "_term",
           "named": true
         },
         {
-          "type": "term",
+          "type": "relation",
           "named": true
         }
       ]
@@ -258,7 +563,7 @@
           "named": true
         },
         {
-          "type": "literal_tuple",
+          "type": "literals",
           "named": true
         }
       ]
@@ -267,30 +572,78 @@
   {
     "type": "const",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "const_type",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "const_type",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "abs",
+            "named": true
+          },
+          {
+            "type": "binary_operation",
+            "named": true
+          },
+          {
+            "type": "function",
+            "named": true
+          },
+          {
+            "type": "infimum",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "supremum",
+            "named": true
+          },
+          {
+            "type": "tuple",
+            "named": true
+          },
+          {
+            "type": "unary_operation",
+            "named": true
+          }
+        ]
+      }
     }
-  },
-  {
-    "type": "const_type",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "default_negation",
@@ -300,16 +653,17 @@
   {
     "type": "defined",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "signature",
-          "named": true
-        }
-      ]
+    "fields": {
+      "signature": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "signature",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -334,43 +688,71 @@
   {
     "type": "edge",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "body",
-          "named": true
-        },
-        {
-          "type": "pool_binary",
-          "named": true
-        }
-      ]
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "body",
+            "named": true
+          }
+        ]
+      },
+      "pool": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "arc_pool",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "external",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "body",
-          "named": true
-        },
-        {
-          "type": "symbolic_atom",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
+    "fields": {
+      "atom": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "symbolic_atom",
+            "named": true
+          }
+        ]
+      },
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "body",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "_term",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -378,11 +760,23 @@
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "pool",
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": ";",
+            "named": false
+          },
+          {
+            "type": "terms",
             "named": true
           }
         ]
@@ -404,11 +798,23 @@
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "pool",
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": ";",
+            "named": false
+          },
+          {
+            "type": "terms",
             "named": true
           }
         ]
@@ -420,71 +826,63 @@
           {
             "type": "identifier",
             "named": true
-          },
-          {
-            "type": "negative_identifier",
-            "named": true
           }
         ]
       }
     }
   },
   {
-    "type": "head",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "disjunction",
-          "named": true
-        },
-        {
-          "type": "head_aggregate",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "set_aggregate",
-          "named": true
-        },
-        {
-          "type": "theory_atom",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "head_aggregate",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "aggregate_function",
-          "named": true
-        },
-        {
-          "type": "head_aggregate_elements",
-          "named": true
-        },
-        {
-          "type": "lower",
-          "named": true
-        },
-        {
-          "type": "upper",
-          "named": true
-        }
-      ]
+    "fields": {
+      "elements": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "head_aggregate_elements",
+            "named": true
+          },
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      },
+      "function": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "aggregate_function",
+            "named": true
+          }
+        ]
+      },
+      "left": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "lower",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "upper",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -500,7 +898,7 @@
             "named": false
           },
           {
-            "type": "literal_tuple",
+            "type": "literals",
             "named": true
           }
         ]
@@ -515,7 +913,7 @@
           }
         ]
       },
-      "tuple": {
+      "terms": {
         "multiple": false,
         "required": false,
         "types": [
@@ -557,13 +955,9 @@
         ]
       },
       "body": {
-        "multiple": true,
-        "required": true,
+        "multiple": false,
+        "required": false,
         "types": [
-          {
-            "type": ":",
-            "named": false
-          },
           {
             "type": "body",
             "named": true
@@ -585,7 +979,7 @@
         "required": true,
         "types": [
           {
-            "type": "term",
+            "type": "_term",
             "named": true
           }
         ]
@@ -595,7 +989,7 @@
         "required": true,
         "types": [
           {
-            "type": "term",
+            "type": "_term",
             "named": true
           }
         ]
@@ -637,54 +1031,49 @@
     }
   },
   {
-    "type": "infimum",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "integrity_constraint",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "body",
-          "named": true
-        }
-      ]
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "body",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "literal",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "boolean_constant",
-          "named": true
-        },
-        {
-          "type": "comparison",
-          "named": true
-        },
-        {
-          "type": "sign",
-          "named": true
-        },
-        {
-          "type": "symbolic_atom",
-          "named": true
-        }
-      ]
+    "fields": {
+      "atom": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_simple_atom",
+            "named": true
+          }
+        ]
+      },
+      "sign": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "_literal_sign",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
-    "type": "literal_tuple",
+    "type": "literals",
     "named": true,
     "fields": {},
     "children": {
@@ -707,11 +1096,11 @@
       "required": true,
       "types": [
         {
-          "type": "relation",
+          "type": "_term",
           "named": true
         },
         {
-          "type": "term",
+          "type": "relation",
           "named": true
         }
       ]
@@ -720,56 +1109,49 @@
   {
     "type": "maximize",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "optimize_elements",
-          "named": true
-        }
-      ]
+    "fields": {
+      "elements": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "optimize_elements",
+            "named": true
+          },
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      }
     }
   },
   {
     "type": "minimize",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "optimize_elements",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "number",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "operator",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "operators",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "operator",
-          "named": true
-        }
-      ]
+    "fields": {
+      "elements": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "optimize_elements",
+            "named": true
+          },
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      }
     }
   },
   {
@@ -785,12 +1167,12 @@
             "named": false
           },
           {
-            "type": "literal_tuple",
+            "type": "literals",
             "named": true
           }
         ]
       },
-      "tuple": {
+      "terms": {
         "multiple": true,
         "required": false,
         "types": [
@@ -809,11 +1191,11 @@
         "required": true,
         "types": [
           {
-            "type": "priority",
+            "type": "_term",
             "named": true
           },
           {
-            "type": "term",
+            "type": "priority",
             "named": true
           }
         ]
@@ -836,36 +1218,6 @@
     }
   },
   {
-    "type": "pool",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "terms",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "pool_binary",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "priority",
     "named": true,
     "fields": {},
@@ -874,7 +1226,7 @@
       "required": true,
       "types": [
         {
-          "type": "term",
+          "type": "_term",
           "named": true
         }
       ]
@@ -883,120 +1235,173 @@
   {
     "type": "program",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "identifiers",
-          "named": true
-        }
-      ]
+    "fields": {
+      "identifiers": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "identifiers",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "project_atom",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "body",
-          "named": true
-        },
-        {
-          "type": "symbolic_atom",
-          "named": true
-        }
-      ]
+    "fields": {
+      "atom": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "symbolic_atom",
+            "named": true
+          }
+        ]
+      },
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "body",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "project_signature",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "signature",
-          "named": true
-        }
-      ]
+    "fields": {
+      "signature": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "signature",
+            "named": true
+          }
+        ]
+      }
     }
-  },
-  {
-    "type": "relation",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "rule",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "body",
-          "named": true
-        },
-        {
-          "type": "head",
-          "named": true
-        }
-      ]
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "body",
+            "named": true
+          }
+        ]
+      },
+      "head": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_head",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "script",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "code",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
+    "fields": {
+      "code": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "code",
+            "named": true
+          }
+        ]
+      },
+      "language": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "set_aggregate",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "lower",
-          "named": true
-        },
-        {
-          "type": "set_aggregate_elements",
-          "named": true
-        },
-        {
-          "type": "upper",
-          "named": true
-        }
-      ]
+    "fields": {
+      "elements": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "set_aggregate_elements",
+            "named": true
+          },
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      },
+      "left": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "lower",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "upper",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1012,7 +1417,7 @@
             "named": false
           },
           {
-            "type": "literal_tuple",
+            "type": "literals",
             "named": true
           }
         ]
@@ -1045,80 +1450,76 @@
     }
   },
   {
-    "type": "show",
+    "type": "show_nothing",
     "named": true,
     "fields": {}
   },
   {
     "type": "show_signature",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "signature",
-          "named": true
-        }
-      ]
+    "fields": {
+      "signature": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "signature",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "show_term",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "body",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "sign",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "default_negation",
-          "named": true
-        }
-      ]
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "body",
+            "named": true
+          }
+        ]
+      },
+      "term": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_term",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "signature",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "negative_identifier",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        }
-      ]
+    "fields": {
+      "arity": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1131,94 +1532,7 @@
       "required": false,
       "types": [
         {
-          "type": "statement",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "statement",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "const",
-          "named": true
-        },
-        {
-          "type": "defined",
-          "named": true
-        },
-        {
-          "type": "edge",
-          "named": true
-        },
-        {
-          "type": "external",
-          "named": true
-        },
-        {
-          "type": "heuristic",
-          "named": true
-        },
-        {
-          "type": "include",
-          "named": true
-        },
-        {
-          "type": "integrity_constraint",
-          "named": true
-        },
-        {
-          "type": "maximize",
-          "named": true
-        },
-        {
-          "type": "minimize",
-          "named": true
-        },
-        {
-          "type": "program",
-          "named": true
-        },
-        {
-          "type": "project_atom",
-          "named": true
-        },
-        {
-          "type": "project_signature",
-          "named": true
-        },
-        {
-          "type": "rule",
-          "named": true
-        },
-        {
-          "type": "script",
-          "named": true
-        },
-        {
-          "type": "show",
-          "named": true
-        },
-        {
-          "type": "show_signature",
-          "named": true
-        },
-        {
-          "type": "show_term",
-          "named": true
-        },
-        {
-          "type": "theory",
-          "named": true
-        },
-        {
-          "type": "weak_constraint",
+          "type": "_statement",
           "named": true
         }
       ]
@@ -1244,14 +1558,31 @@
     }
   },
   {
-    "type": "supremum",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "symbolic_atom",
     "named": true,
     "fields": {
+      "arguments": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": ";",
+            "named": false
+          },
+          {
+            "type": "terms",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -1259,82 +1590,19 @@
           {
             "type": "identifier",
             "named": true
-          },
-          {
-            "type": "negative_identifier",
-            "named": true
           }
         ]
       },
-      "pool": {
+      "sign": {
         "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "pool",
+            "type": "classical_negation",
             "named": true
           }
         ]
       }
-    }
-  },
-  {
-    "type": "term",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "abs",
-          "named": true
-        },
-        {
-          "type": "anonymous",
-          "named": true
-        },
-        {
-          "type": "binary",
-          "named": true
-        },
-        {
-          "type": "external_function",
-          "named": true
-        },
-        {
-          "type": "function",
-          "named": true
-        },
-        {
-          "type": "infimum",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "supremum",
-          "named": true
-        },
-        {
-          "type": "tuple",
-          "named": true
-        },
-        {
-          "type": "unary",
-          "named": true
-        },
-        {
-          "type": "variable",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -1346,7 +1614,7 @@
       "required": false,
       "types": [
         {
-          "type": "term",
+          "type": "_term",
           "named": true
         }
       ]
@@ -1355,15 +1623,22 @@
   {
     "type": "theory",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
         {
           "type": "theory_atom_definition",
           "named": true
@@ -1378,34 +1653,81 @@
   {
     "type": "theory_atom",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "operator",
-          "named": true
-        },
-        {
-          "type": "theory_atom_name",
-          "named": true
-        },
-        {
-          "type": "theory_elements",
-          "named": true
-        },
-        {
-          "type": "theory_term",
-          "named": true
-        }
-      ]
+    "fields": {
+      "elements": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "theory_elements",
+            "named": true
+          },
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      },
+      "name": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": ";",
+            "named": false
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "terms",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "_theory_term",
+            "named": true
+          },
+          {
+            "type": "theory_operator",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "theory_atom_definition",
     "named": true,
     "fields": {
+      "arity": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
       "guard": {
         "multiple": false,
         "required": false,
@@ -1426,7 +1748,25 @@
           }
         ]
       },
-      "term": {
+      "operators": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "theory_operators",
+            "named": true
+          },
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      },
+      "theory_term_name": {
         "multiple": false,
         "required": true,
         "types": [
@@ -1446,39 +1786,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "operators",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "theory_atom_name",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "pool",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -1489,17 +1796,38 @@
   {
     "type": "theory_element",
     "named": true,
-    "fields": {},
+    "fields": {
+      "condition": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ":",
+            "named": false
+          },
+          {
+            "type": "literals",
+            "named": true
+          }
+        ]
+      },
+      "theory_terms": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "theory_terms",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": false,
       "types": [
         {
-          "type": "literal_tuple",
-          "named": true
-        },
-        {
-          "type": "theory_terms",
+          "type": "literals",
           "named": true
         }
       ]
@@ -1523,15 +1851,45 @@
   {
     "type": "theory_function",
     "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "theory_terms",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "theory_list",
+    "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
-      "required": true,
+      "multiple": false,
+      "required": false,
       "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
         {
           "type": "theory_terms",
           "named": true
@@ -1540,19 +1898,14 @@
     }
   },
   {
-    "type": "theory_list",
+    "type": "theory_operator",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "theory_term",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
+  },
+  {
+    "type": "theory_operator_arity",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "theory_operator_associativity",
@@ -1562,28 +1915,47 @@
   {
     "type": "theory_operator_definition",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "operator",
-          "named": true
-        },
-        {
-          "type": "theory_operator_arity",
-          "named": true
-        },
-        {
-          "type": "theory_operator_associativity",
-          "named": true
-        }
-      ]
+    "fields": {
+      "arity": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "theory_operator_arity",
+            "named": true
+          }
+        ]
+      },
+      "associativity": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "theory_operator_associativity",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "theory_operator",
+            "named": true
+          }
+        ]
+      },
+      "priority": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1602,70 +1974,30 @@
     }
   },
   {
-    "type": "theory_set",
+    "type": "theory_operators",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "theory_term",
+          "type": "theory_operator",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "theory_term",
+    "type": "theory_set",
     "named": true,
     "fields": {},
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
         {
-          "type": "anonymous",
-          "named": true
-        },
-        {
-          "type": "infimum",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "supremum",
-          "named": true
-        },
-        {
-          "type": "theory_function",
-          "named": true
-        },
-        {
-          "type": "theory_list",
-          "named": true
-        },
-        {
-          "type": "theory_set",
-          "named": true
-        },
-        {
-          "type": "theory_tuple",
-          "named": true
-        },
-        {
-          "type": "theory_unparsed_term",
-          "named": true
-        },
-        {
-          "type": "variable",
+          "type": "theory_terms",
           "named": true
         }
       ]
@@ -1674,20 +2006,35 @@
   {
     "type": "theory_term_definition",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "theory_operator_definitions",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "operators": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "theory_operator_definitions",
+            "named": true
+          },
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      }
     }
   },
   {
@@ -1699,7 +2046,7 @@
       "required": true,
       "types": [
         {
-          "type": "theory_term",
+          "type": "_theory_term",
           "named": true
         }
       ]
@@ -1714,7 +2061,7 @@
       "required": false,
       "types": [
         {
-          "type": "theory_term",
+          "type": "_theory_term",
           "named": true
         }
       ]
@@ -1729,11 +2076,11 @@
       "required": true,
       "types": [
         {
-          "type": "operators",
+          "type": "_theory_root_term",
           "named": true
         },
         {
-          "type": "theory_term",
+          "type": "theory_operators",
           "named": true
         }
       ]
@@ -1755,10 +2102,10 @@
     }
   },
   {
-    "type": "unary",
+    "type": "unary_operation",
     "named": true,
     "fields": {
-      "op": {
+      "operator": {
         "multiple": false,
         "required": true,
         "types": [
@@ -1772,12 +2119,12 @@
           }
         ]
       },
-      "rhs": {
+      "right": {
         "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "term",
+            "type": "_term",
             "named": true
           }
         ]
@@ -1793,11 +2140,11 @@
       "required": true,
       "types": [
         {
-          "type": "relation",
+          "type": "_term",
           "named": true
         },
         {
-          "type": "term",
+          "type": "relation",
           "named": true
         }
       ]
@@ -1806,33 +2153,46 @@
   {
     "type": "weak_constraint",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "body",
-          "named": true
-        },
-        {
-          "type": "priority",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        },
-        {
-          "type": "terms",
-          "named": true
-        }
-      ]
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "body",
+            "named": true
+          }
+        ]
+      },
+      "terms": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": "terms",
+            "named": true
+          }
+        ]
+      },
+      "weight": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "_term",
+            "named": true
+          },
+          {
+            "type": "priority",
+            "named": true
+          }
+        ]
+      }
     }
-  },
-  {
-    "type": "!=",
-    "named": false
   },
   {
     "type": "\"",
@@ -1840,10 +2200,6 @@
   },
   {
     "type": "#const",
-    "named": false
-  },
-  {
-    "type": "#count",
     "named": false
   },
   {
@@ -1863,10 +2219,6 @@
     "named": false
   },
   {
-    "type": "#false",
-    "named": false
-  },
-  {
     "type": "#heuristic",
     "named": false
   },
@@ -1875,27 +2227,11 @@
     "named": false
   },
   {
-    "type": "#inf",
-    "named": false
-  },
-  {
-    "type": "#infimum",
-    "named": false
-  },
-  {
-    "type": "#max",
-    "named": false
-  },
-  {
     "type": "#maximise",
     "named": false
   },
   {
     "type": "#maximize",
-    "named": false
-  },
-  {
-    "type": "#min",
     "named": false
   },
   {
@@ -1923,27 +2259,7 @@
     "named": false
   },
   {
-    "type": "#sum",
-    "named": false
-  },
-  {
-    "type": "#sum+",
-    "named": false
-  },
-  {
-    "type": "#sup",
-    "named": false
-  },
-  {
-    "type": "#supremum",
-    "named": false
-  },
-  {
     "type": "#theory",
-    "named": false
-  },
-  {
-    "type": "#true",
     "named": false
   },
   {
@@ -1991,10 +2307,6 @@
     "named": false
   },
   {
-    "type": "0",
-    "named": false
-  },
-  {
     "type": ":",
     "named": false
   },
@@ -2015,19 +2327,11 @@
     "named": false
   },
   {
-    "type": "<=",
-    "named": false
-  },
-  {
     "type": "=",
     "named": false
   },
   {
     "type": ">",
-    "named": false
-  },
-  {
-    "type": ">=",
     "named": false
   },
   {
@@ -2055,11 +2359,19 @@
     "named": false
   },
   {
+    "type": "aggregate_function",
+    "named": true
+  },
+  {
     "type": "anonymous",
     "named": true
   },
   {
     "type": "any",
+    "named": false
+  },
+  {
+    "type": "binary",
     "named": false
   },
   {
@@ -2072,16 +2384,24 @@
     "named": false
   },
   {
+    "type": "boolean_constant",
+    "named": true
+  },
+  {
     "type": "code",
     "named": true
   },
   {
-    "type": "default",
-    "named": false
+    "type": "const_type",
+    "named": true
   },
   {
     "type": "directive",
     "named": false
+  },
+  {
+    "type": "double_default_negation",
+    "named": true
   },
   {
     "type": "escape_sequence",
@@ -2096,6 +2416,10 @@
     "named": true
   },
   {
+    "type": "infimum",
+    "named": true
+  },
+  {
     "type": "left",
     "named": false
   },
@@ -2105,16 +2429,16 @@
     "extra": true
   },
   {
-    "type": "negative_identifier",
-    "named": true
-  },
-  {
     "type": "not",
     "named": false
   },
   {
-    "type": "override",
-    "named": false
+    "type": "number",
+    "named": true
+  },
+  {
+    "type": "relation",
+    "named": true
   },
   {
     "type": "right",
@@ -2125,7 +2449,7 @@
     "named": true
   },
   {
-    "type": "theory_operator_arity",
+    "type": "supremum",
     "named": true
   },
   {
