@@ -2385,31 +2385,26 @@
               }
             },
             {
-              "type": "FIELD",
-              "name": "condition",
-              "content": {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "_condition"
-                  },
-                  {
-                    "type": "BLANK"
-                  }
-                ]
-              }
-            },
-            {
-              "type": "SEQ",
+              "type": "CHOICE",
               "members": [
                 {
-                  "type": "SYMBOL",
-                  "name": "_condition"
+                  "type": "FIELD",
+                  "name": "condition",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "_condition"
+                  }
+                },
+                {
+                  "type": "BLANK"
                 }
               ]
             }
           ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_condition"
         }
       ]
     },

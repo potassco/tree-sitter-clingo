@@ -376,9 +376,9 @@ module.exports = grammar({
         theory_element: $ => choice(
             seq(
 		field("theory_terms", $.theory_terms),
-		field("condition", optional($._condition)),
-            seq($._condition),
-        )),
+		optional(field("condition", $._condition))),
+            $._condition,
+        ),
 
         theory_elements: $ => seq($.theory_element, repeat(seq(";", $.theory_element))),
 
