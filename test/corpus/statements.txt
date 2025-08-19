@@ -172,7 +172,8 @@ show
     body: (body
       (body_literal
         atom: (symbolic_atom
-          name: (identifier)))
+          name: (identifier)
+          arguments: (terms)))
       (body_literal
         atom: (symbolic_atom
           name: (identifier)
