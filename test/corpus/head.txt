@@ -25,14 +25,11 @@ X < Y < Z.
   (rule
     head: (literal
       atom: (comparison
-        (term
-          (variable))
+        (variable)
         (relation)
-        (term
-          (variable))
+        (variable)
         (relation)
-        (term
-          (variable))))))
+        (variable)))))
 
 ==================
 boolean
@@ -81,46 +78,10 @@ p; p: q, c; d: ; |X| < 10.
             name: (identifier))))
       (literal
         atom: (comparison
-          (term
-            (abs
-              (term
-                (variable))))
+          (abs
+            (variable))
           (relation)
-          (term
-            (number)))))))
-
-(source_file
-  (statement
-    (rule
-      (head
-        (disjunction
-          (literal
-            (symbolic_atom
-              (identifier)))
-          (conditional_literal
-            (literal
-              (symbolic_atom
-                (identifier)))
-            (literal_tuple
-              (literal
-                (symbolic_atom
-                  (identifier)))
-              (literal
-                (symbolic_atom
-                  (identifier)))))
-          (conditional_literal
-            (literal
-              (symbolic_atom
-                (identifier))))
-          (literal
-            (comparison
-              (term
-                (abs
-                  (term
-                    (variable))))
-              (relation)
-              (term
-                (number)))))))))
+          (number))))))
 
 ==================
 head set aggregate
@@ -131,34 +92,30 @@ head set aggregate
 ---
 
 (source_file
-  (statement
-    (rule
-      (head
-        (set_aggregate
-          (lower
-            (term
-              (number))
-            (relation))
-          (set_aggregate_elements
-            (set_aggregate_element
-              (literal
-                (symbolic_atom
-                  (identifier))))
-            (set_aggregate_element
-              (literal
-                (symbolic_atom
-                  (identifier)))
-              (literal_tuple
-                (literal
-                  (symbolic_atom
-                    (identifier)))
-                (literal
-                  (symbolic_atom
-                    (identifier))))))
-          (upper
-            (relation)
-            (term
-              (number))))))))
+  (rule
+    head: (set_aggregate
+      left: (lower
+        (number)
+        (relation))
+      elements: (set_aggregate_elements
+        (set_aggregate_element
+          literal: (literal
+            atom: (symbolic_atom
+              name: (identifier))))
+        (set_aggregate_element
+          literal: (literal
+            atom: (symbolic_atom
+              name: (identifier)))
+          condition: (literals
+            (literal
+              atom: (symbolic_atom
+                name: (identifier)))
+            (literal
+              atom: (symbolic_atom
+                name: (identifier))))))
+      right: (upper
+        (relation)
+        (number)))))
 
 ==================
 head aggregate
@@ -169,58 +126,58 @@ head aggregate
 ---
 
 (source_file
-  (statement
-    (rule
-      (head
-        (head_aggregate
-          (lower
-            (term
-              (number))
-            (relation))
-          (aggregate_function)
-          (head_aggregate_elements
-            (head_aggregate_element
-              (literal
-                (symbolic_atom
-                  (identifier))))
-            (head_aggregate_element
-              (terms
-                (term
-                  (number)))
-              (literal
-                (symbolic_atom
-                  (identifier)))
-              (literal_tuple
-                (literal
-                  (symbolic_atom
-                    (identifier)))
-                (literal
-                  (symbolic_atom
-                    (identifier)))))
-            (head_aggregate_element
-              (terms
-                (term
-                  (number)))
-              (literal
-                (symbolic_atom
-                  (identifier)))))
-          (upper
-            (relation)
-            (term
-              (number))))))))
+  (rule
+    head: (head_aggregate
+      left: (lower
+        (number)
+        (relation))
+      function: (aggregate_function)
+      elements: (head_aggregate_elements
+        (head_aggregate_element
+          literal: (literal
+            atom: (symbolic_atom
+              name: (identifier))))
+        (head_aggregate_element
+          terms: (terms
+            (number))
+          literal: (literal
+            atom: (symbolic_atom
+              name: (identifier)))
+          condition: (literals
+            (literal
+              atom: (symbolic_atom
+                name: (identifier)))
+            (literal
+              atom: (symbolic_atom
+                name: (identifier)))))
+        (head_aggregate_element
+          terms: (terms
+            (number))
+          literal: (literal
+            atom: (symbolic_atom
+              name: (identifier)))))
+      right: (upper
+        (relation)
+        (number)))))
 
 ==================
 head theory
 ==================
 
-&p.
+&p(;a;b;) < 1.
 
 ---
 
 (source_file
-  (statement
-    (rule
-      (head
-        (theory_atom
-          (theory_atom_name
-            (identifier)))))))
+  (rule
+    head: (theory_atom
+      name: (identifier)
+      arguments: (terms
+        (function
+          name: (identifier)))
+      arguments: (terms
+        (function
+          name: (identifier)))
+      right: (theory_atom_upper
+        (theory_operator)
+        (number)))))

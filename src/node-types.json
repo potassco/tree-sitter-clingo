@@ -118,7 +118,7 @@
         "named": true
       },
       {
-        "type": "show_nothing",
+        "type": "show",
         "named": true
       },
       {
@@ -263,36 +263,6 @@
       "types": [
         {
           "type": "_term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "arc",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "_term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "arc_pool",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "arc",
           "named": true
         }
       ]
@@ -527,11 +497,6 @@
     }
   },
   {
-    "type": "classical_negation",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "comparison",
     "named": true,
     "fields": {},
@@ -699,16 +664,35 @@
           }
         ]
       },
-      "pool": {
-        "multiple": false,
+      "edge_pair": {
+        "multiple": true,
         "required": true,
         "types": [
           {
-            "type": "arc_pool",
+            "type": ";",
+            "named": false
+          },
+          {
+            "type": "edge_pair",
             "named": true
           }
         ]
       }
+    }
+  },
+  {
+    "type": "edge_pair",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "_term",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -764,15 +748,7 @@
         "required": false,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
             "type": ")",
-            "named": false
-          },
-          {
-            "type": ";",
             "named": false
           },
           {
@@ -807,10 +783,6 @@
           },
           {
             "type": ")",
-            "named": false
-          },
-          {
-            "type": ";",
             "named": false
           },
           {
@@ -964,16 +936,6 @@
           }
         ]
       },
-      "priority": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "priority",
-            "named": true
-          }
-        ]
-      },
       "type": {
         "multiple": false,
         "required": true,
@@ -989,7 +951,7 @@
         "required": true,
         "types": [
           {
-            "type": "_term",
+            "type": "weight",
             "named": true
           }
         ]
@@ -1187,15 +1149,11 @@
         ]
       },
       "weight": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "_term",
-            "named": true
-          },
-          {
-            "type": "priority",
+            "type": "weight",
             "named": true
           }
         ]
@@ -1212,21 +1170,6 @@
       "types": [
         {
           "type": "optimize_element",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "priority",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "_term",
           "named": true
         }
       ]
@@ -1450,7 +1393,7 @@
     }
   },
   {
-    "type": "show_nothing",
+    "type": "show",
     "named": true,
     "fields": {}
   },
@@ -1519,6 +1462,16 @@
             "named": true
           }
         ]
+      },
+      "sign": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "classical_negation",
+            "named": true
+          }
+        ]
       }
     }
   },
@@ -1566,15 +1519,7 @@
         "required": false,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
             "type": ")",
-            "named": false
-          },
-          {
-            "type": ";",
             "named": false
           },
           {
@@ -1654,6 +1599,20 @@
     "type": "theory_atom",
     "named": true,
     "fields": {
+      "arguments": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "terms",
+            "named": true
+          }
+        ]
+      },
       "elements": {
         "multiple": true,
         "required": false,
@@ -1673,41 +1632,21 @@
         ]
       },
       "name": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": ";",
-            "named": false
-          },
-          {
             "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "terms",
             "named": true
           }
         ]
       },
       "right": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "_theory_term",
-            "named": true
-          },
-          {
-            "type": "theory_operator",
+            "type": "theory_atom_upper",
             "named": true
           }
         ]
@@ -1792,6 +1731,25 @@
     "type": "theory_atom_type",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "theory_atom_upper",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "_theory_term",
+          "named": true
+        },
+        {
+          "type": "theory_operator",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "theory_element",
@@ -2179,15 +2137,41 @@
         ]
       },
       "weight": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "weight",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "weight",
+    "named": true,
+    "fields": {
+      "priority": {
         "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "@",
+            "named": false
+          },
+          {
+            "type": "_term",
+            "named": true
+          }
+        ]
+      },
+      "term": {
+        "multiple": false,
         "required": true,
         "types": [
           {
             "type": "_term",
-            "named": true
-          },
-          {
-            "type": "priority",
             "named": true
           }
         ]
@@ -2385,6 +2369,10 @@
   },
   {
     "type": "boolean_constant",
+    "named": true
+  },
+  {
+    "type": "classical_negation",
     "named": true
   },
   {

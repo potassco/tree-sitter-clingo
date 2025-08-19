@@ -21,8 +21,7 @@ module.exports = grammar({
     // does not necessarily have to be resolved in the grammar. It could also
     // be left to the user of the parser. Then, we could simply delete the
     // "show signature" part of the statement production.
-    conflicts: $ => [[$.signature, $.function],
-		     [$._unary_negation, $.classical_negation]],
+    conflicts: $ => [[$.signature, $._function]],
 
     supertypes: $ => [$._statement, $._term, $._theory_root_term,
 		      $._simple_atom, $._head, $._literal_sign, $._theory_term],
@@ -124,10 +123,8 @@ module.exports = grammar({
             binary_expression(-2, $._const_term, "**", $._const_term),
         ),
 
-	_unary_negation: _ => "-",
-
         const_unary_operation: $ => choice(
-            unary_expression(1, $._unary_negation, $._const_term),
+            unary_expression(1, "-", $._const_term),
             unary_expression(1, "~", $._const_term),
         ),
 
@@ -178,7 +175,7 @@ module.exports = grammar({
         ),
 
         unary_operation: $ => choice(
-            unary_expression(1, $._unary_negation, $._term),
+            unary_expression(1, "-", $._term),
             unary_expression(1, "~", $._term),
         ),
 
@@ -189,29 +186,30 @@ module.exports = grammar({
             "|"
         ),
 	
-        terms: $ => seq(
+        _terms: $ => seq(
             $._term,
             repeat(seq(",", $._term))
         ),
 
-        _arguments: $ => seq(
-	    "(",
-	    optional($.terms),
-	    repeat(seq(";", optional($.terms))),
-            ")"
-        ),
-	
-	arc: $ => seq($._term, ",", $._term),
-	
-        arc_pool: $ => seq(
-            $.arc,
-            repeat(seq(";", $.arc))),
+	terms: $ => $._terms,
+
+	arguments_par: $ => seq("(", optional($._terms)),
+	arguments_sem: $ => seq(";", optional($._terms)),
+
+	_arguments: $ => seq(
+	    alias($.arguments_par, $.terms),
+	    repeat(alias($.arguments_sem, $.terms)),
+	    ")"
+	),
 
 
-        function: $ => seq(
+        _function: $ => seq(
             field("name", $.identifier),
             field('arguments', optional($._arguments)),
         ),
+
+	function: $ => $._function,
+	
         external_function: $ => seq(
             "@",
             field("name", $.identifier),
@@ -228,12 +226,12 @@ module.exports = grammar({
 	),
 
         // Note: "non-empty" and aliasable to terms
-        _terms_trail_par: $ => seq("(", optional($._terms_trail)),
-        _terms_trail_sem: $ => seq(";", optional($._terms_trail)),
+        terms_trail_par: $ => seq("(", optional($._terms_trail)),
+        terms_trail_sem: $ => seq(";", optional($._terms_trail)),
 
         tuple: $ => seq(
-            alias($._terms_trail_par, $.terms),
-            repeat(alias($._terms_trail_sem, $.terms)),
+            alias($.terms_trail_par, $.terms),
+            repeat(alias($.terms_trail_sem, $.terms)),
             ")"
         ),
 
@@ -307,14 +305,17 @@ module.exports = grammar({
         // Literals
 
         boolean_constant: $ => token(choice("#true", "#false")),
+	
+	_classical_negation_operation: $ => prec.left(
+	    1,
+	    seq(field("sign", alias("-", $.classical_negation)),
+		$._function)
+	),
 
-	classical_negation: $ => "-",
-
-        symbolic_atom: $ => seq(
-	    field("sign", optional($.classical_negation)),
-            field("name", $.identifier),
-            field("arguments", optional($._arguments)),
-        ),
+        symbolic_atom: $ => choice(
+	    $._function,
+	    $._classical_negation_operation,
+	),
 
         relation: $ => token(choice(">", "<", ">=", "<=", "=", "!=")),
 
@@ -382,11 +383,14 @@ module.exports = grammar({
 
         theory_elements: $ => seq($.theory_element, repeat(seq(";", $.theory_element))),
 
+	theory_atom_upper: $ => seq($.theory_operator, $._theory_term),
+
         theory_atom: $ => seq(
 	    "&",
-	    field("name", seq($.identifier, optional($._arguments))),
+	    field("name", $.identifier),
+	    field("arguments", optional($._arguments)),
 	    field("elements", optional(seq("{", optional($.theory_elements), "}"))),
-	    field("right",optional(seq($.theory_operator, $._theory_term)))),
+	    field("right",optional($.theory_atom_upper))),
 
         // body literals
 
@@ -428,7 +432,7 @@ module.exports = grammar({
 	),
 	
 	_colon_body: $ => seq(
-	    optional(seq(":", field("body", $.body))),
+	    optional(seq(":", field("body", optional($.body)))),
 	    "."
 	),
 
@@ -497,12 +501,15 @@ module.exports = grammar({
 	    "."
 	),
 
-        priority: $ => seq("@", $._term),
         _optimize_tuple: $ => seq(",", $.terms),
-        _optimize_weight: $ => seq($._term, optional($.priority)),
+	
+        weight: $ => seq(
+	    field("term", $._term),
+	    field("priority", optional(seq("@", $._term))),
+	),
 
         optimize_element: $ => seq(
-            field("weight", $._optimize_weight),
+            field("weight", $.weight),
             field("terms", optional($._optimize_tuple)),
             field("condition", optional($._condition))
         ),
@@ -515,7 +522,7 @@ module.exports = grammar({
 	    field("body", optional($.body)),
 	    ".",
 	    "[", 
-	    field("weight",$._optimize_weight),
+	    field("weight", $.weight),
 	    field("terms",optional($._optimize_tuple)),
 	    "]"
 	),
@@ -532,10 +539,22 @@ module.exports = grammar({
 	    "."
 	),
 
-	// what's up with this?
-        signature: $ => prec.dynamic(1, seq(field("name",$.identifier), "/", field("arity",$.number))),
+	_classical_negated_identifier: $ => prec.left(
+	    1,
+	    seq(field("sign", alias("-", $.classical_negation)),
+		field("name", $.identifier))
+	),
 
-        show_nothing: $ => seq("#show", "."),
+        signature: $ => prec.dynamic(1, seq(
+	    choice(
+		$._classical_negated_identifier,
+		field("name", $.identifier),
+	    ),
+	    "/",
+	    field("arity",$.number)
+	)),
+
+        show: $ => seq("#show", "."),
 
         show_term: $ => seq(
 	    "#show",
@@ -593,10 +612,12 @@ module.exports = grammar({
 	    field("type", optional(seq("[", $.const_type, "]")))
 	),
 
+	edge_pair: $ => seq($._term, ",", $._term),
+
         edge: $ => seq(
 	    "#edge", 
 	    "(",
-	    field("pool", $.arc_pool),
+	    field("edge_pair", seq($.edge_pair, repeat(seq(";", $.edge_pair)))),
 	    ")",
 	    $._colon_body,
 	),
@@ -606,8 +627,7 @@ module.exports = grammar({
             field("atom", $.symbolic_atom),
 	    $._colon_body,
             "[",
-            field("weight", $._term),
-            field("priority", optional($.priority)),
+            field("weight", $.weight),
             ",",
             field("type", $._term),
             "]"
@@ -716,7 +736,7 @@ module.exports = grammar({
             $.weak_constraint,
             $.minimize,
             $.maximize,
-            $.show_nothing,
+            $.show,
             $.show_term,
             $.show_signature,
             $.defined,

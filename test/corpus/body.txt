@@ -5,63 +5,46 @@ symbolic literals
 :- p(X), not p(X), not not p(X), -p(X), not -p(X), not not -p(X).
 
 ---
-
 (source_file
-  (statement
-    (integrity_constraint
-      (body
-        (body_literal
-          (symbolic_atom
-            (identifier)
-            (pool
-              (terms
-                (term
-                  (variable))))))
-        (body_literal
-          (sign
-            (default_negation))
-          (symbolic_atom
-            (identifier)
-            (pool
-              (terms
-                (term
-                  (variable))))))
-        (body_literal
-          (sign
-            (default_negation)
-            (default_negation))
-          (symbolic_atom
-            (identifier)
-            (pool
-              (terms
-                (term
-                  (variable))))))
-        (body_literal
-          (symbolic_atom
-            (negative_identifier)
-            (pool
-              (terms
-                (term
-                  (variable))))))
-        (body_literal
-          (sign
-            (default_negation))
-          (symbolic_atom
-            (negative_identifier)
-            (pool
-              (terms
-                (term
-                  (variable))))))
-        (body_literal
-          (sign
-            (default_negation)
-            (default_negation))
-          (symbolic_atom
-            (negative_identifier)
-            (pool
-              (terms
-                (term
-                  (variable))))))))))
+  (integrity_constraint
+    body: (body
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier)
+          arguments: (terms
+            (variable))))
+      (body_literal
+        sign: (default_negation)
+        atom: (symbolic_atom
+          name: (identifier)
+          arguments: (terms
+            (variable))))
+      (body_literal
+        sign: (double_default_negation)
+        atom: (symbolic_atom
+          name: (identifier)
+          arguments: (terms
+            (variable))))
+      (body_literal
+        atom: (symbolic_atom
+          sign: (classical_negation)
+          name: (identifier)
+          arguments: (terms
+            (variable))))
+      (body_literal
+        sign: (default_negation)
+        atom: (symbolic_atom
+          sign: (classical_negation)
+          name: (identifier)
+          arguments: (terms
+            (variable))))
+      (body_literal
+        sign: (double_default_negation)
+        atom: (symbolic_atom
+          sign: (classical_negation)
+          name: (identifier)
+          arguments: (terms
+            (variable)))))))
 
 ==================
 comparisions
@@ -72,34 +55,26 @@ comparisions
 ---
 
 (source_file
-  (statement
-    (integrity_constraint
-      (body
-        (body_literal
-          (comparison
-            (term
-              (variable))
-            (relation)
-            (term
-              (variable))
-            (relation)
-            (term
-              (variable))))
-        (body_literal
-          (comparison
-            (term
-              (function
-                (negative_identifier)
-                (pool
-                  (terms
-                    (term
-                      (variable))))))
-            (relation)
-            (term
-              (variable))
-            (relation)
-            (term
-              (variable))))))))
+  (integrity_constraint
+    body: (body
+      (body_literal
+        atom: (comparison
+          (variable)
+          (relation)
+          (variable)
+          (relation)
+          (variable)))
+      (body_literal
+        atom: (comparison
+          (unary_operation
+            right: (function
+              name: (identifier)
+              arguments: (terms
+                (variable))))
+          (relation)
+          (variable)
+          (relation)
+          (variable))))))
 
 ==================
 conditional literals
@@ -110,58 +85,44 @@ conditional literals
 ---
 
 (source_file
-  (statement
-    (integrity_constraint
-      (body
-        (body_literal
-          (symbolic_atom
-            (identifier)))
-        (body_literal
-          (conditional_literal
-            (literal
-              (sign
-                (default_negation))
-              (symbolic_atom
-                (identifier)))
-            (literal_tuple
-              (literal
-                (symbolic_atom
-                  (identifier)))
-              (literal
-                (symbolic_atom
-                  (identifier))))))
-        (body_literal
-          (conditional_literal
-            (literal
-              (symbolic_atom
-                (identifier)
-                (pool
-                  (terms
-                    (term
-                      (variable))))))))
-        (body_literal
-          (conditional_literal
-            (literal
-              (sign
-                (default_negation)
-                (default_negation))
-              (comparison
-                (term
-                  (variable))
-                (relation)
-                (term
-                  (variable))
-                (relation)
-                (term
-                  (variable))))
-            (literal_tuple
-              (literal
-                (symbolic_atom
-                  (identifier)
-                  (pool
-                    (terms
-                      (term
-                        (variable)))))))))))))
+  (integrity_constraint
+    body: (body
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier)))
+      (conditional_literal
+        (literal
+          sign: (default_negation)
+          atom: (symbolic_atom
+            name: (identifier)))
+        (literals
+          (literal
+            atom: (symbolic_atom
+              name: (identifier)))
+          (literal
+            atom: (symbolic_atom
+              name: (identifier)))))
+      (conditional_literal
+        (literal
+          atom: (symbolic_atom
+            name: (identifier)
+            arguments: (terms
+              (variable)))))
+      (conditional_literal
+        (literal
+          sign: (double_default_negation)
+          atom: (comparison
+            (variable)
+            (relation)
+            (variable)
+            (relation)
+            (variable)))
+        (literals
+          (literal
+            atom: (symbolic_atom
+              name: (identifier)
+              arguments: (terms
+                (variable)))))))))
 
 ==================
 body set aggregates
@@ -172,48 +133,44 @@ body set aggregates
 ---
 
 (source_file
-  (statement
-    (integrity_constraint
-      (body
-        (body_literal
-          (sign
-            (default_negation))
-          (set_aggregate
-            (lower
-              (term
-                (number)))
-            (set_aggregate_elements
-              (set_aggregate_element
+  (integrity_constraint
+    body: (body
+      (body_literal
+        sign: (default_negation)
+        atom: (set_aggregate
+          left: (lower
+            (number))
+          elements: (set_aggregate_elements
+            (set_aggregate_element
+              literal: (literal
+                atom: (symbolic_atom
+                  name: (identifier))))
+            (set_aggregate_element
+              literal: (literal
+                atom: (symbolic_atom
+                  name: (identifier))))
+            (set_aggregate_element
+              literal: (literal
+                atom: (symbolic_atom
+                  name: (identifier)))
+              condition: (literals
                 (literal
-                  (symbolic_atom
-                    (identifier))))
-              (set_aggregate_element
+                  atom: (symbolic_atom
+                    name: (identifier)))))
+            (set_aggregate_element
+              literal: (literal
+                atom: (symbolic_atom
+                  name: (identifier)))
+              condition: (literals
                 (literal
-                  (symbolic_atom
-                    (identifier))))
-              (set_aggregate_element
+                  atom: (symbolic_atom
+                    name: (identifier)))
                 (literal
-                  (symbolic_atom
-                    (identifier)))
-                (literal_tuple
-                  (literal
-                    (symbolic_atom
-                      (identifier)))))
-              (set_aggregate_element
-                (literal
-                  (symbolic_atom
-                    (identifier)))
-                (literal_tuple
-                  (literal
-                    (symbolic_atom
-                      (identifier)))
-                  (literal
-                    (symbolic_atom
-                      (identifier))))))
-            (upper
-              (relation)
-              (term
-                (number)))))))))
+                  atom: (symbolic_atom
+                    name: (identifier))))))
+          right: (upper
+            (relation)
+            (number)))))))
 
 ==================
 body aggregates
@@ -224,55 +181,46 @@ body aggregates
 ---
 
 (source_file
-  (statement
-    (integrity_constraint
-      (body
-        (body_literal
-          (sign
-            (default_negation))
-          (body_aggregate
-            (lower
-              (term
-                (number)))
-            (aggregate_function)
-            (body_aggregate_elements
-              (body_aggregate_element)
-              (body_aggregate_element
-                (literal_tuple
-                  (literal
-                    (symbolic_atom
-                      (identifier)))))
-              (body_aggregate_element
-                (terms
-                  (term
-                    (function
-                      (identifier)))))
-              (body_aggregate_element
-                (terms
-                  (term
-                    (function
-                      (identifier)))))
-              (body_aggregate_element
-                (terms
-                  (term
-                    (function
-                      (identifier))))
-                (literal_tuple
-                  (literal
-                    (symbolic_atom
-                      (identifier)))
-                  (literal
-                    (symbolic_atom
-                      (identifier)))))
-              (body_aggregate_element
-                (terms
-                  (term
-                    (function
-                      (identifier)))
-                  (term
-                    (function
-                      (identifier))))))
-            (upper
-              (relation)
-              (term
-                (number)))))))))
+  (integrity_constraint
+    body: (body
+      (body_literal
+        sign: (default_negation)
+        atom: (body_aggregate
+          left: (lower
+            (number))
+          function: (aggregate_function)
+          elements: (body_aggregate_elements
+            (body_aggregate_element)
+            (body_aggregate_element
+              condition: (literals
+                (literal
+                  atom: (symbolic_atom
+                    name: (identifier)))))
+            (body_aggregate_element
+              terms: (terms
+                (function
+                  name: (identifier))))
+            (body_aggregate_element
+              terms: (terms
+                (function
+                  name: (identifier))))
+            (body_aggregate_element
+              terms: (terms
+                (function
+                  name: (identifier)))
+              condition: (literals
+                (literal
+                  atom: (symbolic_atom
+                    name: (identifier)))
+                (literal
+                  atom: (symbolic_atom
+                    name: (identifier)))))
+            (body_aggregate_element
+              terms: (terms
+                (function
+                  name: (identifier))
+                (function
+                  name: (identifier)))))
+          right: (upper
+            (relation)
+            (number)))))))
