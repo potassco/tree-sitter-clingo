@@ -778,10 +778,6 @@
         "required": false,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
             "type": ")",
             "named": false
           },
@@ -1728,11 +1724,6 @@
     }
   },
   {
-    "type": "theory_atom_type",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "theory_atom_upper",
     "named": true,
     "fields": {},
@@ -1815,10 +1806,6 @@
         "required": false,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
             "type": ")",
             "named": false
           },
@@ -1862,11 +1849,6 @@
   },
   {
     "type": "theory_operator_arity",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "theory_operator_associativity",
     "named": true,
     "fields": {}
   },
@@ -2001,7 +1983,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "_theory_term",
@@ -2015,11 +1997,11 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
-      "required": false,
+      "multiple": false,
+      "required": true,
       "types": [
         {
-          "type": "_theory_term",
+          "type": "theory_terms",
           "named": true
         }
       ]
@@ -2351,10 +2333,6 @@
     "named": true
   },
   {
-    "type": "any",
-    "named": false
-  },
-  {
     "type": "binary",
     "named": false
   },
@@ -2362,10 +2340,6 @@
     "type": "block_comment",
     "named": true,
     "extra": true
-  },
-  {
-    "type": "body",
-    "named": false
   },
   {
     "type": "boolean_constant",
@@ -2384,10 +2358,6 @@
     "named": true
   },
   {
-    "type": "directive",
-    "named": false
-  },
-  {
     "type": "double_default_negation",
     "named": true
   },
@@ -2396,20 +2366,12 @@
     "named": true
   },
   {
-    "type": "head",
-    "named": false
-  },
-  {
     "type": "identifier",
     "named": true
   },
   {
     "type": "infimum",
     "named": true
-  },
-  {
-    "type": "left",
-    "named": false
   },
   {
     "type": "line_comment",
@@ -2429,15 +2391,19 @@
     "named": true
   },
   {
-    "type": "right",
-    "named": false
-  },
-  {
     "type": "string_fragment",
     "named": true
   },
   {
     "type": "supremum",
+    "named": true
+  },
+  {
+    "type": "theory_atom_type",
+    "named": true
+  },
+  {
+    "type": "theory_operator_associativity",
     "named": true
   },
   {

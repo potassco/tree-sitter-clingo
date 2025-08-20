@@ -158,11 +158,11 @@ show
       arity: (number)))
   (show_term
     term: (binary_operation
-      left: (function
-        name: (identifier))
-      right: (binary_operation
-        left: (number)
-        right: (number))))
+      left: (binary_operation
+        left: (function
+          name: (identifier))
+        right: (number))
+      right: (number)))
   (show_term
     term: (unary_operation
       right: (function
@@ -244,6 +244,7 @@ const
 ==================
 
 #const x = 1.
+#const x = f().
 #const x = f((), |x|).
 #const x = 1. [default]
 #const x = 2. [override]
@@ -254,6 +255,11 @@ const
   (const
     name: (identifier)
     value: (number))
+  (const
+    name: (identifier)
+    value: (function
+      name: (identifier)
+      arguments: (terms)))
   (const
     name: (identifier)
     value: (function
@@ -428,7 +434,8 @@ heuristic
 (source_file
   (heuristic
     atom: (symbolic_atom
-      name: (identifier))
+      name: (identifier)
+      arguments: (terms))
     weight: (weight
       term: (function
         name: (identifier)))
@@ -437,7 +444,8 @@ heuristic
   (heuristic
     atom: (symbolic_atom
       sign: (classical_negation)
-      name: (identifier))
+      name: (identifier)
+      arguments: (terms))
     weight: (weight
       term: (function
         name: (identifier))

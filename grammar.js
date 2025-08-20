@@ -104,79 +104,89 @@ module.exports = grammar({
             $.supremum,
             $.number,
             $.string,
-            alias($.const_binary_operation, $.binary_operation),
-            alias($.const_unary_operation, $.unary_operation),
-            alias($.const_abs, $.abs),
-            alias($.const_function, $.function),
-            alias($.const_tuple, $.tuple),
+            alias($._const_binary_operation, $.binary_operation),
+            alias($._const_unary_operation, $.unary_operation),
+            alias($._const_abs, $.abs),
+            alias($._const_function, $.function),
+            alias($._const_tuple, $.tuple),
         ),
 
-        const_binary_operation: $ => choice(
-            binary_expression(7, $._const_term, "^", $._const_term),
-            binary_expression(6, $._const_term, "?", $._const_term),
-            binary_expression(5, $._const_term, "&", $._const_term),
-            binary_expression(4, $._const_term, "+", $._const_term),
-            binary_expression(4, $._const_term, "-", $._const_term),
+        _const_binary_operation: $ => choice(
+            binary_expression(1, $._const_term, "^", $._const_term),
+            binary_expression(1, $._const_term, "?", $._const_term),
+            binary_expression(1, $._const_term, "&", $._const_term),
+            binary_expression(2, $._const_term, "+", $._const_term),
+            binary_expression(2, $._const_term, "-", $._const_term),
             binary_expression(3, $._const_term, "*", $._const_term),
             binary_expression(3, $._const_term, "/", $._const_term),
             binary_expression(3, $._const_term, "\\", $._const_term),
-            binary_expression(-2, $._const_term, "**", $._const_term),
+            binary_expression(-5, $._const_term, "**", $._const_term),
         ),
 
-        const_unary_operation: $ => choice(
-            unary_expression(1, "-", $._const_term),
-            unary_expression(1, "~", $._const_term),
+        _const_unary_operation: $ => choice(
+            unary_expression(4, "-", $._const_term),
+            unary_expression(4, "~", $._const_term),
         ),
 
-        const_abs: $ => seq(
+        _const_abs: $ => seq(
             "|",
             $._const_term,
             "|",
         ),
 
-        const_terms: $ => seq(
+        _const_terms: $ => seq(
             $._const_term,
             repeat(seq(",", $._const_term))
 	),
+
+	_const_arguments_par: $ => seq("(", optional($._const_terms)),
 	
         _const_arguments: $ => seq(
-	    "(",
-	    alias(optional($.const_terms),$.terms),
+	    alias($._const_arguments_par, $.terms),
 	    ")"
 	),
 
-        const_function: $ => seq(
+        _const_function: $ => seq(
             field("name", $.identifier),
             field('arguments', optional($._const_arguments))
 	),
 
-        const_terms_trail: $ => seq(
-	    "(",
-	    optional(seq(
+        _const_terms_trail: $ => choice(
+	    seq(
 		$._const_term,
 		repeat(seq(",", $._const_term)),
 		optional(",")
-            )),
+            ),
+	    ","
 	),
 
-	const_tuple: $ => seq(alias($.const_terms_trail, $.terms), ")"),
+	_const_terms_trail_par: $ => seq("(", optional($._const_terms_trail)),
 
+	_const_tuple: $ => seq(
+	    alias($._const_terms_trail_par, $.terms),
+	    ")"
+	),
+
+	// based off of clingox.ast operator prec and assoc. values
         binary_operation: $ => choice(
-            binary_expression(8, $._term, "..", $._term),
-            binary_expression(7, $._term, "^", $._term),
-            binary_expression(6, $._term, "?", $._term),
-            binary_expression(5, $._term, "&", $._term),
-            binary_expression(4, $._term, "+", $._term),
-            binary_expression(4, $._term, "-", $._term),
+	    binary_expression(0, $._term, "..", $._term),
+            binary_expression(1, $._term, "^", $._term),
+            binary_expression(1, $._term, "?", $._term),
+            binary_expression(1, $._term, "&", $._term),
+            binary_expression(2, $._term, "+", $._term),
+            binary_expression(2, $._term, "-", $._term),
             binary_expression(3, $._term, "*", $._term),
             binary_expression(3, $._term, "/", $._term),
             binary_expression(3, $._term, "\\", $._term),
-            binary_expression(-2, $._term, "**", $._term),
+            binary_expression(-5, $._term, "**", $._term),
         ),
-
+	// changes in clingo 6: now ** has higher precedence than the unary operators
+	// i.e. 2**-1**0 parses as (2 ** -(1 ** 0)), whereas in clingo 5 it parsed as
+	// (2 ** ((-1) ** 0))
+	// is this an intentional change? Maybe ask Roland.
         unary_operation: $ => choice(
-            unary_expression(1, "-", $._term),
-            unary_expression(1, "~", $._term),
+            unary_expression(4, "-", $._term),
+            unary_expression(4, "~", $._term),
         ),
 
         abs: $ => seq(
@@ -193,15 +203,14 @@ module.exports = grammar({
 
 	terms: $ => $._terms,
 
-	arguments_par: $ => seq("(", optional($._terms)),
-	arguments_sem: $ => seq(";", optional($._terms)),
+	_arguments_par: $ => seq("(", optional($._terms)),
+	_arguments_sem: $ => seq(";", optional($._terms)),
 
 	_arguments: $ => seq(
-	    alias($.arguments_par, $.terms),
-	    repeat(alias($.arguments_sem, $.terms)),
+	    alias($._arguments_par, $.terms),
+	    repeat(alias($._arguments_sem, $.terms)),
 	    ")"
 	),
-
 
         _function: $ => seq(
             field("name", $.identifier),
@@ -225,13 +234,12 @@ module.exports = grammar({
 	    ","
 	),
 
-        // Note: "non-empty" and aliasable to terms
-        terms_trail_par: $ => seq("(", optional($._terms_trail)),
-        terms_trail_sem: $ => seq(";", optional($._terms_trail)),
+        _terms_trail_par: $ => seq("(", optional($._terms_trail)),
+        _terms_trail_sem: $ => seq(";", optional($._terms_trail)),
 
         tuple: $ => seq(
-            alias($.terms_trail_par, $.terms),
-            repeat(alias($.terms_trail_sem, $.terms)),
+            alias($._terms_trail_par, $.terms),
+            repeat(alias($._terms_trail_sem, $.terms)),
             ")"
         ),
 
@@ -258,20 +266,47 @@ module.exports = grammar({
         ),
         theory_operators: $ => repeat1($.theory_operator),
 
-        theory_terms: $ => seq($._theory_term, repeat(seq(",", $._theory_term))),
+	// we put in some extra and somewhat unnecessary work to make
+	// the arguments of theory function/tuple be parsed in way
+	// consistent wit regular symbolic atoms/function/tuple
+	// arguments, though in the case of theory function/tuple we
+	// have no pools.
+	
+        _theory_terms: $ => seq($._theory_term, repeat(seq(",", $._theory_term))),
+
+	theory_terms: $ => $._theory_terms,
+
+	theory_arguments_par: $ => seq("(", optional($._theory_terms)),
+
+	_theory_arguments: $ => seq(
+	    alias($.theory_arguments_par, $.theory_terms),
+	    ")"
+	),
 
         theory_function: $ => seq(
 	    field("name", $.identifier),
-	    field("arguments", optional(seq("(", optional($.theory_terms), ")")))),
+	    field("arguments", optional($._theory_arguments))
+	),
 
         _theory_terms_trail: $ => choice(
-	    ",",
-	    seq($._theory_term,
-		repeat(seq(",", $._theory_term)),
-		optional(","))),
 
-        theory_tuple: $ => seq("(", optional($._theory_terms_trail), ")"),
+	    seq(
+		$._theory_term,
+		repeat(seq(",", $._theory_term)),
+		optional(",")
+	    ),
+	    ",",
+	),
+
+	theory_terms_trail_par: $ => seq("(", optional($._theory_terms_trail)),
+
+        theory_tuple: $ => seq(
+	    alias($.theory_terms_trail_par, $.theory_terms),
+	    ")"
+	),
+	
         theory_list: $ => seq("[", optional($.theory_terms), "]"),
+	
         theory_set: $ => seq("{", optional($.theory_terms), "}"),
 
         theory_unparsed_term: $ => choice(
@@ -646,10 +681,10 @@ module.exports = grammar({
 	    field("type", optional(seq("[", $._term, "]")))
 	),
 
-        theory_operator_arity: $ => "unary",
-        _theory_operator_arity_binary: $ => "binary",
+        theory_operator_arity: _ => token("unary"),
+        _theory_operator_arity_binary: _ => token("binary"),
 
-        theory_operator_associativity: $ => choice("left", "right"),
+        theory_operator_associativity: _ => token(choice("left", "right")),
 
         theory_operator_definition: $ => choice(
             seq(
@@ -681,7 +716,7 @@ module.exports = grammar({
 	    field("operators", seq("{", optional($.theory_operator_definitions), "}"))
 	),
 
-        theory_atom_type: $ => choice("head", "body", "any", "directive"),
+        theory_atom_type: _ => token(choice("head", "body", "any", "directive")),
 
         _theory_operators_sep: $ => seq(
 	    $.theory_operator,

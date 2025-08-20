@@ -1,2 +1,4 @@
 - Write unit tests for [syntax highlighting](https ://tree-sitter.github.io/tree-sitter/3-syntax-highlighting.html#language-injection)
 - Write queries for [tagging predicate definitions and references](https://tree-sitter.github.io/tree-sitter/4-code-navigation.html?highlight=tags#tagging-and-captures) under queries/tags.scm 
+- Rewrite highlitghting queries
+- Make binary/unary operators named nodes, with a unique name for each
