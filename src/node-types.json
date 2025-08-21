@@ -1838,6 +1838,10 @@
         "required": false,
         "types": [
           {
+            "type": "(",
+            "named": false
+          },
+          {
             "type": ")",
             "named": false
           },
@@ -1865,7 +1869,7 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "theory_terms",
@@ -1966,7 +1970,7 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "theory_terms",

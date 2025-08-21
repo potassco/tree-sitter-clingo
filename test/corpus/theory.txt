@@ -69,8 +69,8 @@ theory tuple
       elements: (theory_elements
         (theory_element
           theory_terms: (theory_terms
-            (theory_tuple
-              (theory_terms))))
+	    (theory_tuple
+	      (theory_terms))))
         (theory_element
           theory_terms: (theory_terms
             (theory_tuple
@@ -113,7 +113,8 @@ theory list
       elements: (theory_elements
         (theory_element
           theory_terms: (theory_terms
-            (theory_list)))
+            (theory_list
+	      (theory_terms))))
         (theory_element
           theory_terms: (theory_terms
             (theory_list
@@ -141,7 +142,8 @@ theory set
       elements: (theory_elements
         (theory_element
           theory_terms: (theory_terms
-            (theory_set)))
+            (theory_set
+	      (theory_terms))))
         (theory_element
           theory_terms: (theory_terms
             (theory_set
@@ -173,7 +175,7 @@ theory function
               name: (identifier))
             (theory_function
               name: (identifier)
-              arguments: (theory_terms))
+	      arguments: (theory_terms))
             (theory_function
               name: (identifier)
               arguments: (theory_terms

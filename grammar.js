@@ -141,33 +141,33 @@ module.exports = grammar({
             repeat(seq(",", $._const_term))
 	),
 
-	_const_arguments_par: $ => seq("(", optional($._const_terms)),
-	
-        _const_arguments: $ => seq(
-	    alias($._const_arguments_par, $.terms),
-	    ")"
+	_const_arguments_item: $ => choice(
+	    alias($._empty_terms, $.terms),
+	    alias($._const_terms, $.terms),
 	),
+	
+        _const_arguments: $ => seq("(", $._const_arguments_item, ")"),
 
         _const_function: $ => seq(
             field("name", $.identifier),
             field('arguments', optional($._const_arguments))
 	),
 
-        _const_terms_trail: $ => choice(
-	    seq(
-		$._const_term,
-		repeat(seq(",", $._const_term)),
-		optional(",")
-            ),
-	    ","
+	_const_terms_trail: $ => seq(
+            $._const_term,
+            repeat1(seq(",", $._const_term)),
+            optional(",")
+        ),
+
+	_const_tuple_item: $ => choice(
+	    alias($._empty_terms, $.terms),
+	    alias(",", $.terms),
+	    $._const_term,
+	    alias(seq($._const_term, ","), $.terms),
+	    alias($._const_terms_trail, $.terms),
 	),
 
-	_const_terms_trail_par: $ => seq("(", optional($._const_terms_trail)),
-
-	_const_tuple: $ => seq(
-	    alias($._const_terms_trail_par, $.terms),
-	    ")"
-	),
+	_const_tuple: $ => seq("(", $._const_tuple_item, ")"),
 
 	// based off of clingox.ast operator prec and assoc. values
         binary_operation: $ => choice(
@@ -242,7 +242,6 @@ module.exports = grammar({
 	    $._term,
 	    alias(seq($._term, ","), $.terms),
 	    alias($._terms_trail, $.terms),
-
 	),
 
 	tuple: $ => seq(
@@ -274,31 +273,22 @@ module.exports = grammar({
             "not"
         ),
         theory_operators: $ => repeat1($.theory_operator),
-
-	// we put in some extra and somewhat unnecessary work to make
-	// the arguments of theory function/tuple be parsed in way
-	// consistent wit regular symbolic atoms/function/tuple
-	// arguments, though in the case of theory function/tuple we
-	// have no pools.
 	
-        _theory_terms: $ => seq($._theory_term, repeat(seq(",", $._theory_term))),
+        theory_terms: $ => seq($._theory_term, repeat(seq(",", $._theory_term))),
 
-	theory_terms: $ => $._theory_terms,
-
-	theory_arguments_par: $ => seq("(", optional($._theory_terms)),
-
-	_theory_arguments: $ => seq(
-	    alias($.theory_arguments_par, $.theory_terms),
-	    ")"
+	_theory_arguments_item : $ => choice(
+	    alias($._empty_terms, $.theory_terms),
+	    $.theory_terms
 	),
+
+	_theory_arguments : $ => seq("(", $._theory_arguments_item ,")"),
 
         theory_function: $ => seq(
 	    field("name", $.identifier),
-	    field("arguments", optional($._theory_arguments))
+	    field("arguments", optional($._theory_arguments)),
 	),
 
         _theory_terms_trail: $ => choice(
-
 	    seq(
 		$._theory_term,
 		repeat(seq(",", $._theory_term)),
@@ -307,25 +297,23 @@ module.exports = grammar({
 	    ",",
 	),
 
-	theory_terms_trail_par: $ => seq("(", optional($._theory_terms_trail)),
-
-        theory_tuple: $ => seq(
-	    alias($.theory_terms_trail_par, $.theory_terms),
-	    ")"
+	_theory_tuple_item : $ => choice(
+	    alias($._empty_terms, $.theory_terms),
+	    alias($._theory_terms_trail, $.theory_terms)
 	),
-	
-        theory_list: $ => seq("[", optional($.theory_terms), "]"),
-	
-        theory_set: $ => seq("{", optional($.theory_terms), "}"),
 
-        theory_unparsed_term: $ => choice(
-            repeat1(seq($.theory_operators, $._theory_root_term)),
-            seq($._theory_root_term,
-		repeat1(seq(
-		    $.theory_operators,
-		    $._theory_root_term
-		))
-	       ),
+        theory_tuple: $ => seq("(", $._theory_tuple_item, ")"),
+	
+        theory_list: $ => seq("[", $._theory_arguments_item, "]"),
+	
+        theory_set: $ => seq("{", $._theory_arguments_item, "}"),
+
+	theory_unparsed_term: $ => seq(
+            optional($._theory_root_term),
+	    repeat1(seq(
+		$.theory_operators,
+		$._theory_root_term
+	    ))
         ),
 
         _theory_term: $ => choice(
