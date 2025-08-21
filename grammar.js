@@ -17,6 +17,8 @@ module.exports = grammar({
     
     extras: $ => [$.line_comment, $.block_comment, /\s/],
 
+    externals: $ => [$._empty_terms],
+
     // Note that the ambiguity between signature and term in show statements
     // does not necessarily have to be resolved in the grammar. It could also
     // be left to the user of the parser. Then, we could simply delete the
@@ -203,12 +205,15 @@ module.exports = grammar({
 
 	terms: $ => $._terms,
 
-	_arguments_par: $ => seq("(", optional($._terms)),
-	_arguments_sem: $ => seq(";", optional($._terms)),
+	_argument_pool_item: $ => choice(
+	    alias($._empty_terms, $.terms),
+	    $.terms
+	),
 
 	_arguments: $ => seq(
-	    alias($._arguments_par, $.terms),
-	    repeat(alias($._arguments_sem, $.terms)),
+	    "(",
+	    $._argument_pool_item,
+	    repeat(seq(";", $._argument_pool_item)),
 	    ")"
 	),
 
@@ -224,22 +229,26 @@ module.exports = grammar({
             field("name", $.identifier),
             field('arguments', optional($._arguments)),
         ),
+	
+	_terms_trail: $ => seq(
+            $._term,
+            repeat1(seq(",", $._term)),
+            optional(",")
+        ),
 
-        _terms_trail: $ => choice(
-	    seq(
-		$._term,
-		repeat(seq(",", $._term)),
-		optional(",")
-            ),
-	    ","
+	_tuple_pool_item: $ => choice(
+	    alias($._empty_terms, $.terms),
+	    alias(",", $.terms),
+	    $._term,
+	    alias(seq($._term, ","), $.terms),
+	    alias($._terms_trail, $.terms),
+
 	),
 
-        _terms_trail_par: $ => seq("(", optional($._terms_trail)),
-        _terms_trail_sem: $ => seq(";", optional($._terms_trail)),
-
-        tuple: $ => seq(
-            alias($._terms_trail_par, $.terms),
-            repeat(alias($._terms_trail_sem, $.terms)),
+	tuple: $ => seq(
+	    "(",
+            $._tuple_pool_item,
+	    repeat(seq(";", $._tuple_pool_item)),
             ")"
         ),
 

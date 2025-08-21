@@ -201,12 +201,12 @@ p((),(;a;a,;;a,b;a,b,),(,),(c;,)).
             (terms))
           (tuple
             (terms)
+            (function
+              name: (identifier))
             (terms
               (function
                 name: (identifier)))
-            (terms
-              (function
-                name: (identifier)))
+            (terms)
             (terms)
             (terms
               (function
@@ -221,9 +221,8 @@ p((),(;a;a,;;a,b;a,b,),(,),(c;,)).
           (tuple
             (terms))
           (tuple
-            (terms
-              (function
-                name: (identifier)))
+            (function
+              name: (identifier))
             (terms)))))))
 
 ==================
