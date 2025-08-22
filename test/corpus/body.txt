@@ -5,6 +5,7 @@ symbolic literals
 :- p(X), not p(X), not not p(X), -p(X), not -p(X), not not -p(X).
 
 ---
+
 (source_file
   (integrity_constraint
     body: (body
@@ -80,7 +81,7 @@ comparisions
 conditional literals
 ==================
 
-:- a, not b: p, c; p(X):; not not X < Y < Z: p(X).
+:- a, not b: p, c; p(X):; not not X < Y < Z: p(X); d:.
 
 ---
 
@@ -91,11 +92,11 @@ conditional literals
         atom: (symbolic_atom
           name: (identifier)))
       (conditional_literal
-        (literal
+        literal: (literal
           sign: (default_negation)
           atom: (symbolic_atom
             name: (identifier)))
-        (literals
+        condition: (condition
           (literal
             atom: (symbolic_atom
               name: (identifier)))
@@ -103,13 +104,13 @@ conditional literals
             atom: (symbolic_atom
               name: (identifier)))))
       (conditional_literal
-        (literal
+        literal: (literal
           atom: (symbolic_atom
             name: (identifier)
             arguments: (terms
               (variable)))))
       (conditional_literal
-        (literal
+        literal: (literal
           sign: (double_default_negation)
           atom: (comparison
             (variable)
@@ -117,12 +118,16 @@ conditional literals
             (variable)
             (relation)
             (variable)))
-        (literals
+        condition: (condition
           (literal
             atom: (symbolic_atom
               name: (identifier)
               arguments: (terms
-                (variable)))))))))
+                (variable))))))
+      (conditional_literal
+        literal: (literal
+          atom: (symbolic_atom
+            name: (identifier)))))))
 
 ==================
 body set aggregates
@@ -153,7 +158,7 @@ body set aggregates
               literal: (literal
                 atom: (symbolic_atom
                   name: (identifier)))
-              condition: (literals
+              condition: (condition
                 (literal
                   atom: (symbolic_atom
                     name: (identifier)))))
@@ -161,7 +166,7 @@ body set aggregates
               literal: (literal
                 atom: (symbolic_atom
                   name: (identifier)))
-              condition: (literals
+              condition: (condition
                 (literal
                   atom: (symbolic_atom
                     name: (identifier)))
@@ -192,7 +197,7 @@ body aggregates
           elements: (body_aggregate_elements
             (body_aggregate_element)
             (body_aggregate_element
-              condition: (literals
+              condition: (condition
                 (literal
                   atom: (symbolic_atom
                     name: (identifier)))))
@@ -208,7 +213,7 @@ body aggregates
               terms: (terms
                 (function
                   name: (identifier)))
-              condition: (literals
+              condition: (condition
                 (literal
                   atom: (symbolic_atom
                     name: (identifier)))

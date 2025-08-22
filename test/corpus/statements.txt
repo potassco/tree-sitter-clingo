@@ -97,14 +97,14 @@ minimize
         weight: (weight
           term: (number)
           priority: (number))
-        condition: (literals
+        condition: (condition
           (literal
             atom: (symbolic_atom
               name: (identifier)))))
       (optimize_element
         weight: (weight
           term: (number))
-        condition: (literals
+        condition: (condition
           (literal
             atom: (symbolic_atom
               name: (identifier)))))
@@ -113,7 +113,7 @@ minimize
           term: (number))
         terms: (terms
           (number))
-        condition: (literals
+        condition: (condition
           (literal
             atom: (symbolic_atom
               name: (identifier)))
@@ -172,8 +172,7 @@ show
     body: (body
       (body_literal
         atom: (symbolic_atom
-          name: (identifier)
-          arguments: (terms)))
+          name: (identifier)))
       (body_literal
         atom: (symbolic_atom
           name: (identifier)
@@ -258,15 +257,13 @@ const
   (const
     name: (identifier)
     value: (function
-      name: (identifier)
-      arguments: (terms)))
+      name: (identifier)))
   (const
     name: (identifier)
     value: (function
       name: (identifier)
       arguments: (terms
-        (tuple
-          (terms))
+        (tuple)
         (abs
           (function
             name: (identifier))))))
@@ -434,8 +431,7 @@ heuristic
 (source_file
   (heuristic
     atom: (symbolic_atom
-      name: (identifier)
-      arguments: (terms))
+      name: (identifier))
     weight: (weight
       term: (function
         name: (identifier)))
@@ -444,8 +440,7 @@ heuristic
   (heuristic
     atom: (symbolic_atom
       sign: (classical_negation)
-      name: (identifier)
-      arguments: (terms))
+      name: (identifier))
     weight: (weight
       term: (function
         name: (identifier))

@@ -426,7 +426,7 @@
             "named": false
           },
           {
-            "type": "literals",
+            "type": "condition",
             "named": true
           }
         ]
@@ -516,7 +516,7 @@
     }
   },
   {
-    "type": "conditional_literal",
+    "type": "condition",
     "named": true,
     "fields": {},
     "children": {
@@ -526,12 +526,34 @@
         {
           "type": "literal",
           "named": true
-        },
-        {
-          "type": "literals",
-          "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "conditional_literal",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "condition",
+            "named": true
+          }
+        ]
+      },
+      "literal": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "literal",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -609,11 +631,6 @@
         ]
       }
     }
-  },
-  {
-    "type": "default_negation",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "defined",
@@ -752,6 +769,10 @@
             "named": false
           },
           {
+            "type": "()",
+            "named": false
+          },
+          {
             "type": ")",
             "named": false
           },
@@ -787,6 +808,10 @@
         "types": [
           {
             "type": "(",
+            "named": false
+          },
+          {
+            "type": "()",
             "named": false
           },
           {
@@ -882,7 +907,7 @@
             "named": false
           },
           {
-            "type": "literals",
+            "type": "condition",
             "named": true
           }
         ]
@@ -1047,21 +1072,6 @@
     }
   },
   {
-    "type": "literals",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "literal",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "lower",
     "named": true,
     "fields": {},
@@ -1141,7 +1151,7 @@
             "named": false
           },
           {
-            "type": "literals",
+            "type": "condition",
             "named": true
           }
         ]
@@ -1372,7 +1382,7 @@
             "named": false
           },
           {
-            "type": "literals",
+            "type": "condition",
             "named": true
           }
         ]
@@ -1535,6 +1545,10 @@
             "named": false
           },
           {
+            "type": "()",
+            "named": false
+          },
+          {
             "type": ")",
             "named": false
           },
@@ -1625,6 +1639,10 @@
         "types": [
           {
             "type": "(",
+            "named": false
+          },
+          {
+            "type": "()",
             "named": false
           },
           {
@@ -1787,7 +1805,7 @@
             "named": false
           },
           {
-            "type": "literals",
+            "type": "condition",
             "named": true
           }
         ]
@@ -1802,16 +1820,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "literals",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -1869,7 +1877,7 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "theory_terms",
@@ -1877,11 +1885,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "theory_operator",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "theory_operator_arity",
@@ -1970,7 +1973,7 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "theory_terms",
@@ -2034,7 +2037,7 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "theory_terms",
@@ -2068,7 +2071,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "_term",
@@ -2277,6 +2280,10 @@
     "named": false
   },
   {
+    "type": "()",
+    "named": false
+  },
+  {
     "type": ")",
     "named": false
   },
@@ -2398,6 +2405,10 @@
     "named": true
   },
   {
+    "type": "default_negation",
+    "named": true
+  },
+  {
     "type": "double_default_negation",
     "named": true
   },
@@ -2419,10 +2430,6 @@
     "extra": true
   },
   {
-    "type": "not",
-    "named": false
-  },
-  {
     "type": "number",
     "named": true
   },
@@ -2440,6 +2447,10 @@
   },
   {
     "type": "theory_atom_type",
+    "named": true
+  },
+  {
+    "type": "theory_operator",
     "named": true
   },
   {

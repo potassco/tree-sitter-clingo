@@ -50,7 +50,7 @@ theory elements
 1:17 - 1:18             theory_terms: theory_terms
 1:17 - 1:18               number `1`
 1:18 - 1:19             ":"
-1:19 - 1:22             condition: literals
+1:19 - 1:22             condition: condition
 1:19 - 1:20               literal
 1:19 - 1:20                 atom: symbolic_atom
 1:19 - 1:20                   name: identifier `a`
@@ -65,7 +65,7 @@ theory elements
 1:25 - 1:26               ","
 1:26 - 1:27               number `2`
 1:27 - 1:28             ":"
-1:28 - 1:29             condition: literals
+1:28 - 1:29             condition: condition
 1:28 - 1:29               literal
 1:28 - 1:29                 atom: symbolic_atom
 1:28 - 1:29                   name: identifier `a`
@@ -92,7 +92,6 @@ theory tuple
 1:5  - 1:7              theory_terms: theory_terms
 1:5  - 1:7                theory_tuple
 1:5  - 1:6                  "("
-1:6  - 1:6                  theory_terms 
 1:6  - 1:7                  ")"
 1:7  - 1:8            ";"
 1:9  - 1:12           theory_element
@@ -163,7 +162,6 @@ theory list
 1:5  - 1:7              theory_terms: theory_terms
 1:5  - 1:7                theory_list
 1:5  - 1:6                  "["
-1:6  - 1:6                  theory_terms 
 1:6  - 1:7                  "]"
 1:7  - 1:8            ";"
 1:9  - 1:12           theory_element
@@ -206,7 +204,6 @@ theory set
 1:5  - 1:7              theory_terms: theory_terms
 1:5  - 1:7                theory_set
 1:5  - 1:6                  "{"
-1:6  - 1:6                  theory_terms 
 1:6  - 1:7                  "}"
 1:7  - 1:8            ";"
 1:9  - 1:12           theory_element
@@ -253,7 +250,6 @@ theory function
 1:8  - 1:11               theory_function
 1:8  - 1:9                  name: identifier `f`
 1:9  - 1:10                 "("
-1:10 - 1:10                 arguments: theory_terms 
 1:10 - 1:11                 ")"
 1:11 - 1:12               ","
 1:13 - 1:17               theory_function

@@ -38,7 +38,7 @@ theory elements
         (theory_element
           theory_terms: (theory_terms
             (number))
-          condition: (literals
+          condition: (condition
             (literal
               atom: (symbolic_atom
                 name: (identifier)))
@@ -49,7 +49,7 @@ theory elements
           theory_terms: (theory_terms
             (number)
             (number))
-          condition: (literals
+          condition: (condition
             (literal
               atom: (symbolic_atom
                 name: (identifier)))))))))
@@ -69,8 +69,7 @@ theory tuple
       elements: (theory_elements
         (theory_element
           theory_terms: (theory_terms
-	    (theory_tuple
-	      (theory_terms))))
+            (theory_tuple)))
         (theory_element
           theory_terms: (theory_terms
             (theory_tuple
@@ -113,8 +112,7 @@ theory list
       elements: (theory_elements
         (theory_element
           theory_terms: (theory_terms
-            (theory_list
-	      (theory_terms))))
+            (theory_list)))
         (theory_element
           theory_terms: (theory_terms
             (theory_list
@@ -142,8 +140,7 @@ theory set
       elements: (theory_elements
         (theory_element
           theory_terms: (theory_terms
-            (theory_set
-	      (theory_terms))))
+            (theory_set)))
         (theory_element
           theory_terms: (theory_terms
             (theory_set
@@ -174,8 +171,7 @@ theory function
             (theory_function
               name: (identifier))
             (theory_function
-              name: (identifier)
-	      arguments: (theory_terms))
+              name: (identifier))
             (theory_function
               name: (identifier)
               arguments: (theory_terms
@@ -308,3 +304,96 @@ theory definition
         (theory_operator))
       guard: (identifier)
       type: (theory_atom_type))))
+
+==================
+theory definition operator error period
+:error
+==================
+
+#theory lp { 
+    lin_term {
+    . : 0, binary, left
+    }
+}.
+
+---
+
+
+
+==================
+theory definition operator error colon
+:error
+==================
+
+#theory lp { 
+    lin_term {
+    : : 0, unary
+    }
+}.
+
+---
+
+
+
+==================
+theory definition operator error semicolon
+:error
+==================
+
+#theory lp { 
+    lin_term {
+    ; : 0, unary
+    }
+}.
+
+---
+
+
+
+==================
+theory definition operator error arrow
+:error
+==================
+
+#theory lp { 
+    lin_term {
+    :- : 0, unary
+    }
+}.
+
+---
+
+
+
+==================
+theory definition operator combined
+==================
+
+#theory lp { 
+    lin_term {
+    .. : 0, unary;
+    :; : 0, unary;
+    ::- : 0, unary
+    }
+}.
+
+---
+
+(source_file
+  (theory
+    name: (identifier)
+    (theory_term_definition
+      name: (identifier)
+      operators: (theory_operator_definitions
+        (theory_operator_definition
+          operator: (theory_operator)
+          priority: (number)
+          arity: (theory_operator_arity))
+        (theory_operator_definition
+          operator: (theory_operator)
+          priority: (number)
+          arity: (theory_operator_arity))
+        (theory_operator_definition
+          operator: (theory_operator)
+          priority: (number)
+          arity: (theory_operator_arity))))))

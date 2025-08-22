@@ -62,10 +62,10 @@ p; p: q, c; d: ; |X| < 10.
         atom: (symbolic_atom
           name: (identifier)))
       (conditional_literal
-        (literal
+        literal: (literal
           atom: (symbolic_atom
             name: (identifier)))
-        (literals
+        condition: (condition
           (literal
             atom: (symbolic_atom
               name: (identifier)))
@@ -73,7 +73,7 @@ p; p: q, c; d: ; |X| < 10.
             atom: (symbolic_atom
               name: (identifier)))))
       (conditional_literal
-        (literal
+        literal: (literal
           atom: (symbolic_atom
             name: (identifier))))
       (literal
@@ -106,7 +106,7 @@ head set aggregate
           literal: (literal
             atom: (symbolic_atom
               name: (identifier)))
-          condition: (literals
+          condition: (condition
             (literal
               atom: (symbolic_atom
                 name: (identifier)))
@@ -143,7 +143,7 @@ head aggregate
           literal: (literal
             atom: (symbolic_atom
               name: (identifier)))
-          condition: (literals
+          condition: (condition
             (literal
               atom: (symbolic_atom
                 name: (identifier)))

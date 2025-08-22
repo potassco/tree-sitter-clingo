@@ -6,8 +6,7 @@ bool tree_sitter_clingo_external_scanner_scan(void *payload, TSLexer *lexer,
                                              const bool *valid_symbols) {
   if (valid_symbols[_EMPTY_TERMS]) {
 	lexer->mark_end(lexer);
-        if (lexer->lookahead == ';' || lexer->lookahead == ')' ||
-	    lexer->lookahead == ']' || lexer->lookahead == '}') {
+        if (lexer->lookahead == ';' || lexer->lookahead == ')') {
 	    lexer->result_symbol = _EMPTY_TERMS;
 	    return true;
 	} else {

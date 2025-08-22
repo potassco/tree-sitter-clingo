@@ -1,55 +1,125 @@
-; comments
+;; comments
 (line_comment) @comment
 (block_comment) @comment
 
-; identifiers
-(identifier) @identifier
-
-; constants
+;; constants
 (number) @number
 (string) @string
-(supremum) @constant
-(infimum) @constant
+(const
+ name: (identifier) @constant)
+(function
+ name: (identifier) @constant
+ !arguments)
+(program
+ identifiers: (identifiers (identifier) @constant))
 
-; terms
-(variable) @parameter
-(anonymous) @parameter
+(supremum) @constant.builtin
+(infimum) @constant.builtin
 
-; meta directives
-["#include"] @include
-["#const"] @define
-["#defined" ] @preproc
-["#theory" ] @preproc
-(show "#show" @preproc)
-(show_signature "#show" @preproc)
-(project_signature "#project" @preproc)
-["#script" "#end"] @preproc
+(function
+ name: (identifier) @function
+ arguments: (_))
+(external_function "@" @function (identifier) @function)
+(theory_function (identifier) @function)
 
-; delimiters
+(variable) @variable
+(anonymous) @variable.builtin
+
+;; delimiters
 [":-" ":~" ";" "," "." "@" ":"] @delimiter
+(disjunction
+ "|" @delimiter)
+(signature
+ "/" @delimiter)
 
-; punctuation
-["(" ")" "{" "}" "[" "}"] @punctuation.bracket
+;; punctuation
+["(" ")" "{" "}" "[" "]"] @punctuation.bracket
 
-; operators
-(relation) @operator
-["+" "/" "-" "*" "\\" "**" ".." "?" "~" "&" "not" "=" (operator)] @operator
+;; operators
+[
+ ".."
+ "^"
+ "?"
+ "&"
+ "+"
+ "-"
+ "*"
+ "/"
+ "\\"
+ "**"
+ "|"
+ "~"
+ (theory_operator)
+ (relation)
+ (default_negation)
+ (double_default_negation)
+ (classical_negation)
+ ] @operator
 
-; atoms and some terms
-(symbolic_atom (identifier) @function)
-(symbolic_atom (negative_identifier) @function)
-(function (identifier) @constant) 
-(external_function ["@"] @function.builtin (identifier) @function.builtin)
+;; atoms
+(symbolic_atom (identifier) @constructor)
+(signature
+ name: (identifier) @constructor)
 
-; keywords
-(aggregate_function) @keyword
+;; keywords
 (theory_atom_definition
-    ["&"]@keyword
-    name: (_)@keyword)
+    "&" @keyword
+    name: (identifier) @keyword)
 (theory_atom
-    ["&"]@keyword
-    (theory_atom_name)@keyword)
-["#true" "#false" "#external" "#minimize" "#minimise" "#maximize" "#maximise" "#edge" "#heuristic"] @keyword
-(show_term "#show" @keyword)
-(project_atom "#project" @keyword)
+    "&" @keyword
+    (identifier) @keyword)
+(script
+ language: (identifier) @keyword)
+[
+ "#external"
+ "#minimize"
+ "#minimise"
+ "#maximize"
+ "#maximise"
+ "#edge"
+ "#heuristic"
+ "#script"
+ "#end"
+ "#show"
+ "#project"
+ "#theory"
+ "#defined"
+ "#const"
+ "#include"
+ (aggregate_function)
+ "#true"
+ "#false"
+ ] @keyword
+
+;; type
+(theory_atom_definition
+ theory_term_name: (identifier) @type
+ guard: (identifier) @type)
+
+(theory_term_definition
+ name: (identifier) @type)
+
+(heuristic
+ type: (_) @type)
+
+(external
+ type: (_) @type)
+
+[
+ (theory_atom_type)
+ (const_type)
+ (theory_operator_arity)
+ (theory_operator_associativity)
+] @type.builtin
+
+
+;; module
+(include
+ (identifier) @module)
+(program
+ name: (identifier) @module)
+
+;; embedded
+(script
+ code: (code) @embedded)
 

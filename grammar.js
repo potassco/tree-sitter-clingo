@@ -140,13 +140,8 @@ module.exports = grammar({
             $._const_term,
             repeat(seq(",", $._const_term))
 	),
-
-	_const_arguments_item: $ => choice(
-	    alias($._empty_terms, $.terms),
-	    alias($._const_terms, $.terms),
-	),
 	
-        _const_arguments: $ => seq("(", $._const_arguments_item, ")"),
+        _const_arguments: $ => seq("(", optional(alias($._const_terms, $.terms)), ")"),
 
         _const_function: $ => seq(
             field("name", $.identifier),
@@ -160,15 +155,13 @@ module.exports = grammar({
         ),
 
 	_const_tuple_item: $ => choice(
-	    alias($._empty_terms, $.terms),
 	    alias(",", $.terms),
 	    $._const_term,
 	    alias(seq($._const_term, ","), $.terms),
 	    alias($._const_terms_trail, $.terms),
 	),
 
-	_const_tuple: $ => seq("(", $._const_tuple_item, ")"),
-
+	_const_tuple: $ => seq("(", optional($._const_tuple_item), ")"),
 	// based off of clingox.ast operator prec and assoc. values
         binary_operation: $ => choice(
 	    binary_expression(0, $._term, "..", $._term),
@@ -210,11 +203,14 @@ module.exports = grammar({
 	    $.terms
 	),
 
-	_arguments: $ => seq(
-	    "(",
-	    $._argument_pool_item,
-	    repeat(seq(";", $._argument_pool_item)),
-	    ")"
+	_arguments: $ => choice(
+	    "()",
+	    seq(
+		"(",
+		$._argument_pool_item,
+		repeat(seq(";", $._argument_pool_item)),
+		")"
+	    ),
 	),
 
         _function: $ => seq(
@@ -244,12 +240,15 @@ module.exports = grammar({
 	    alias($._terms_trail, $.terms),
 	),
 
-	tuple: $ => seq(
-	    "(",
-            $._tuple_pool_item,
-	    repeat(seq(";", $._tuple_pool_item)),
-            ")"
-        ),
+	tuple: $ => choice(
+	    "()",
+	    seq(
+		"(",
+		$._tuple_pool_item,
+		repeat(seq(";", $._tuple_pool_item)),
+		")"
+            ),
+	),
 
         _term: $ => choice(
             $.infimum,
@@ -267,21 +266,21 @@ module.exports = grammar({
         ),
 
         // theory terms
+        theory_operator: $ => token(choice(
+	    "not",
+	    // the general pattern would be [/!<=>+\-*\\?&@|:;~\^\.]+,
+	    // but we have to exclude the operators . : ; :-
+	    /[/!<=>+\-*\\?&@|~\^]/,
+	    /[/!<=>+\-*\\?&@|;~\^\.][/!<=>+\-*\\?&@|:;~\^\.]+/,
+	    /:[/!<=>+*\\?&@|:;~\^\.]/,
+	    /:[/!<=>+\-*\\?&@|:;~\^\.]{2,}/,
+	)),
 
-        theory_operator: $ => choice(
-            /[/!<=>+\-*\\?&@|:;~\^\.]+/,
-            "not"
-        ),
         theory_operators: $ => repeat1($.theory_operator),
 	
         theory_terms: $ => seq($._theory_term, repeat(seq(",", $._theory_term))),
 
-	_theory_arguments_item : $ => choice(
-	    alias($._empty_terms, $.theory_terms),
-	    $.theory_terms
-	),
-
-	_theory_arguments : $ => seq("(", $._theory_arguments_item ,")"),
+	_theory_arguments : $ => seq("(", optional($.theory_terms) ,")"),
 
         theory_function: $ => seq(
 	    field("name", $.identifier),
@@ -296,17 +295,16 @@ module.exports = grammar({
 	    ),
 	    ",",
 	),
-
-	_theory_tuple_item : $ => choice(
-	    alias($._empty_terms, $.theory_terms),
-	    alias($._theory_terms_trail, $.theory_terms)
+	
+        theory_tuple: $ => seq(
+	    "(",
+	    optional(alias($._theory_terms_trail, $.theory_terms)),
+	    ")"
 	),
-
-        theory_tuple: $ => seq("(", $._theory_tuple_item, ")"),
 	
-        theory_list: $ => seq("[", $._theory_arguments_item, "]"),
+        theory_list: $ => seq("[", optional($.theory_terms), "]"),
 	
-        theory_set: $ => seq("{", $._theory_arguments_item, "}"),
+        theory_set: $ => seq("{", optional($.theory_terms), "}"),
 
 	theory_unparsed_term: $ => seq(
             optional($._theory_root_term),
@@ -377,9 +375,9 @@ module.exports = grammar({
 
         // aggregates
 
-        literals: $ => seq($.literal, repeat(seq(",", $.literal))),
+        condition: $ => seq($.literal, repeat(seq(",", $.literal))),
 
-        _condition: $ => seq(":", optional($.literals)),
+        _condition: $ => seq(":", field("condition", optional($.condition))),
 
         aggregate_function: $ => token(choice(
             "#sum",
@@ -455,12 +453,12 @@ module.exports = grammar({
 
         _body_literal_sep: $ => choice(
             seq($.body_literal, choice(";", ",")),
-            seq($.conditional_literal, ";"),
+            seq($._conditional_literal, ";"),
         ),
 
         body: $ => seq(
 	    repeat($._body_literal_sep), 
-	    choice($.body_literal, $.conditional_literal)
+	    choice($.body_literal, $._conditional_literal)
 	),
 	
 	_colon_body: $ => seq(
@@ -489,11 +487,21 @@ module.exports = grammar({
 	    field("right", optional($.upper))
 	),
 
-        conditional_literal: $ => seq($.literal, $._condition),
+        _conditional_literal_n: $ => seq(
+	    field("literal", $.literal),
+	    ":",
+	    field("condition", $.condition)
+	),
 
-        _conditional_literal_n: $ => seq($.literal, ":", $.literals),
+        _conditional_literal_0: $ => seq(
+	    field("literal", $.literal),
+	    ":"
+	),
 
-        _conditional_literal_0: $ => seq($.literal, ":"),
+	_conditional_literal: $ => choice(
+	    alias($._conditional_literal_n, $.conditional_literal),
+	    alias($._conditional_literal_0, $.conditional_literal)
+	),
 
         _disjunction_element_sep: $ => choice(
             seq($.literal, choice(",", ";", "|")),
@@ -504,8 +512,8 @@ module.exports = grammar({
 
         disjunction: $ => choice(
             seq(repeat1($._disjunction_element_sep), 
-		choice($.literal, $.conditional_literal)),
-            $.conditional_literal,
+		choice($.literal, $._conditional_literal)),
+            $._conditional_literal,
         ),
 
         _head: $ => choice(

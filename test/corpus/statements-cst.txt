@@ -129,7 +129,7 @@ minimize
 1:12 - 1:13             "@"
 1:13 - 1:14             priority: number `3`
 1:14 - 1:15           ":"
-1:16 - 1:17           condition: literals
+1:16 - 1:17           condition: condition
 1:16 - 1:17             literal
 1:16 - 1:17               atom: symbolic_atom
 1:16 - 1:17                 name: identifier `a`
@@ -138,7 +138,7 @@ minimize
 1:19 - 1:20           weight: weight
 1:19 - 1:20             term: number `1`
 1:20 - 1:21           ":"
-1:22 - 1:23           condition: literals
+1:22 - 1:23           condition: condition
 1:22 - 1:23             literal
 1:22 - 1:23               atom: symbolic_atom
 1:22 - 1:23                 name: identifier `b`
@@ -150,7 +150,7 @@ minimize
 1:27 - 1:28           terms: terms
 1:27 - 1:28             number `3`
 1:28 - 1:29           ":"
-1:30 - 1:33           condition: literals
+1:30 - 1:33           condition: condition
 1:30 - 1:31             literal
 1:30 - 1:31               atom: symbolic_atom
 1:30 - 1:31                 name: identifier `b`
@@ -236,9 +236,7 @@ show
 5:14 - 5:17         body_literal
 5:14 - 5:17           atom: symbolic_atom
 5:14 - 5:15             name: identifier `q`
-5:15 - 5:16             "("
-5:16 - 5:16             arguments: terms 
-5:16 - 5:17             ")"
+5:15 - 5:17             "()"
 5:17 - 5:18         ","
 5:19 - 5:23         body_literal
 5:19 - 5:23           atom: symbolic_atom
@@ -263,6 +261,7 @@ defined
 #defined -a/2.
 
 ---
+
 1:0  - 3:0    source_file
 1:0  - 1:13     defined
 1:0  - 1:8        "#defined"
@@ -343,6 +342,7 @@ const
 #const x = 2. [override]
 
 ---
+
 1:0  - 6:0    source_file
 1:0  - 1:13     const
 1:0  - 1:6        "#const"
@@ -357,7 +357,6 @@ const
 2:11 - 2:14       value: function
 2:11 - 2:12         name: identifier `f`
 2:12 - 2:13         "("
-2:13 - 2:13         arguments: terms 
 2:13 - 2:14         ")"
 2:14 - 2:15       "."
 3:0  - 3:22     const
@@ -370,7 +369,6 @@ const
 3:13 - 3:20         arguments: terms
 3:13 - 3:15           tuple
 3:13 - 3:14             "("
-3:14 - 3:14             terms 
 3:14 - 3:15             ")"
 3:15 - 3:16           ","
 3:17 - 3:20           abs
@@ -630,9 +628,7 @@ heuristic
 1:0  - 1:10       "#heuristic"
 1:11 - 1:14       atom: symbolic_atom
 1:11 - 1:12         name: identifier `a`
-1:12 - 1:13         "("
-1:13 - 1:13         arguments: terms 
-1:13 - 1:14         ")"
+1:12 - 1:14         "()"
 1:14 - 1:15       "."
 1:16 - 1:17       "["
 1:17 - 1:21       weight: weight
@@ -647,9 +643,7 @@ heuristic
 2:11 - 2:15       atom: symbolic_atom
 2:11 - 2:12         sign: classical_negation `-`
 2:12 - 2:13         name: identifier `a`
-2:13 - 2:14         "("
-2:14 - 2:14         arguments: terms 
-2:14 - 2:15         ")"
+2:13 - 2:15         "()"
 2:15 - 2:16       "."
 2:17 - 2:18       "["
 2:18 - 2:25       weight: weight
