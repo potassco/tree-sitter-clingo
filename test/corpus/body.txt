@@ -48,7 +48,7 @@ symbolic literals
             (variable)))))))
 
 ==================
-comparisions
+comparisons
 ==================
 
 :- X < Y < Z, -p(X) < X < Y.

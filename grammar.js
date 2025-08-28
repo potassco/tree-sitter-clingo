@@ -19,11 +19,39 @@ module.exports = grammar({
 
     externals: $ => [$._empty_terms],
 
-    // Note that the ambiguity between signature and term in show statements
+    // Note that the conflict below between signature and function in show statements
     // does not necessarily have to be resolved in the grammar. It could also
     // be left to the user of the parser. Then, we could simply delete the
-    // "show signature" part of the statement production.
-    conflicts: $ => [[$.signature, $._function]],
+    // "show signature" part of the statement production, along with this conflict.
+    conflicts: $ => [
+	[$.signature, $.function]
+    ],
+
+    inline: $ => [
+	$.atom_identifier,
+	$._argument_pool_item,
+	$._tuple_pool_item,
+	$._const_tuple_item,
+	$._simple_atom,
+	$._literal_sign,
+	$._condition,
+	$._body_literal_sep,
+	$._colon_body,
+	$._disjunction_element_sep,
+	$._optimize_tuple,
+	$._theory_definitions,
+	// these rules  should be inlined as well, but
+	// cannot be due to bug:
+	// https://github.com/tree-sitter/tree-sitter/issues/2299
+	//
+	// $._const_term_comma
+	// $._const_terms_trail,
+	// $._term_comma
+	// $._terms_trail,
+	// $._theory_terms_trail,
+	// $._theory_operators_sep,
+
+    ],
 
     supertypes: $ => [$._statement, $._term, $._theory_root_term,
 		      $._simple_atom, $._head, $._literal_sign, $._theory_term],
@@ -148,6 +176,8 @@ module.exports = grammar({
             field('arguments', optional($._const_arguments))
 	),
 
+	_const_term_comma: $ => seq($._const_term, ","),
+
 	_const_terms_trail: $ => seq(
             $._const_term,
             repeat1(seq(",", $._const_term)),
@@ -157,7 +187,7 @@ module.exports = grammar({
 	_const_tuple_item: $ => choice(
 	    alias(",", $.terms),
 	    $._const_term,
-	    alias(seq($._const_term, ","), $.terms),
+	    alias($._const_term_comma, $.terms),
 	    alias($._const_terms_trail, $.terms),
 	),
 
@@ -191,12 +221,10 @@ module.exports = grammar({
             "|"
         ),
 	
-        _terms: $ => seq(
+        terms: $ => seq(
             $._term,
             repeat(seq(",", $._term))
         ),
-
-	terms: $ => $._terms,
 
 	_argument_pool_item: $ => choice(
 	    alias($._empty_terms, $.terms),
@@ -213,18 +241,18 @@ module.exports = grammar({
 	    ),
 	),
 
-        _function: $ => seq(
+        function: $ => seq(
             field("name", $.identifier),
             field('arguments', optional($._arguments)),
         ),
-
-	function: $ => $._function,
 	
         external_function: $ => seq(
             "@",
             field("name", $.identifier),
             field('arguments', optional($._arguments)),
         ),
+
+	_term_comma: $ => seq($._term, ","),
 	
 	_terms_trail: $ => seq(
             $._term,
@@ -236,7 +264,7 @@ module.exports = grammar({
 	    alias($._empty_terms, $.terms),
 	    alias(",", $.terms),
 	    $._term,
-	    alias(seq($._term, ","), $.terms),
+	    alias($._term_comma, $.terms),
 	    alias($._terms_trail, $.terms),
 	),
 
@@ -335,16 +363,25 @@ module.exports = grammar({
         // Literals
 
         boolean_constant: $ => token(choice("#true", "#false")),
-	
-	_classical_negation_operation: $ => prec.left(
-	    1,
-	    seq(field("sign", alias("-", $.classical_negation)),
-		$._function)
+
+
+	atom_identifier: $ => seq(
+	    field("sign", optional(alias("-", $.classical_negation))),
+	    field("name", $.identifier),	    
 	),
 
-        symbolic_atom: $ => choice(
-	    $._function,
-	    $._classical_negation_operation,
+	// Ideally we'd like to to have a named child node
+	// atom_identifier, as it would make querying the names of atoms
+	// somewhat easier. However, atom_identifier *must* be inlined, as
+	// otherwise we run into conflicts that I could not resolve
+	// with associativity/precedence. In theory we could just inline and
+	// write alias($.atom_identifier, $.atom_identifier), however
+	// this does no work expected due to a bug:
+	// https://github.com/tree-sitter/tree-sitter/issues/2299 
+	// so we leave things as is for now.
+        symbolic_atom: $ => seq(
+	    $.atom_identifier,
+            field('arguments', optional($._arguments)),
 	),
 
         relation: $ => token(choice(">", "<", ">=", "<=", "=", "!=")),
@@ -453,12 +490,12 @@ module.exports = grammar({
 
         _body_literal_sep: $ => choice(
             seq($.body_literal, choice(";", ",")),
-            seq($._conditional_literal, ";"),
+            seq($.conditional_literal, ";"),
         ),
 
         body: $ => seq(
 	    repeat($._body_literal_sep), 
-	    choice($.body_literal, $._conditional_literal)
+	    choice($.body_literal, $.conditional_literal)
 	),
 	
 	_colon_body: $ => seq(
@@ -498,9 +535,9 @@ module.exports = grammar({
 	    ":"
 	),
 
-	_conditional_literal: $ => choice(
-	    alias($._conditional_literal_n, $.conditional_literal),
-	    alias($._conditional_literal_0, $.conditional_literal)
+	conditional_literal: $ => choice(
+	    $._conditional_literal_n,
+	    $._conditional_literal_0,
 	),
 
         _disjunction_element_sep: $ => choice(
@@ -512,8 +549,8 @@ module.exports = grammar({
 
         disjunction: $ => choice(
             seq(repeat1($._disjunction_element_sep), 
-		choice($.literal, $._conditional_literal)),
-            $._conditional_literal,
+		choice($.literal, $.conditional_literal)),
+            $.conditional_literal,
         ),
 
         _head: $ => choice(
@@ -579,20 +616,11 @@ module.exports = grammar({
 	    "."
 	),
 
-	_classical_negated_identifier: $ => prec.left(
-	    1,
-	    seq(field("sign", alias("-", $.classical_negation)),
-		field("name", $.identifier))
-	),
-
-        signature: $ => prec.dynamic(1, seq(
-	    choice(
-		$._classical_negated_identifier,
-		field("name", $.identifier),
-	    ),
+        signature: $ => seq(
+	    $.atom_identifier,
 	    "/",
 	    field("arity",$.number)
-	)),
+	),
 
         show: $ => seq("#show", "."),
 
@@ -618,12 +646,12 @@ module.exports = grammar({
 	    $._colon_body,
 	),
 
-        identifiers: $ => seq($.identifier, repeat(seq(",", $.identifier))),
+        parameters: $ => seq($.identifier, repeat(seq(",", $.identifier))),
 
         program: $ => seq(
 	    "#program", 
 	    field("name", $.identifier),
-	    field("identifiers", optional(seq("(", optional($.identifiers), ")"))),
+	    field("parameters", optional(seq("(", optional($.parameters), ")"))),
 	    "."
 	),
 

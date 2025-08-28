@@ -140,6 +140,7 @@ show
 #show a/2.
 #show -a/2.
 #show a/2+1.
+#show -a/2+1.
 #show -p(X) : q(), c(X).
 #show a.
 
@@ -161,6 +162,14 @@ show
       left: (binary_operation
         left: (function
           name: (identifier))
+        right: (number))
+      right: (number)))
+  (show_term
+    term: (binary_operation
+      left: (binary_operation
+        left: (unary_operation
+          right: (function
+            name: (identifier)))
         right: (number))
       right: (number)))
   (show_term
@@ -327,7 +336,7 @@ program
     name: (identifier))
   (program
     name: (identifier)
-    identifiers: (identifiers
+    parameters: (parameters
       (identifier)
       (identifier))))
 

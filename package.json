@@ -1,8 +1,11 @@
 {
   "name": "tree-sitter-clingo",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Clingo grammar for tree-sitter",
-  "repository": "https://github.com/potassco/tree-sitter-clingo",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/potassco/tree-sitter-clingo.git"
+  },
   "license": "MIT",
   "author": {
     "name": "Roland Kaminski"
@@ -31,7 +34,7 @@
   },
   "devDependencies": {
     "prebuildify": "^6.0.1",
-    "tree-sitter-cli": "^0.25.8"
+    "tree-sitter-cli": "^0.26.0"
   },
   "peerDependencies": {
     "tree-sitter": "^0.22.4"
