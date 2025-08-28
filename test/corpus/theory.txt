@@ -290,7 +290,7 @@ theory definition
       name: (identifier)
       arity: (number)
       theory_term_name: (identifier)
-      type: (theory_atom_type))
+      atom_type: (theory_atom_type))
     (theory_atom_definition
       name: (identifier)
       arity: (number)
@@ -303,7 +303,7 @@ theory definition
         (theory_operator)
         (theory_operator))
       guard: (identifier)
-      type: (theory_atom_type))))
+      atom_type: (theory_atom_type))))
 
 ==================
 theory definition operator error period

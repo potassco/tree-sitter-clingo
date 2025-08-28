@@ -424,7 +424,7 @@ theory definition
 9:12  - 9:13          ":"
 9:14  - 9:22          theory_term_name: identifier `lin_term`
 9:22  - 9:23          ","
-9:24  - 9:27          type: theory_atom_type `any`
+9:24  - 9:27          atom_type: theory_atom_type `any`
 9:27  - 9:28        ";"
 10:4  - 10:60       theory_atom_definition
 10:4  - 10:5          "&"
@@ -451,6 +451,6 @@ theory definition
 10:47 - 10:48         ","
 10:49 - 10:55         guard: identifier `bounds`
 10:55 - 10:56         ","
-10:57 - 10:60         type: theory_atom_type `any`
+10:57 - 10:60         atom_type: theory_atom_type `any`
 11:0  - 11:1        "}"
 11:1  - 11:2        "."

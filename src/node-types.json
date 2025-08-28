@@ -364,20 +364,12 @@
     "named": true,
     "fields": {
       "elements": {
-        "multiple": true,
-        "required": true,
+        "multiple": false,
+        "required": false,
         "types": [
           {
             "type": "body_aggregate_elements",
             "named": true
-          },
-          {
-            "type": "{",
-            "named": false
-          },
-          {
-            "type": "}",
-            "named": false
           }
         ]
       },
@@ -571,17 +563,9 @@
         ]
       },
       "type": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
-          {
-            "type": "[",
-            "named": false
-          },
-          {
-            "type": "]",
-            "named": false
-          },
           {
             "type": "const_type",
             "named": true
@@ -686,10 +670,6 @@
         "required": true,
         "types": [
           {
-            "type": ";",
-            "named": false
-          },
-          {
             "type": "edge_pair",
             "named": true
           }
@@ -737,17 +717,9 @@
         ]
       },
       "type": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
-          {
-            "type": "[",
-            "named": false
-          },
-          {
-            "type": "]",
-            "named": false
-          },
           {
             "type": "_term",
             "named": true
@@ -764,22 +736,6 @@
         "multiple": true,
         "required": false,
         "types": [
-          {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": "()",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": ";",
-            "named": false
-          },
           {
             "type": "terms",
             "named": true
@@ -807,22 +763,6 @@
         "required": false,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": "()",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": ";",
-            "named": false
-          },
-          {
             "type": "terms",
             "named": true
           }
@@ -845,20 +785,12 @@
     "named": true,
     "fields": {
       "elements": {
-        "multiple": true,
-        "required": true,
+        "multiple": false,
+        "required": false,
         "types": [
           {
             "type": "head_aggregate_elements",
             "named": true
-          },
-          {
-            "type": "{",
-            "named": false
-          },
-          {
-            "type": "}",
-            "named": false
           }
         ]
       },
@@ -1080,20 +1012,12 @@
     "named": true,
     "fields": {
       "elements": {
-        "multiple": true,
-        "required": true,
+        "multiple": false,
+        "required": false,
         "types": [
           {
             "type": "optimize_elements",
             "named": true
-          },
-          {
-            "type": "{",
-            "named": false
-          },
-          {
-            "type": "}",
-            "named": false
           }
         ]
       }
@@ -1104,20 +1028,12 @@
     "named": true,
     "fields": {
       "elements": {
-        "multiple": true,
-        "required": true,
+        "multiple": false,
+        "required": false,
         "types": [
           {
             "type": "optimize_elements",
             "named": true
-          },
-          {
-            "type": "{",
-            "named": false
-          },
-          {
-            "type": "}",
-            "named": false
           }
         ]
       }
@@ -1212,17 +1128,9 @@
         ]
       },
       "parameters": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
-          {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
           {
             "type": "parameters",
             "named": true
@@ -1330,20 +1238,12 @@
     "named": true,
     "fields": {
       "elements": {
-        "multiple": true,
-        "required": true,
+        "multiple": false,
+        "required": false,
         "types": [
           {
             "type": "set_aggregate_elements",
             "named": true
-          },
-          {
-            "type": "{",
-            "named": false
-          },
-          {
-            "type": "}",
-            "named": false
           }
         ]
       },
@@ -1541,22 +1441,6 @@
         "required": false,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": "()",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": ";",
-            "named": false
-          },
-          {
             "type": "terms",
             "named": true
           }
@@ -1638,42 +1522,18 @@
         "required": false,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": "()",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": ";",
-            "named": false
-          },
-          {
             "type": "terms",
             "named": true
           }
         ]
       },
       "elements": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
             "type": "theory_elements",
             "named": true
-          },
-          {
-            "type": "{",
-            "named": false
-          },
-          {
-            "type": "}",
-            "named": false
           }
         ]
       },
@@ -1713,6 +1573,16 @@
           }
         ]
       },
+      "atom_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "theory_atom_type",
+            "named": true
+          }
+        ]
+      },
       "guard": {
         "multiple": false,
         "required": false,
@@ -1734,20 +1604,12 @@
         ]
       },
       "operators": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
             "type": "theory_operators",
             "named": true
-          },
-          {
-            "type": "{",
-            "named": false
-          },
-          {
-            "type": "}",
-            "named": false
           }
         ]
       },
@@ -1757,16 +1619,6 @@
         "types": [
           {
             "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "type": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "theory_atom_type",
             "named": true
           }
         ]
@@ -1842,17 +1694,9 @@
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
-          {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
           {
             "type": "theory_terms",
             "named": true
@@ -1997,20 +1841,12 @@
         ]
       },
       "operators": {
-        "multiple": true,
-        "required": true,
+        "multiple": false,
+        "required": false,
         "types": [
           {
             "type": "theory_operator_definitions",
             "named": true
-          },
-          {
-            "type": "{",
-            "named": false
-          },
-          {
-            "type": "}",
-            "named": false
           }
         ]
       }
@@ -2178,13 +2014,9 @@
     "named": true,
     "fields": {
       "priority": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
-          {
-            "type": "@",
-            "named": false
-          },
           {
             "type": "_term",
             "named": true

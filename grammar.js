@@ -169,11 +169,14 @@ module.exports = grammar({
             repeat(seq(",", $._const_term))
 	),
 	
-        _const_arguments: $ => seq("(", optional(alias($._const_terms, $.terms)), ")"),
+        _const_arguments: $ => seq(
+	    "(",
+	    optional(field("arguments", alias($._const_terms, $.terms))),
+	    ")"),
 
         _const_function: $ => seq(
             field("name", $.identifier),
-            field('arguments', optional($._const_arguments))
+            optional($._const_arguments)
 	),
 
 	_const_term_comma: $ => seq($._const_term, ","),
@@ -235,21 +238,21 @@ module.exports = grammar({
 	    "()",
 	    seq(
 		"(",
-		$._argument_pool_item,
-		repeat(seq(";", $._argument_pool_item)),
+		field("arguments", $._argument_pool_item),
+		repeat(seq(";", field("arguments", $._argument_pool_item))),
 		")"
 	    ),
 	),
 
         function: $ => seq(
             field("name", $.identifier),
-            field('arguments', optional($._arguments)),
+            optional($._arguments),
         ),
 	
         external_function: $ => seq(
             "@",
             field("name", $.identifier),
-            field('arguments', optional($._arguments)),
+            optional($._arguments),
         ),
 
 	_term_comma: $ => seq($._term, ","),
@@ -308,11 +311,15 @@ module.exports = grammar({
 	
         theory_terms: $ => seq($._theory_term, repeat(seq(",", $._theory_term))),
 
-	_theory_arguments : $ => seq("(", optional($.theory_terms) ,")"),
+	_theory_arguments : $ => seq(
+	    "(", 
+	    optional(field("arguments", $.theory_terms)),
+	    ")"
+	),
 
         theory_function: $ => seq(
 	    field("name", $.identifier),
-	    field("arguments", optional($._theory_arguments)),
+	    optional($._theory_arguments),
 	),
 
         _theory_terms_trail: $ => choice(
@@ -366,7 +373,7 @@ module.exports = grammar({
 
 
 	atom_identifier: $ => seq(
-	    field("sign", optional(alias("-", $.classical_negation))),
+	    optional(field("sign", alias("-", $.classical_negation))),
 	    field("name", $.identifier),	    
 	),
 
@@ -381,7 +388,7 @@ module.exports = grammar({
 	// so we leave things as is for now.
         symbolic_atom: $ => seq(
 	    $.atom_identifier,
-            field('arguments', optional($._arguments)),
+            optional($._arguments),
 	),
 
         relation: $ => token(choice(">", "<", ">=", "<=", "=", "!=")),
@@ -407,14 +414,14 @@ module.exports = grammar({
 	),
 
         literal: $ => seq(
-	    field("sign", optional($._literal_sign)),
+	    optional(field("sign", $._literal_sign)),
 	    field("atom",$._simple_atom)),
 
         // aggregates
 
         condition: $ => seq($.literal, repeat(seq(",", $.literal))),
 
-        _condition: $ => seq(":", field("condition", optional($.condition))),
+        _condition: $ => seq(":", optional(field("condition", $.condition))),
 
         aggregate_function: $ => token(choice(
             "#sum",
@@ -429,15 +436,17 @@ module.exports = grammar({
 
         set_aggregate_element: $ => seq(
             field("literal", $.literal),
-            field("condition", optional($._condition))),
+            optional(field("condition", $._condition))),
 	
         set_aggregate_elements: $ => seq(
 	    $.set_aggregate_element, repeat(seq(";", $.set_aggregate_element))),
 
         set_aggregate: $ => seq(
-	    field("left", optional($.lower)),
-	    field("elements",seq("{", optional($.set_aggregate_elements), "}")),
-	    field("right", optional($.upper))),
+	    optional(field("left", $.lower)),
+	    "{",
+	    optional(field("elements", $.set_aggregate_elements)),
+	    "}",
+	    optional(field("right", $.upper))),
 
         // theory atoms
 
@@ -455,15 +464,22 @@ module.exports = grammar({
         theory_atom: $ => seq(
 	    "&",
 	    field("name", $.identifier),
-	    field("arguments", optional($._arguments)),
-	    field("elements", optional(seq("{", optional($.theory_elements), "}"))),
-	    field("right",optional($.theory_atom_upper))),
+	    optional($._arguments),
+	    optional(seq(
+		"{",
+		optional(field("elements", $.theory_elements)), 
+		"}"
+	    )),
+	    optional(field("right", $.theory_atom_upper))
+	),
 
         // body literals
 
         body_aggregate_element: $ => choice(
             field("condition", $._condition),
-            seq(field("terms", $.terms), field("condition", optional($._condition))),
+            seq(field("terms", $.terms), 
+		optional(field("condition", $._condition))
+	       ),
         ),
 	
         body_aggregate_elements: $ => seq(
@@ -472,14 +488,16 @@ module.exports = grammar({
 	),
 	
         body_aggregate: $ => seq(
-	    field("left", optional($.lower)),
+	    optional(field("left", $.lower)),
 	    field("function", $.aggregate_function),
-	    field("elements", seq("{", optional($.body_aggregate_elements), "}")),
-	    field("right",optional($.upper))
+	    "{",
+	    optional(field("elements", $.body_aggregate_elements)),
+	    "}",
+	    optional(field("right", $.upper))
 	),
 
         body_literal: $ => seq(
-	    field("sign", optional($._literal_sign)),
+	    optional(field("sign", $._literal_sign)),
 	    field("atom", choice(
 		$.set_aggregate,
 		$.body_aggregate,
@@ -499,17 +517,17 @@ module.exports = grammar({
 	),
 	
 	_colon_body: $ => seq(
-	    optional(seq(":", field("body", optional($.body)))),
+	    optional(seq(":", optional(field("body", $.body)))),
 	    "."
 	),
 
         // head literals
 
         head_aggregate_element: $ => seq(
-            field("terms", optional($.terms)),
+            optional(field("terms", $.terms)),
             ":",
             field("literal", $.literal),
-            field("condition", optional($._condition))
+            optional(field("condition", $._condition))
 	),
 
         head_aggregate_elements: $ => seq(
@@ -518,10 +536,12 @@ module.exports = grammar({
 	),
 
         head_aggregate: $ => seq(
-	    field("left",optional($.lower)), 
+	    optional(field("left", $.lower)), 
 	    field("function", $.aggregate_function),
-	    field("elements", seq("{", optional($.head_aggregate_elements), "}")),
-	    field("right", optional($.upper))
+	    "{",
+	    optional(field("elements", $.head_aggregate_elements)),
+	    "}",
+	    optional(field("right", $.upper))
 	),
 
         _conditional_literal_n: $ => seq(
@@ -574,7 +594,7 @@ module.exports = grammar({
 
         integrity_constraint: $ => seq(
 	    ":-",
-	    field("body", optional($.body)),
+	    optional(field("body", $.body)),
 	    "."
 	),
 
@@ -582,13 +602,16 @@ module.exports = grammar({
 	
         weight: $ => seq(
 	    field("term", $._term),
-	    field("priority", optional(seq("@", $._term))),
+	    optional(seq(
+		"@",
+		field("priority",$._term)
+	    ))
 	),
 
         optimize_element: $ => seq(
             field("weight", $.weight),
-            field("terms", optional($._optimize_tuple)),
-            field("condition", optional($._condition))
+            optional(field("terms", $._optimize_tuple)),
+            optional(field("condition", $._condition))
         ),
         optimize_elements: $ => seq(
 	    $.optimize_element, 
@@ -596,23 +619,27 @@ module.exports = grammar({
 
         weak_constraint: $ => seq(
 	    ":~",
-	    field("body", optional($.body)),
+	    optional(field("body", $.body)),
 	    ".",
 	    "[", 
 	    field("weight", $.weight),
-	    field("terms",optional($._optimize_tuple)),
+	    optional(field("terms", $._optimize_tuple)),
 	    "]"
 	),
 
         maximize: $ => seq(
 	    choice("#maximize", "#maximise"), 
-	    field("elements", seq("{", optional($.optimize_elements), "}")), 
+	    "{",
+	    optional(field("elements", $.optimize_elements)), 
+	    "}",
 	    "."
 	),
 
         minimize: $ => seq(
-	    choice("#minimize", "#minimise"), 
-	    field("elements", seq("{", optional($.optimize_elements), "}")),
+	    choice("#minimize", "#minimise"),
+	    "{",
+	    optional(field("elements", $.optimize_elements)),
+	    "}",
 	    "."
 	),
 
@@ -622,7 +649,10 @@ module.exports = grammar({
 	    field("arity",$.number)
 	),
 
-        show: $ => seq("#show", "."),
+        show: $ => seq(
+	    "#show",
+	    "."
+	),
 
         show_term: $ => seq(
 	    "#show",
@@ -636,9 +666,17 @@ module.exports = grammar({
 	    "."
 	),
 
-        defined: $ => seq("#defined", field("signature", $.signature), "."),
+        defined: $ => seq(
+	    "#defined",
+	    field("signature", $.signature),
+	    "."
+	),
 
-        project_signature: $ => seq("#project", field("signature", $.signature), "."),
+        project_signature: $ => seq(
+	    "#project", 
+	    field("signature", $.signature),
+	    "."
+	),
 
         project_atom: $ => seq(
 	    "#project",
@@ -651,7 +689,11 @@ module.exports = grammar({
         program: $ => seq(
 	    "#program", 
 	    field("name", $.identifier),
-	    field("parameters", optional(seq("(", optional($.parameters), ")"))),
+	    optional(seq(
+		"(",
+		optional(field("parameters", $.parameters)),
+		")"
+	    )),
 	    "."
 	),
 
@@ -677,7 +719,11 @@ module.exports = grammar({
 	    "=",
 	    field("value", $._const_term),
 	    ".",
-	    field("type", optional(seq("[", $.const_type, "]")))
+	    optional(seq(
+		"[",
+		field("type", $.const_type),
+		"]"
+	    ))
 	),
 
 	edge_pair: $ => seq($._term, ",", $._term),
@@ -685,7 +731,8 @@ module.exports = grammar({
         edge: $ => seq(
 	    "#edge", 
 	    "(",
-	    field("edge_pair", seq($.edge_pair, repeat(seq(";", $.edge_pair)))),
+	    field("edge_pair", $.edge_pair),
+	    repeat(seq(";", field("edge_pair", $.edge_pair))),
 	    ")",
 	    $._colon_body,
 	),
@@ -711,7 +758,11 @@ module.exports = grammar({
 	    "#external",
 	    field("atom", $.symbolic_atom),
 	    $._colon_body,
-	    field("type", optional(seq("[", $._term, "]")))
+	    optional(seq(
+		"[",
+		field("type", $._term),
+		"]"
+	    ))
 	),
 
         theory_operator_arity: _ => token("unary"),
@@ -746,7 +797,9 @@ module.exports = grammar({
 
         theory_term_definition: $ => seq(
 	    field("name",$.identifier),
-	    field("operators", seq("{", optional($.theory_operator_definitions), "}"))
+	    "{",
+	    optional(field("operators", $.theory_operator_definitions)),
+	    "}"
 	),
 
         theory_atom_type: _ => token(choice("head", "body", "any", "directive")),
@@ -765,16 +818,14 @@ module.exports = grammar({
             field("theory_term_name", $.identifier),
             ",",
             optional(seq(
-		field("operators", seq(
-                    "{",
-                    optional(alias($._theory_operators_sep, $.theory_operators)),
-                    "}"
-		)),
+		"{",
+		optional(field("operators", alias($._theory_operators_sep, $.theory_operators))),
+                "}",
                 ",",
                 field("guard", $.identifier),
                 ","
 	    )),
-            field("type", $.theory_atom_type)
+            field("atom_type", $.theory_atom_type)
         ),
 
         _theory_definitions: $ => choice(
