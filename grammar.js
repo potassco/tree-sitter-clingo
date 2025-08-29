@@ -17,7 +17,7 @@ module.exports = grammar({
     
     extras: $ => [$.line_comment, $.block_comment, /\s/],
 
-    externals: $ => [$._empty_terms],
+    externals: $ => [$.empty_pool_item_first, $.empty_pool_item],
 
     // Note that the conflict below between signature and function in show statements
     // does not necessarily have to be resolved in the grammar. It could also
@@ -29,7 +29,6 @@ module.exports = grammar({
 
     inline: $ => [
 	$.atom_identifier,
-	$._argument_pool_item,
 	$._tuple_pool_item,
 	$._const_tuple_item,
 	$._simple_atom,
@@ -134,14 +133,14 @@ module.exports = grammar({
             $.supremum,
             $.number,
             $.string,
-            alias($._const_binary_operation, $.binary_operation),
-            alias($._const_unary_operation, $.unary_operation),
-            alias($._const_abs, $.abs),
-            alias($._const_function, $.function),
-            alias($._const_tuple, $.tuple),
+            alias($.const_binary_operation, $.binary_operation),
+            alias($.const_unary_operation, $.unary_operation),
+            alias($.const_abs, $.abs),
+            alias($.const_function, $.function),
+            alias($.const_tuple, $.tuple),
         ),
 
-        _const_binary_operation: $ => choice(
+        const_binary_operation: $ => choice(
             binary_expression(1, $._const_term, "^", $._const_term),
             binary_expression(1, $._const_term, "?", $._const_term),
             binary_expression(1, $._const_term, "&", $._const_term),
@@ -153,30 +152,27 @@ module.exports = grammar({
             binary_expression(-5, $._const_term, "**", $._const_term),
         ),
 
-        _const_unary_operation: $ => choice(
+        const_unary_operation: $ => choice(
             unary_expression(4, "-", $._const_term),
             unary_expression(4, "~", $._const_term),
         ),
 
-        _const_abs: $ => seq(
+        const_abs: $ => seq(
             "|",
             $._const_term,
             "|",
         ),
 
-        _const_terms: $ => seq(
+        const_terms: $ => seq(
             $._const_term,
             repeat(seq(",", $._const_term))
 	),
 	
-        _const_arguments: $ => seq(
-	    "(",
-	    optional(field("arguments", alias($._const_terms, $.terms))),
-	    ")"),
+        const_pool: $ => seq("(", optional(alias($.const_terms, $.terms)), ")"),
 
-        _const_function: $ => seq(
+        const_function: $ => seq(
             field("name", $.identifier),
-            optional($._const_arguments)
+	    optional(field("arguments", alias($.const_pool, $.pool)))
 	),
 
 	_const_term_comma: $ => seq($._const_term, ","),
@@ -188,13 +184,14 @@ module.exports = grammar({
         ),
 
 	_const_tuple_item: $ => choice(
-	    alias(",", $.terms),
+	    alias(",", $.comma),
 	    $._const_term,
 	    alias($._const_term_comma, $.terms),
 	    alias($._const_terms_trail, $.terms),
 	),
 
-	_const_tuple: $ => seq("(", optional($._const_tuple_item), ")"),
+	const_tuple: $ => seq("(", optional($._const_tuple_item), ")"),
+
 	// based off of clingox.ast operator prec and assoc. values
         binary_operation: $ => choice(
 	    binary_expression(0, $._term, "..", $._term),
@@ -229,30 +226,26 @@ module.exports = grammar({
             repeat(seq(",", $._term))
         ),
 
-	_argument_pool_item: $ => choice(
-	    alias($._empty_terms, $.terms),
-	    $.terms
+	_pool_n: $ => seq(
+	    choice($.terms, alias($.empty_pool_item_first, $.empty_pool_item)),
+	    repeat1(seq(";", choice($.terms, $.empty_pool_item)))
 	),
-
-	_arguments: $ => choice(
-	    "()",
-	    seq(
-		"(",
-		field("arguments", $._argument_pool_item),
-		repeat(seq(";", field("arguments", $._argument_pool_item))),
-		")"
-	    ),
+	
+	pool: $ => seq(
+	    "(",
+	    choice(optional($.terms), $._pool_n),
+	    ")"
 	),
 
         function: $ => seq(
             field("name", $.identifier),
-            optional($._arguments),
+            optional(field("arguments", $.pool)),
         ),
 	
         external_function: $ => seq(
             "@",
             field("name", $.identifier),
-            optional($._arguments),
+            optional(field("arguments", $.pool)),
         ),
 
 	_term_comma: $ => seq($._term, ","),
@@ -264,21 +257,21 @@ module.exports = grammar({
         ),
 
 	_tuple_pool_item: $ => choice(
-	    alias($._empty_terms, $.terms),
-	    alias(",", $.terms),
+	    alias(",", $.comma),
 	    $._term,
 	    alias($._term_comma, $.terms),
 	    alias($._terms_trail, $.terms),
 	),
 
-	tuple: $ => choice(
-	    "()",
-	    seq(
-		"(",
-		$._tuple_pool_item,
-		repeat(seq(";", $._tuple_pool_item)),
-		")"
-            ),
+	_tuple_pool_n: $ => seq(
+	    choice($._tuple_pool_item, alias($.empty_pool_item_first, $.empty_pool_item)),
+	    repeat1(seq(";", choice($.terms, $.empty_pool_item)))
+	),
+
+	tuple: $ => seq(
+	    "(",
+	    choice(optional($._tuple_pool_item), $._tuple_pool_n),
+	    ")"
 	),
 
         _term: $ => choice(
@@ -388,7 +381,7 @@ module.exports = grammar({
 	// so we leave things as is for now.
         symbolic_atom: $ => seq(
 	    $.atom_identifier,
-            optional($._arguments),
+            optional(field("arguments", $.pool)),
 	),
 
         relation: $ => token(choice(">", "<", ">=", "<=", "=", "!=")),
@@ -464,7 +457,7 @@ module.exports = grammar({
         theory_atom: $ => seq(
 	    "&",
 	    field("name", $.identifier),
-	    optional($._arguments),
+	    optional(field("arguments", $.pool)),
 	    optional(seq(
 		"{",
 		optional(field("elements", $.theory_elements)), 

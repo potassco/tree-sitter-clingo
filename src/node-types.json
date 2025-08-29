@@ -733,11 +733,11 @@
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "terms",
+            "type": "pool",
             "named": true
           }
         ]
@@ -759,11 +759,11 @@
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "terms",
+            "type": "pool",
             "named": true
           }
         ]
@@ -1114,6 +1114,25 @@
     }
   },
   {
+    "type": "pool",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "empty_pool_item",
+          "named": true
+        },
+        {
+          "type": "terms",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "program",
     "named": true,
     "fields": {
@@ -1437,11 +1456,11 @@
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "terms",
+            "type": "pool",
             "named": true
           }
         ]
@@ -1474,7 +1493,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "_term",
@@ -1518,11 +1537,11 @@
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "terms",
+            "type": "pool",
             "named": true
           }
         ]
@@ -1914,6 +1933,14 @@
           "named": true
         },
         {
+          "type": "comma",
+          "named": true
+        },
+        {
+          "type": "empty_pool_item",
+          "named": true
+        },
+        {
           "type": "terms",
           "named": true
         }
@@ -2112,10 +2139,6 @@
     "named": false
   },
   {
-    "type": "()",
-    "named": false
-  },
-  {
     "type": ")",
     "named": false
   },
@@ -2233,6 +2256,10 @@
     "named": true
   },
   {
+    "type": "comma",
+    "named": true
+  },
+  {
     "type": "const_type",
     "named": true
   },
@@ -2242,6 +2269,10 @@
   },
   {
     "type": "double_default_negation",
+    "named": true
+  },
+  {
+    "type": "empty_pool_item",
     "named": true
   },
   {

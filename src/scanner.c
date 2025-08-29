@@ -1,19 +1,31 @@
 #include "tree_sitter/parser.h"
 
-enum TokenType { _EMPTY_TERMS };
+enum TokenType { EMPTY_POOL_ITEM_FIRST , EMPTY_POOL_ITEM};
 
 bool tree_sitter_clingo_external_scanner_scan(void *payload, TSLexer *lexer,
                                              const bool *valid_symbols) {
-  if (valid_symbols[_EMPTY_TERMS]) {
+  if (valid_symbols[EMPTY_POOL_ITEM_FIRST]) {
 	lexer->mark_end(lexer);
-        if (lexer->lookahead == ';' || lexer->lookahead == ')') {
-	    lexer->result_symbol = _EMPTY_TERMS;
+        if (lexer->lookahead == ';') {
+	    lexer->result_symbol = EMPTY_POOL_ITEM_FIRST;
 	    return true;
 	} else {
 	    return false;
 	};
-    }
-    return false;
+  }
+
+  if (valid_symbols[EMPTY_POOL_ITEM]) {
+	lexer->mark_end(lexer);
+        if (lexer->lookahead == ';' || lexer->lookahead == ')') {
+	    lexer->result_symbol = EMPTY_POOL_ITEM;
+	    return true;
+	} else {
+	    return false;
+	};
+  }
+
+  return false;
+
 }
 
 // If we need to allocate/deallocate state, we do it in these functions.

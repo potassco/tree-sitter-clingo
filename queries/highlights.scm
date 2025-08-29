@@ -1,5 +1,7 @@
 ;; we conform to the neovim highlighting captures
 ;; https://neovim.io/doc/user/treesitter.html#_treesitter-syntax-highlighting
+;; which is a superset/extension of the standard tree-sitter highlighting captures
+;; https://github.com/tree-sitter/tree-sitter/blob/34ef1157a65987d53a18a32dbdd04046c263f7e5/crates/highlight/src/highlight.rs#L29
 
 ;;
 ;; keywords
@@ -129,9 +131,9 @@
 (theory_function 
   name: (identifier) @constant.macro
   !arguments)
-;; external functions can also be conceptualized as
+;; External functions can also be conceptualized as
 ;; preprocessor macros, since they are replaced during
-;; grounding with the value computed by an external script
+;; grounding with the value computed by an external script.
 (external_function
   "@" @function.macro
   name: (identifier) @function.macro)
@@ -152,13 +154,14 @@
 (anonymous) @variable.builtin
 
 ;;
-;; atoms
+;; symbolic atoms
 ;;
-;; we highlight atoms as functions, since @function is usually used to
-;; highlight the fundamental building blocks in tree-sitter, and as
-;; this allows us to distinguish between definitions (atoms in the
-;; head) and references (atoms occurring elsewhere), highlighting them
-;; as @function and @function.call, respectively.
+;; we highlight symbolic atoms as functions, since @function is
+;; usually used to highlight the fundamental building blocks in
+;; tree-sitter, and as this allows us to distinguish between
+;; definitions (atoms in the head) and references (atoms occurring
+;; elsewhere), highlighting them as @function and @function.call,
+;; respectively.
 ;;
 ;; atom definitions (@function)
 (rule
@@ -166,22 +169,13 @@
     !sign
     atom: (symbolic_atom
 	   ((classical_negation)? (identifier)) @function)))
-(rule
-  head: (literal
-    sign: (_)
-    atom: (symbolic_atom
-	   ((classical_negation)? (identifier)) @function.call)))
 
 (disjunction
   (literal
     !sign
     atom: (symbolic_atom
 	   ((classical_negation)? (identifier)) @function)))
-(disjunction
-  (literal
-    sign: (_)
-    atom: (symbolic_atom
-	   ((classical_negation)? (identifier)) @function.call)))
+
 
 (disjunction
   (conditional_literal
@@ -189,23 +183,14 @@
       !sign
       atom: (symbolic_atom
 	   ((classical_negation)? (identifier)) @function))))
-(disjunction
-  (conditional_literal
-    literal: (literal
-      sign: (_)
-      atom: (symbolic_atom
-	   ((classical_negation)? (identifier)) @function.call))))
+
 
 (head_aggregate_element
   literal: (literal
     !sign
     atom: (symbolic_atom
 	   ((classical_negation)? (identifier)) @function)))
-(head_aggregate_element
-  literal: (literal
-    sign: (_)
-    atom: (symbolic_atom
-	   ((classical_negation)? (identifier)) @function.call)))
+
 
 (rule
   head: (set_aggregate
@@ -215,6 +200,37 @@
           !sign
 	  atom: (symbolic_atom
 	   ((classical_negation)? (identifier)) @function))))))
+
+(external
+  atom: (symbolic_atom
+	   ((classical_negation)? (identifier)) @function))
+
+;; atom references (@function.call)
+(rule
+  head: (literal
+    sign: (_)
+    atom: (symbolic_atom
+	   ((classical_negation)? (identifier)) @function.call)))
+
+(disjunction
+  (literal
+    sign: (_)
+    atom: (symbolic_atom
+	   ((classical_negation)? (identifier)) @function.call)))
+
+(disjunction
+  (conditional_literal
+    literal: (literal
+      sign: (_)
+      atom: (symbolic_atom
+	   ((classical_negation)? (identifier)) @function.call))))
+
+(head_aggregate_element
+  literal: (literal
+    sign: (_)
+    atom: (symbolic_atom
+	   ((classical_negation)? (identifier)) @function.call)))
+
 (rule
   head: (set_aggregate
     elements: (set_aggregate_elements
@@ -224,11 +240,6 @@
 	  atom: (symbolic_atom
 	   ((classical_negation)? (identifier)) @function.call))))))
 
-(external
-  atom: (symbolic_atom
-	   ((classical_negation)? (identifier)) @function))
-
-;; atom references (@function.call)
 (body_literal
   atom: (symbolic_atom
 	   ((classical_negation)? (identifier)) @function.call))
