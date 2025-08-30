@@ -710,7 +710,7 @@
         }
       ]
     },
-    "const_pool": {
+    "_const_pool": {
       "type": "SEQ",
       "members": [
         {
@@ -718,21 +718,25 @@
           "value": "("
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "ALIAS",
-              "content": {
-                "type": "SYMBOL",
-                "name": "const_terms"
+          "type": "FIELD",
+          "name": "arguments",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "const_terms"
+                },
+                "named": true,
+                "value": "terms"
               },
-              "named": true,
-              "value": "terms"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
         },
         {
           "type": "STRING",
@@ -755,17 +759,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "arguments",
-              "content": {
-                "type": "ALIAS",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "const_pool"
-                },
-                "named": true,
-                "value": "pool"
-              }
+              "type": "SYMBOL",
+              "name": "_const_pool"
             },
             {
               "type": "BLANK"
@@ -1337,22 +1332,26 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "terms"
-            },
-            {
-              "type": "ALIAS",
-              "content": {
+          "type": "FIELD",
+          "name": "arguments",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
                 "type": "SYMBOL",
-                "name": "empty_pool_item_first"
+                "name": "terms"
               },
-              "named": true,
-              "value": "empty_pool_item"
-            }
-          ]
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "empty_pool_item_first"
+                },
+                "named": true,
+                "value": "empty_pool_item"
+              }
+            ]
+          }
         },
         {
           "type": "REPEAT1",
@@ -1364,24 +1363,28 @@
                 "value": ";"
               },
               {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "terms"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "empty_pool_item"
-                  }
-                ]
+                "type": "FIELD",
+                "name": "arguments",
+                "content": {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "terms"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "empty_pool_item"
+                    }
+                  ]
+                }
               }
             ]
           }
         }
       ]
     },
-    "pool": {
+    "_pool": {
       "type": "SEQ",
       "members": [
         {
@@ -1392,16 +1395,20 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "terms"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
+              "type": "FIELD",
+              "name": "arguments",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "terms"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              }
             },
             {
               "type": "SYMBOL",
@@ -1430,12 +1437,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "arguments",
-              "content": {
-                "type": "SYMBOL",
-                "name": "pool"
-              }
+              "type": "SYMBOL",
+              "name": "_pool"
             },
             {
               "type": "BLANK"
@@ -1467,7 +1470,7 @@
               "name": "arguments",
               "content": {
                 "type": "SYMBOL",
-                "name": "pool"
+                "name": "_pool"
               }
             },
             {
@@ -1598,7 +1601,7 @@
                 "members": [
                   {
                     "type": "SYMBOL",
-                    "name": "terms"
+                    "name": "_tuple_pool_item"
                   },
                   {
                     "type": "SYMBOL",
@@ -2094,7 +2097,7 @@
               "name": "arguments",
               "content": {
                 "type": "SYMBOL",
-                "name": "pool"
+                "name": "_pool"
               }
             },
             {
@@ -2570,7 +2573,7 @@
               "name": "arguments",
               "content": {
                 "type": "SYMBOL",
-                "name": "pool"
+                "name": "_pool"
               }
             },
             {
@@ -4748,6 +4751,7 @@
   "inline": [
     "atom_identifier",
     "_tuple_pool_item",
+    "_const_tuple_item",
     "_simple_atom",
     "_literal_sign",
     "_condition",

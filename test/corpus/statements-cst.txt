@@ -250,7 +250,8 @@ show
 6:14 - 6:17         body_literal
 6:14 - 6:17           atom: symbolic_atom
 6:14 - 6:15             name: identifier `q`
-6:15 - 6:17             "()"
+6:15 - 6:16             "("
+6:16 - 6:17             ")"
 6:17 - 6:18         ","
 6:19 - 6:23         body_literal
 6:19 - 6:23           atom: symbolic_atom
@@ -642,7 +643,8 @@ heuristic
 1:0  - 1:10       "#heuristic"
 1:11 - 1:14       atom: symbolic_atom
 1:11 - 1:12         name: identifier `a`
-1:12 - 1:14         "()"
+1:12 - 1:13         "("
+1:13 - 1:14         ")"
 1:14 - 1:15       "."
 1:16 - 1:17       "["
 1:17 - 1:21       weight: weight
@@ -657,7 +659,8 @@ heuristic
 2:11 - 2:15       atom: symbolic_atom
 2:11 - 2:12         sign: classical_negation `-`
 2:12 - 2:13         name: identifier `a`
-2:13 - 2:15         "()"
+2:13 - 2:14         "("
+2:14 - 2:15         ")"
 2:15 - 2:16       "."
 2:17 - 2:18       "["
 2:18 - 2:25       weight: weight

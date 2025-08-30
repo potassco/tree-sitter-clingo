@@ -225,57 +225,64 @@ function
 :cst
 ==================
 
-p(f(),g,h(;1;;-f(1),2;),@g,@g()).
+p(f(),g,h(;1;;-f(;;),2;),@g,@g()).
 
 ---
 
 1:0  - 2:0    source_file
-1:0  - 1:32     rule
-1:0  - 1:31       head: literal
-1:0  - 1:31         atom: symbolic_atom
+1:0  - 1:34     rule
+1:0  - 1:33       head: literal
+1:0  - 1:33         atom: symbolic_atom
 1:0  - 1:1            name: identifier `p`
 1:1  - 1:2            "("
-1:2  - 1:30           arguments: terms
+1:2  - 1:32           arguments: terms
 1:2  - 1:5              function
 1:2  - 1:3                name: identifier `f`
-1:3  - 1:5                "()"
+1:3  - 1:4                "("
+1:4  - 1:5                ")"
 1:5  - 1:6              ","
 1:6  - 1:7              function
 1:6  - 1:7                name: identifier `g`
 1:7  - 1:8              ","
-1:8  - 1:22             function
+1:8  - 1:24             function
 1:8  - 1:9                name: identifier `h`
 1:9  - 1:10               "("
-1:10 - 1:10               arguments: terms 
+1:10 - 1:10               arguments: empty_pool_item 
 1:10 - 1:11               ";"
 1:11 - 1:12               arguments: terms
 1:11 - 1:12                 number `1`
 1:12 - 1:13               ";"
-1:13 - 1:20               arguments: terms
-1:13 - 1:18                 unary_operation
-1:13 - 1:14                   "-"
-1:14 - 1:18                   right: function
-1:14 - 1:15                     name: identifier `f`
-1:15 - 1:16                     "("
-1:16 - 1:17                     arguments: terms
-1:16 - 1:17                       number `1`
-1:17 - 1:18                     ")"
-1:18 - 1:19                 ","
-1:19 - 1:20                 number `2`
-1:20 - 1:21               ";"
-1:21 - 1:21               arguments: terms 
-1:21 - 1:22               ")"
-1:22 - 1:23             ","
-1:23 - 1:25             external_function
-1:23 - 1:24               "@"
-1:24 - 1:25               name: identifier `g`
-1:25 - 1:26             ","
-1:26 - 1:30             external_function
-1:26 - 1:27               "@"
-1:27 - 1:28               name: identifier `g`
-1:28 - 1:30               "()"
-1:30 - 1:31           ")"
-1:31 - 1:32       "."
+1:13 - 1:13               arguments: empty_pool_item 
+1:13 - 1:14               ";"
+1:14 - 1:22               arguments: terms
+1:14 - 1:20                 unary_operation
+1:14 - 1:15                   "-"
+1:15 - 1:20                   right: function
+1:15 - 1:16                     name: identifier `f`
+1:16 - 1:17                     "("
+1:17 - 1:17                     arguments: empty_pool_item 
+1:17 - 1:18                     ";"
+1:18 - 1:18                     arguments: empty_pool_item 
+1:18 - 1:19                     ";"
+1:19 - 1:19                     arguments: empty_pool_item 
+1:19 - 1:20                     ")"
+1:20 - 1:21                 ","
+1:21 - 1:22                 number `2`
+1:22 - 1:23               ";"
+1:23 - 1:23               arguments: empty_pool_item 
+1:23 - 1:24               ")"
+1:24 - 1:25             ","
+1:25 - 1:27             external_function
+1:25 - 1:26               "@"
+1:26 - 1:27               name: identifier `g`
+1:27 - 1:28             ","
+1:28 - 1:32             external_function
+1:28 - 1:29               "@"
+1:29 - 1:30               name: identifier `g`
+1:30 - 1:31               "("
+1:31 - 1:32               ")"
+1:32 - 1:33           ")"
+1:33 - 1:34       "."
 
 ==================
 tuple
@@ -294,11 +301,12 @@ p((),(;a;a,;;a,b;a,b,),(,),(c;,)).
 1:1  - 1:2            "("
 1:2  - 1:32           arguments: terms
 1:2  - 1:4              tuple
-1:2  - 1:4                "()"
+1:2  - 1:3                "("
+1:3  - 1:4                ")"
 1:4  - 1:5              ","
 1:5  - 1:22             tuple
 1:5  - 1:6                "("
-1:6  - 1:6                terms 
+1:6  - 1:6                empty_pool_item 
 1:6  - 1:7                ";"
 1:7  - 1:8                function
 1:7  - 1:8                  name: identifier `a`
@@ -308,7 +316,7 @@ p((),(;a;a,;;a,b;a,b,),(,),(c;,)).
 1:9  - 1:10                   name: identifier `a`
 1:10 - 1:11                 ","
 1:11 - 1:12               ";"
-1:12 - 1:12               terms 
+1:12 - 1:12               empty_pool_item 
 1:12 - 1:13               ";"
 1:13 - 1:16               terms
 1:13 - 1:14                 function
@@ -328,7 +336,7 @@ p((),(;a;a,;;a,b;a,b,),(,),(c;,)).
 1:22 - 1:23             ","
 1:23 - 1:26             tuple
 1:23 - 1:24               "("
-1:24 - 1:25               terms `,`
+1:24 - 1:25               comma `,`
 1:25 - 1:26               ")"
 1:26 - 1:27             ","
 1:27 - 1:32             tuple
@@ -336,7 +344,7 @@ p((),(;a;a,;;a,b;a,b,),(,),(c;,)).
 1:28 - 1:29               function
 1:28 - 1:29                 name: identifier `c`
 1:29 - 1:30               ";"
-1:30 - 1:31               terms `,`
+1:30 - 1:31               comma `,`
 1:31 - 1:32               ")"
 1:32 - 1:33           ")"
 1:33 - 1:34       "."

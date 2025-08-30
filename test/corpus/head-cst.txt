@@ -211,7 +211,7 @@ head theory
 1:0  - 1:1          "&"
 1:1  - 1:2          name: identifier `p`
 1:2  - 1:3          "("
-1:3  - 1:3          arguments: terms 
+1:3  - 1:3          arguments: empty_pool_item 
 1:3  - 1:4          ";"
 1:4  - 1:5          arguments: terms
 1:4  - 1:5            function
@@ -221,7 +221,7 @@ head theory
 1:6  - 1:7            function
 1:6  - 1:7              name: identifier `b`
 1:7  - 1:8          ";"
-1:8  - 1:8          arguments: terms 
+1:8  - 1:8          arguments: empty_pool_item 
 1:8  - 1:9          ")"
 1:10 - 1:13         right: theory_atom_upper
 1:10 - 1:11           theory_operator `<`

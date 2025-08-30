@@ -168,11 +168,15 @@ module.exports = grammar({
             repeat(seq(",", $._const_term))
 	),
 	
-        const_pool: $ => seq("(", optional(alias($.const_terms, $.terms)), ")"),
+        _const_pool: $ => seq(
+	    "(",
+	    field("arguments", optional(alias($.const_terms, $.terms))),
+	    ")"
+	),
 
         const_function: $ => seq(
             field("name", $.identifier),
-	    optional(field("arguments", alias($.const_pool, $.pool)))
+	    optional($._const_pool)
 	),
 
 	_const_term_comma: $ => seq($._const_term, ","),
@@ -227,25 +231,25 @@ module.exports = grammar({
         ),
 
 	_pool_n: $ => seq(
-	    choice($.terms, alias($.empty_pool_item_first, $.empty_pool_item)),
-	    repeat1(seq(";", choice($.terms, $.empty_pool_item)))
+	    field("arguments", choice($.terms, alias($.empty_pool_item_first, $.empty_pool_item))),
+	    repeat1(seq(";", field("arguments", choice($.terms, $.empty_pool_item))))
 	),
 	
-	pool: $ => seq(
+	_pool: $ => seq(
 	    "(",
-	    choice(optional($.terms), $._pool_n),
+	    choice(field("arguments", optional($.terms)), $._pool_n),
 	    ")"
 	),
 
         function: $ => seq(
             field("name", $.identifier),
-            optional(field("arguments", $.pool)),
+            optional($._pool),
         ),
 	
         external_function: $ => seq(
             "@",
             field("name", $.identifier),
-            optional(field("arguments", $.pool)),
+            optional(field("arguments", $._pool)),
         ),
 
 	_term_comma: $ => seq($._term, ","),
@@ -265,7 +269,7 @@ module.exports = grammar({
 
 	_tuple_pool_n: $ => seq(
 	    choice($._tuple_pool_item, alias($.empty_pool_item_first, $.empty_pool_item)),
-	    repeat1(seq(";", choice($.terms, $.empty_pool_item)))
+	    repeat1(seq(";", choice($._tuple_pool_item, $.empty_pool_item)))
 	),
 
 	tuple: $ => seq(
@@ -381,7 +385,7 @@ module.exports = grammar({
 	// so we leave things as is for now.
         symbolic_atom: $ => seq(
 	    $.atom_identifier,
-            optional(field("arguments", $.pool)),
+            optional(field("arguments", $._pool)),
 	),
 
         relation: $ => token(choice(">", "<", ">=", "<=", "=", "!=")),
@@ -457,7 +461,7 @@ module.exports = grammar({
         theory_atom: $ => seq(
 	    "&",
 	    field("name", $.identifier),
-	    optional(field("arguments", $.pool)),
+	    optional(field("arguments", $._pool)),
 	    optional(seq(
 		"{",
 		optional(field("elements", $.theory_elements)), 

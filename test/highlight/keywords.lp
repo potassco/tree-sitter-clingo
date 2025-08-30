@@ -9,8 +9,8 @@
 %  ^ keyword.directive
 %         ^ constant.macro
 %            ^ string.escape
-%                ^ function.macro
-%                 ^ function.macro
+%                ^ constant.macro
+%                 ^ constant.macro
 
 #maximise{f(X,_)}.
 %  ^ keyword.directive
@@ -74,24 +74,24 @@ not not a.
 %       ^ function.call
 
 #sum{1:a}.
-% ^ @keyword.operator
+% ^ keyword.operator
 %   ^ punctuation.bracket
 %       ^ punctuation.bracket
 
 #sum+{1:a}.
-% ^ @keyword.operator
+% ^ keyword.operator
 
 #min{1:a}.
-% ^ @keyword.operator
+% ^ keyword.operator
 
 #max{1:a}.
-% ^ @keyword.operator
+% ^ keyword.operator
 
 #count{1:a}.
-% ^ @keyword.operator
+% ^ keyword.operator
 
 #external a.
-%  ^ keyword.modifier
+%  ^ keyword.directive
 
 #const c = 3. [default]
 %  ^ keyword.directive.define
@@ -99,7 +99,7 @@ not not a.
 %        ^ operator
 %                 ^ keyword
 
-&lp{a, b(1)}.
+&lp{a, b(1,2)}.
 % <- keyword
 % ^ keyword
 %   ^ constant.macro
@@ -202,7 +202,25 @@ a: b | not a.
 %   ^ function.call
 %      ^ function.call
 
+p(1..1, 1^1, 1?1, 1+1, 1*1, 1\1, 1**1).
+%  ^ operator
+%        ^ operator
+%             ^ operator
+%                  ^ operator
+%                       ^ operator
+%                            ^ operator
+%                                 ^ operator
 
+p(~1, -1, |1|)
+% ^ operator
+%     ^ operator
+%         ^ operator
+%           ^ operator
 
-
-
+1 < 1, 1 > 1, 1 <= 1, 1 >= 1, 1 = 1, 1 != 1.
+% ^ operator
+%        ^ operator
+%               ^ operator
+%                       ^ operator
+%                               ^ operator
+%                                       ^ operator

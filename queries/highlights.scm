@@ -16,6 +16,7 @@
  "#project"
  "#show"
  "#defined"
+ "#external"
 ] @keyword.directive
 
 [
@@ -27,10 +28,6 @@
  (double_default_negation)
  (aggregate_function)
 ] @keyword.operator
-
-[
- "#external"
-] @keyword.modifier
 
 [
  "#const"
@@ -79,6 +76,7 @@
  ":-"
  ":~"
  ":"
+ (comma)
 ] @punctuation.delimiter
 (disjunction "|" @punctuation.delimiter)
 (weight "@" @punctuation.delimiter)
@@ -106,6 +104,7 @@
 (abs "|" @operator)
 (binary_operation "/" @operator)
 (binary_operation "&" @operator)
+(unary_operation "-" @operator)
 
 ;;
 ;; other terms
@@ -116,10 +115,11 @@
 
 (supremum) @constant.builtin
 (infimum) @constant.builtin
-;; we mark all constants (non-external function symbols with 0 arity)
-;; as preprocessor-defined constants, since similarly to a macro, they
-;; are replaced by the given value when there is a #const statement or
-;; -c flag or if they are a parameter of a #program statement
+;; We highlight all constants (non-external function symbols with 0
+;; arity) as preprocessor-defined constants, since similarly to a
+;; macro, they are replaced by the given value when there is a #const
+;; statement or -c flag or if they are a parameter of a #program
+;; statement
 (const
   name: (identifier) @constant.macro
   "=" @operator)
@@ -131,15 +131,16 @@
 (theory_function 
   name: (identifier) @constant.macro
   !arguments)
-;; External functions can also be conceptualized as
-;; preprocessor macros, since they are replaced during
-;; grounding with the value computed by an external script.
+;; External functions are highlighted as preprocessor macros, since
+;; similarly to macros, they are replaced during grounding with the
+;; value computed by an external script. function.macro would be a
+;; better fit, but functions are reserved for highlighting atoms.
 (external_function
-  "@" @function.macro
-  name: (identifier) @function.macro)
-;; we conceptualize non-zero arity, non external function symbols as
-;; (data) constructors, such as in Haskell. The @function capture is
-;; instead used for atoms
+  "@" @constant.macro
+  name: (identifier) @constant.macro)
+;; we highlight non-zero arity, non external function symbols as data
+;; constructors (as in Haskell). The @function capture is instead
+;; used for atoms
 (function
   name: (identifier) @constructor
   arguments: (_))
@@ -156,12 +157,12 @@
 ;;
 ;; symbolic atoms
 ;;
-;; we highlight symbolic atoms as functions, since @function is
-;; usually used to highlight the fundamental building blocks in
-;; tree-sitter, and as this allows us to distinguish between
-;; definitions (atoms in the head) and references (atoms occurring
-;; elsewhere), highlighting them as @function and @function.call,
-;; respectively.
+;; We highlight symbolic atoms as functions, since @function is
+;; usually used to highlight the fundamental building blocks of a
+;; language in tree-sitter, and as this allows us to distinguish
+;; between definitions (atoms in the head) and references (atoms
+;; occurring elsewhere), highlighting them as @function and
+;; @function.call, respectively.
 ;;
 ;; atom definitions (@function)
 (rule
@@ -267,8 +268,8 @@
 	   ((classical_negation)? (identifier)) @function.call))
 
 (signature
- sign: (classical_negation)? @function.call
- name: (identifier) @function.call) 
+  sign: (classical_negation)? @function.call
+  name: (identifier) @function.call) 
 
 ;; boolean constant
 (boolean_constant) @boolean

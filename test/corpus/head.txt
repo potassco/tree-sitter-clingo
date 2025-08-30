@@ -172,14 +172,14 @@ head theory
   (rule
     head: (theory_atom
       name: (identifier)
-      arguments: (terms)
+      arguments: (empty_pool_item)
       arguments: (terms
         (function
           name: (identifier)))
       arguments: (terms
         (function
           name: (identifier)))
-      arguments: (terms)
+      arguments: (empty_pool_item)
       right: (theory_atom_upper
         (theory_operator)
         (number)))))

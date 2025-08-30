@@ -172,17 +172,19 @@ p(f(),g,h(;1;;-f(;;),2;),@g,@g()).
             name: (identifier))
           (function
             name: (identifier)
-            arguments: (terms)
+            arguments: (empty_pool_item)
             arguments: (terms
               (number))
+            arguments: (empty_pool_item)
             arguments: (terms
               (unary_operation
                 right: (function
                   name: (identifier)
-                  arguments: (terms
-                    (number))))
+                  arguments: (empty_pool_item)
+                  arguments: (empty_pool_item)
+                  arguments: (empty_pool_item)))
               (number))
-            arguments: (terms))
+            arguments: (empty_pool_item))
           (external_function
             name: (identifier))
           (external_function
@@ -204,13 +206,13 @@ p((),(;a;a,;;a,b;a,b,),(,),(c;,)).
         arguments: (terms
           (tuple)
           (tuple
-            (terms)
+            (empty_pool_item)
             (function
               name: (identifier))
             (terms
               (function
                 name: (identifier)))
-            (terms)
+            (empty_pool_item)
             (terms
               (function
                 name: (identifier))
@@ -222,11 +224,11 @@ p((),(;a;a,;;a,b;a,b,),(,),(c;,)).
               (function
                 name: (identifier))))
           (tuple
-            (terms))
+            (comma))
           (tuple
             (function
               name: (identifier))
-            (terms)))))))
+            (comma)))))))
 
 ==================
 identifier

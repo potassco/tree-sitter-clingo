@@ -733,11 +733,27 @@
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "pool",
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": ";",
+            "named": false
+          },
+          {
+            "type": "empty_pool_item",
+            "named": true
+          },
+          {
+            "type": "terms",
             "named": true
           }
         ]
@@ -759,11 +775,15 @@
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "pool",
+            "type": "empty_pool_item",
+            "named": true
+          },
+          {
+            "type": "terms",
             "named": true
           }
         ]
@@ -1114,25 +1134,6 @@
     }
   },
   {
-    "type": "pool",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "empty_pool_item",
-          "named": true
-        },
-        {
-          "type": "terms",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "program",
     "named": true,
     "fields": {
@@ -1456,11 +1457,27 @@
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "pool",
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": ";",
+            "named": false
+          },
+          {
+            "type": "empty_pool_item",
+            "named": true
+          },
+          {
+            "type": "terms",
             "named": true
           }
         ]
@@ -1537,11 +1554,27 @@
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "pool",
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": ";",
+            "named": false
+          },
+          {
+            "type": "empty_pool_item",
+            "named": true
+          },
+          {
+            "type": "terms",
             "named": true
           }
         ]
