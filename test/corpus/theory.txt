@@ -210,7 +210,7 @@ theory terms
 theory unparsed
 ==================
 
-&p { - 1, -1 * f(2), - + 1 * 2 ** 3 }.
+&p { - 1, -1 * f(2), - + 1 * 2 ** 3, not f }.
 
 ---
 
@@ -245,7 +245,12 @@ theory unparsed
               (number)
               (theory_operators
                 (theory_operator))
-              (number))))))))
+              (number))
+            (theory_unparsed_term
+              (theory_operators
+                (theory_operator))
+              (theory_function
+                name: (identifier)))))))))
 
 ==================
 theory definition

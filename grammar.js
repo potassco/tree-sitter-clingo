@@ -31,6 +31,7 @@ module.exports = grammar({
 	$.atom_identifier,
 	$._tuple_pool_item,
 	$._const_tuple_item,
+	$._theory_operator,
 	$._simple_atom,
 	$._literal_sign,
 	$._condition,
@@ -304,7 +305,6 @@ module.exports = grammar({
 
         // theory terms
         theory_operator: $ => token(choice(
-	    "not",
 	    // the general pattern would be [/!<=>+\-*\\?&@|:;~\^\.]+,
 	    // but we have to exclude the four operators . : ; :-
 	    /[/!<=>+\-*\\?&@|~\^]/,
@@ -312,8 +312,13 @@ module.exports = grammar({
 	    /:[/!<=>+*\\?&@|:;~\^\.]/,
 	    /:[/!<=>+\-*\\?&@|:;~\^\.]{2,}/,
 	)),
+	
+	_theory_operator: $ => choice(
+	    $.theory_operator,
+	    alias($.default_negation, $.theory_operator)
+	),
 
-        theory_operators: $ => repeat1($.theory_operator),
+        theory_operators: $ => repeat1($._theory_operator),
 	
         theory_terms: $ => seq($._theory_term, repeat(seq(",", $._theory_term))),
 
@@ -465,7 +470,7 @@ module.exports = grammar({
 
         theory_elements: $ => seq($.theory_element, repeat(seq(";", $.theory_element))),
 
-	theory_atom_upper: $ => seq($.theory_operator, $._theory_term),
+	theory_atom_upper: $ => seq($._theory_operator, $._theory_term),
 
         theory_atom: $ => seq(
 	    "&",
@@ -778,14 +783,14 @@ module.exports = grammar({
 
         theory_operator_definition: $ => choice(
             seq(
-		field("operator", $.theory_operator),
+		field("operator", $._theory_operator),
 		":",
 		field("priority", $.number),
 		",",
 		field("arity", $.theory_operator_arity)
 	    ),
             seq(
-		field("operator", $.theory_operator),
+		field("operator", $._theory_operator),
 		":",
 		field("priority", $.number),
 		",",
@@ -811,8 +816,8 @@ module.exports = grammar({
         theory_atom_type: _ => token(choice("head", "body", "any", "directive")),
 
         _theory_operators_sep: $ => seq(
-	    $.theory_operator,
-	    repeat(seq(",", $.theory_operator))
+	    $._theory_operator,
+	    repeat(seq(",", $._theory_operator))
 	),
 
         theory_atom_definition: $ => seq(

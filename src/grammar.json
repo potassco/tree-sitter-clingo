@@ -1707,10 +1707,6 @@
         "type": "CHOICE",
         "members": [
           {
-            "type": "STRING",
-            "value": "not"
-          },
-          {
             "type": "PATTERN",
             "value": "[/!<=>+\\-*\\\\?&@|~\\^]"
           },
@@ -1729,11 +1725,29 @@
         ]
       }
     },
+    "_theory_operator": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "theory_operator"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "default_negation"
+          },
+          "named": true,
+          "value": "theory_operator"
+        }
+      ]
+    },
     "theory_operators": {
       "type": "REPEAT1",
       "content": {
         "type": "SYMBOL",
-        "name": "theory_operator"
+        "name": "_theory_operator"
       }
     },
     "theory_terms": {
@@ -2547,7 +2561,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "theory_operator"
+          "name": "_theory_operator"
         },
         {
           "type": "SYMBOL",
@@ -4221,7 +4235,7 @@
               "name": "operator",
               "content": {
                 "type": "SYMBOL",
-                "name": "theory_operator"
+                "name": "_theory_operator"
               }
             },
             {
@@ -4258,7 +4272,7 @@
               "name": "operator",
               "content": {
                 "type": "SYMBOL",
-                "name": "theory_operator"
+                "name": "_theory_operator"
               }
             },
             {
@@ -4397,7 +4411,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "theory_operator"
+          "name": "_theory_operator"
         },
         {
           "type": "REPEAT",
@@ -4410,7 +4424,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "theory_operator"
+                "name": "_theory_operator"
               }
             ]
           }
@@ -4757,6 +4771,7 @@
     "atom_identifier",
     "_tuple_pool_item",
     "_const_tuple_item",
+    "_theory_operator",
     "_simple_atom",
     "_literal_sign",
     "_condition",
