@@ -224,11 +224,11 @@ p((),(;a;a,;;a,b;a,b,),(,),(c;,)).
               (function
                 name: (identifier))))
           (tuple
-            (comma))
+            (lone_comma))
           (tuple
             (function
               name: (identifier))
-            (comma)))))))
+            (lone_comma)))))))
 
 ==================
 identifier

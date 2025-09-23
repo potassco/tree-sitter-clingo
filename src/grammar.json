@@ -710,7 +710,7 @@
         }
       ]
     },
-    "_const_pool": {
+    "_const_arg_pool": {
       "type": "SEQ",
       "members": [
         {
@@ -760,7 +760,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "_const_pool"
+              "name": "_const_arg_pool"
             },
             {
               "type": "BLANK"
@@ -829,7 +829,7 @@
             "value": ","
           },
           "named": true,
-          "value": "comma"
+          "value": "lone_comma"
         },
         {
           "type": "SYMBOL",
@@ -1328,7 +1328,7 @@
         }
       ]
     },
-    "_pool_n": {
+    "_arg_pool_n": {
       "type": "SEQ",
       "members": [
         {
@@ -1384,7 +1384,7 @@
         }
       ]
     },
-    "_pool": {
+    "_arg_pool": {
       "type": "SEQ",
       "members": [
         {
@@ -1412,7 +1412,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "_pool_n"
+              "name": "_arg_pool_n"
             }
           ]
         },
@@ -1438,7 +1438,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "_pool"
+              "name": "_arg_pool"
             },
             {
               "type": "BLANK"
@@ -1470,7 +1470,7 @@
               "name": "arguments",
               "content": {
                 "type": "SYMBOL",
-                "name": "_pool"
+                "name": "_arg_pool"
               }
             },
             {
@@ -1540,7 +1540,7 @@
             "value": ","
           },
           "named": true,
-          "value": "comma"
+          "value": "lone_comma"
         },
         {
           "type": "SYMBOL",
@@ -1856,8 +1856,13 @@
           ]
         },
         {
-          "type": "STRING",
-          "value": ","
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": ","
+          },
+          "named": true,
+          "value": "lone_comma"
         }
       ]
     },
@@ -2097,7 +2102,7 @@
               "name": "arguments",
               "content": {
                 "type": "SYMBOL",
-                "name": "_pool"
+                "name": "_arg_pool"
               }
             },
             {
@@ -2573,7 +2578,7 @@
               "name": "arguments",
               "content": {
                 "type": "SYMBOL",
-                "name": "_pool"
+                "name": "_arg_pool"
               }
             },
             {
@@ -4764,6 +4769,7 @@
   "supertypes": [
     "_statement",
     "_term",
+    "_tuple_pool_item",
     "_theory_root_term",
     "_simple_atom",
     "_head",

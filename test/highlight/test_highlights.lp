@@ -163,7 +163,6 @@ p(f(),(),(,)).
 %   ^ punctuation.bracket
 %     ^ punctuation.bracket
 %      ^ punctuation.bracket
-%         ^ punctuation.delimiter
 
 a; not b.
 % <- function

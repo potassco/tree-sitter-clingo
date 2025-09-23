@@ -52,8 +52,16 @@ module.exports = grammar({
 
     ],
 
-    supertypes: $ => [$._statement, $._term, $._theory_root_term,
-		      $._simple_atom, $._head, $._literal_sign, $._theory_term],
+    supertypes: $ => [
+	$._statement,
+	$._term,
+	$._tuple_pool_item,
+	$._theory_root_term,
+	$._simple_atom,
+	$._head,
+	$._literal_sign,
+	$._theory_term
+    ],
     
     rules: {
         source_file: $ => repeat($._statement),
@@ -168,7 +176,7 @@ module.exports = grammar({
             repeat(seq(",", $._const_term))
 	),
 	
-        _const_pool: $ => seq(
+        _const_arg_pool: $ => seq(
 	    "(",
 	    field("arguments", optional(alias($.const_terms, $.terms))),
 	    ")"
@@ -176,7 +184,7 @@ module.exports = grammar({
 
         const_function: $ => seq(
             field("name", $.identifier),
-	    optional($._const_pool)
+	    optional($._const_arg_pool)
 	),
 
 	_const_term_comma: $ => seq($._const_term, ","),
@@ -188,7 +196,7 @@ module.exports = grammar({
         ),
 
 	_const_tuple_item: $ => choice(
-	    alias(",", $.comma),
+	    alias(",", $.lone_comma),
 	    $._const_term,
 	    alias($._const_term_comma, $.terms),
 	    alias($._const_terms_trail, $.terms),
@@ -209,10 +217,7 @@ module.exports = grammar({
             binary_expression(3, $._term, "\\", $._term),
             binary_expression(-5, $._term, "**", $._term),
         ),
-	// changes in clingo 6: now ** has higher precedence than the unary operators
-	// i.e. 2**-1**0 parses as (2 ** -(1 ** 0)), whereas in clingo 5 it parsed as
-	// (2 ** ((-1) ** 0))
-	// is this an intentional change? Maybe ask Roland.
+
         unary_operation: $ => choice(
             unary_expression(4, "-", $._term),
             unary_expression(4, "~", $._term),
@@ -230,26 +235,28 @@ module.exports = grammar({
             repeat(seq(",", $._term))
         ),
 
-	_pool_n: $ => seq(
-	    field("arguments", choice($.terms, alias($.empty_pool_item_first, $.empty_pool_item))),
+	_arg_pool_n: $ => seq(
+	    field("arguments", choice($.terms,
+				      alias($.empty_pool_item_first,
+					    $.empty_pool_item))),
 	    repeat1(seq(";", field("arguments", choice($.terms, $.empty_pool_item))))
 	),
-	
-	_pool: $ => seq(
+
+	_arg_pool: $ => seq(
 	    "(",
-	    choice(field("arguments", optional($.terms)), $._pool_n),
+	    choice(field("arguments", optional($.terms)), $._arg_pool_n),
 	    ")"
 	),
 
         function: $ => seq(
             field("name", $.identifier),
-            optional($._pool),
+            optional($._arg_pool),
         ),
 	
         external_function: $ => seq(
             "@",
             field("name", $.identifier),
-            optional(field("arguments", $._pool)),
+            optional(field("arguments", $._arg_pool)),
         ),
 
 	_term_comma: $ => seq($._term, ","),
@@ -261,14 +268,16 @@ module.exports = grammar({
         ),
 
 	_tuple_pool_item: $ => choice(
-	    alias(",", $.comma),
+	    alias(",", $.lone_comma),
 	    $._term,
 	    alias($._term_comma, $.terms),
 	    alias($._terms_trail, $.terms),
 	),
 
 	_tuple_pool_n: $ => seq(
-	    choice($._tuple_pool_item, alias($.empty_pool_item_first, $.empty_pool_item)),
+	    choice($._tuple_pool_item,
+		   alias($.empty_pool_item_first,
+			 $.empty_pool_item)),
 	    repeat1(seq(";", choice($._tuple_pool_item, $.empty_pool_item)))
 	),
 
@@ -297,7 +306,7 @@ module.exports = grammar({
         theory_operator: $ => token(choice(
 	    "not",
 	    // the general pattern would be [/!<=>+\-*\\?&@|:;~\^\.]+,
-	    // but we have to exclude the operators . : ; :-
+	    // but we have to exclude the four operators . : ; :-
 	    /[/!<=>+\-*\\?&@|~\^]/,
 	    /[/!<=>+\-*\\?&@|;~\^\.][/!<=>+\-*\\?&@|:;~\^\.]+/,
 	    /:[/!<=>+*\\?&@|:;~\^\.]/,
@@ -325,7 +334,7 @@ module.exports = grammar({
 		repeat(seq(",", $._theory_term)),
 		optional(",")
 	    ),
-	    ",",
+	    alias(",", $.lone_comma),
 	),
 	
         theory_tuple: $ => seq(
@@ -385,7 +394,7 @@ module.exports = grammar({
 	// so we leave things as is for now.
         symbolic_atom: $ => seq(
 	    $.atom_identifier,
-            optional(field("arguments", $._pool)),
+            optional(field("arguments", $._arg_pool)),
 	),
 
         relation: $ => token(choice(">", "<", ">=", "<=", "=", "!=")),
@@ -461,7 +470,7 @@ module.exports = grammar({
         theory_atom: $ => seq(
 	    "&",
 	    field("name", $.identifier),
-	    optional(field("arguments", $._pool)),
+	    optional(field("arguments", $._arg_pool)),
 	    optional(seq(
 		"{",
 		optional(field("elements", $.theory_elements)), 

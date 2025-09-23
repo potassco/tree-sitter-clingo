@@ -99,7 +99,7 @@ theory tuple
 1:9  - 1:12               theory_tuple
 1:9  - 1:10                 "("
 1:10 - 1:11                 theory_terms
-1:10 - 1:11                   ","
+1:10 - 1:11                   lone_comma `,`
 1:11 - 1:12                 ")"
 1:12 - 1:13           ";"
 1:14 - 1:17           theory_element

@@ -76,7 +76,7 @@
  ":-"
  ":~"
  ":"
- (comma)
+ (lone_comma)
 ] @punctuation.delimiter
 (disjunction "|" @punctuation.delimiter)
 (weight "@" @punctuation.delimiter)
@@ -291,4 +291,3 @@
   (identifier) @module)
 (program
   name: (identifier) @module)
-

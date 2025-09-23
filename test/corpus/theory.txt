@@ -73,7 +73,8 @@ theory tuple
         (theory_element
           theory_terms: (theory_terms
             (theory_tuple
-              (theory_terms))))
+              (theory_terms
+                (lone_comma)))))
         (theory_element
           theory_terms: (theory_terms
             (theory_tuple
