@@ -1,6 +1,84 @@
 [
   {
-    "type": "_head",
+    "type": "_literal_sign",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "default_negation",
+        "named": true
+      },
+      {
+        "type": "double_default_negation",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "_theory_root_term",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "anonymous",
+        "named": true
+      },
+      {
+        "type": "infimum",
+        "named": true
+      },
+      {
+        "type": "number",
+        "named": true
+      },
+      {
+        "type": "string",
+        "named": true
+      },
+      {
+        "type": "supremum",
+        "named": true
+      },
+      {
+        "type": "theory_function",
+        "named": true
+      },
+      {
+        "type": "theory_list",
+        "named": true
+      },
+      {
+        "type": "theory_set",
+        "named": true
+      },
+      {
+        "type": "theory_tuple",
+        "named": true
+      },
+      {
+        "type": "variable",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "_tuple_pool_item",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "lone_comma",
+        "named": true
+      },
+      {
+        "type": "term",
+        "named": true
+      },
+      {
+        "type": "terms",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "head",
     "named": true,
     "subtypes": [
       {
@@ -26,21 +104,7 @@
     ]
   },
   {
-    "type": "_literal_sign",
-    "named": true,
-    "subtypes": [
-      {
-        "type": "default_negation",
-        "named": true
-      },
-      {
-        "type": "double_default_negation",
-        "named": true
-      }
-    ]
-  },
-  {
-    "type": "_simple_atom",
+    "type": "simple_atom",
     "named": true,
     "subtypes": [
       {
@@ -58,7 +122,7 @@
     ]
   },
   {
-    "type": "_statement",
+    "type": "statement",
     "named": true,
     "subtypes": [
       {
@@ -140,7 +204,7 @@
     ]
   },
   {
-    "type": "_term",
+    "type": "term",
     "named": true,
     "subtypes": [
       {
@@ -194,53 +258,7 @@
     ]
   },
   {
-    "type": "_theory_root_term",
-    "named": true,
-    "subtypes": [
-      {
-        "type": "anonymous",
-        "named": true
-      },
-      {
-        "type": "infimum",
-        "named": true
-      },
-      {
-        "type": "number",
-        "named": true
-      },
-      {
-        "type": "string",
-        "named": true
-      },
-      {
-        "type": "supremum",
-        "named": true
-      },
-      {
-        "type": "theory_function",
-        "named": true
-      },
-      {
-        "type": "theory_list",
-        "named": true
-      },
-      {
-        "type": "theory_set",
-        "named": true
-      },
-      {
-        "type": "theory_tuple",
-        "named": true
-      },
-      {
-        "type": "variable",
-        "named": true
-      }
-    ]
-  },
-  {
-    "type": "_theory_term",
+    "type": "theory_term",
     "named": true,
     "subtypes": [
       {
@@ -254,24 +272,6 @@
     ]
   },
   {
-    "type": "_tuple_pool_item",
-    "named": true,
-    "subtypes": [
-      {
-        "type": "_term",
-        "named": true
-      },
-      {
-        "type": "lone_comma",
-        "named": true
-      },
-      {
-        "type": "terms",
-        "named": true
-      }
-    ]
-  },
-  {
     "type": "abs",
     "named": true,
     "fields": {},
@@ -280,7 +280,7 @@
       "required": true,
       "types": [
         {
-          "type": "_term",
+          "type": "term",
           "named": true
         }
       ]
@@ -295,7 +295,7 @@
         "required": true,
         "types": [
           {
-            "type": "_term",
+            "type": "term",
             "named": true
           }
         ]
@@ -351,7 +351,7 @@
         "required": true,
         "types": [
           {
-            "type": "_term",
+            "type": "term",
             "named": true
           }
         ]
@@ -477,15 +477,15 @@
         "required": true,
         "types": [
           {
-            "type": "_simple_atom",
-            "named": true
-          },
-          {
             "type": "body_aggregate",
             "named": true
           },
           {
             "type": "set_aggregate",
+            "named": true
+          },
+          {
+            "type": "simple_atom",
             "named": true
           },
           {
@@ -515,11 +515,11 @@
       "required": true,
       "types": [
         {
-          "type": "_term",
+          "type": "relation",
           "named": true
         },
         {
-          "type": "relation",
+          "type": "term",
           "named": true
         }
       ]
@@ -704,7 +704,7 @@
       "required": true,
       "types": [
         {
-          "type": "_term",
+          "type": "term",
           "named": true
         }
       ]
@@ -739,7 +739,7 @@
         "required": false,
         "types": [
           {
-            "type": "_term",
+            "type": "term",
             "named": true
           }
         ]
@@ -948,7 +948,7 @@
         "required": true,
         "types": [
           {
-            "type": "_term",
+            "type": "term",
             "named": true
           }
         ]
@@ -1009,7 +1009,7 @@
         "required": true,
         "types": [
           {
-            "type": "_simple_atom",
+            "type": "simple_atom",
             "named": true
           }
         ]
@@ -1035,11 +1035,11 @@
       "required": true,
       "types": [
         {
-          "type": "_term",
+          "type": "relation",
           "named": true
         },
         {
-          "type": "relation",
+          "type": "term",
           "named": true
         }
       ]
@@ -1238,7 +1238,7 @@
         "required": true,
         "types": [
           {
-            "type": "_head",
+            "type": "head",
             "named": true
           }
         ]
@@ -1392,7 +1392,7 @@
         "required": true,
         "types": [
           {
-            "type": "_term",
+            "type": "term",
             "named": true
           }
         ]
@@ -1445,7 +1445,7 @@
       "required": false,
       "types": [
         {
-          "type": "_statement",
+          "type": "statement",
           "named": true
         }
       ]
@@ -1531,7 +1531,7 @@
       "required": true,
       "types": [
         {
-          "type": "_term",
+          "type": "term",
           "named": true
         }
       ]
@@ -1704,11 +1704,11 @@
       "required": true,
       "types": [
         {
-          "type": "_theory_term",
+          "type": "theory_operator",
           "named": true
         },
         {
-          "type": "theory_operator",
+          "type": "theory_term",
           "named": true
         }
       ]
@@ -1931,11 +1931,11 @@
       "required": true,
       "types": [
         {
-          "type": "_theory_term",
+          "type": "lone_comma",
           "named": true
         },
         {
-          "type": "lone_comma",
+          "type": "theory_term",
           "named": true
         }
       ]
@@ -2053,7 +2053,7 @@
         "required": true,
         "types": [
           {
-            "type": "_term",
+            "type": "term",
             "named": true
           }
         ]
@@ -2069,11 +2069,11 @@
       "required": true,
       "types": [
         {
-          "type": "_term",
+          "type": "relation",
           "named": true
         },
         {
-          "type": "relation",
+          "type": "term",
           "named": true
         }
       ]
@@ -2128,7 +2128,7 @@
         "required": false,
         "types": [
           {
-            "type": "_term",
+            "type": "term",
             "named": true
           }
         ]
@@ -2138,7 +2138,7 @@
         "required": true,
         "types": [
           {
-            "type": "_term",
+            "type": "term",
             "named": true
           }
         ]

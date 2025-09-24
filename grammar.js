@@ -33,11 +33,8 @@ module.exports = grammar({
 
   inline: ($) => [
     $.atom_identifier,
-    $._tuple_pool_item,
     $._const_tuple_item,
     $._theory_operator,
-    $._simple_atom,
-    $._literal_sign,
     $._condition,
     $._body_literal_sep,
     $._colon_body,
@@ -57,18 +54,18 @@ module.exports = grammar({
   ],
 
   supertypes: ($) => [
-    $._statement,
-    $._term,
-    $._tuple_pool_item,
-    $._theory_root_term,
-    $._simple_atom,
-    $._head,
-    $._literal_sign,
-    $._theory_term,
+    $.statement,
+    $.term,
+    $.tuple_pool_item,
+    $.theory_root_term,
+    $.simple_atom,
+    $.head,
+    $.literal_sign,
+    $.theory_term,
   ],
 
   rules: {
-    source_file: ($) => repeat($._statement),
+    source_file: ($) => repeat($.statement),
 
     // comments
 
@@ -198,27 +195,27 @@ module.exports = grammar({
     // based off of clingox.ast operator prec and assoc. values
     binary_operation: ($) =>
       choice(
-        binary_expression(0, $._term, "..", $._term),
-        binary_expression(1, $._term, "^", $._term),
-        binary_expression(1, $._term, "?", $._term),
-        binary_expression(1, $._term, "&", $._term),
-        binary_expression(2, $._term, "+", $._term),
-        binary_expression(2, $._term, "-", $._term),
-        binary_expression(3, $._term, "*", $._term),
-        binary_expression(3, $._term, "/", $._term),
-        binary_expression(3, $._term, "\\", $._term),
-        binary_expression(-5, $._term, "**", $._term),
+        binary_expression(0, $.term, "..", $.term),
+        binary_expression(1, $.term, "^", $.term),
+        binary_expression(1, $.term, "?", $.term),
+        binary_expression(1, $.term, "&", $.term),
+        binary_expression(2, $.term, "+", $.term),
+        binary_expression(2, $.term, "-", $.term),
+        binary_expression(3, $.term, "*", $.term),
+        binary_expression(3, $.term, "/", $.term),
+        binary_expression(3, $.term, "\\", $.term),
+        binary_expression(-5, $.term, "**", $.term),
       ),
 
     unary_operation: ($) =>
       choice(
-        unary_expression(4, "-", $._term),
-        unary_expression(4, "~", $._term),
+        unary_expression(4, "-", $.term),
+        unary_expression(4, "~", $.term),
       ),
 
-    abs: ($) => seq("|", $._term, repeat(seq(";", $._term)), "|"),
+    abs: ($) => seq("|", $.term, repeat(seq(";", $.term)), "|"),
 
-    terms: ($) => seq($._term, repeat(seq(",", $._term))),
+    terms: ($) => seq($.term, repeat(seq(",", $.term))),
 
     _arg_pool_n: ($) =>
       seq(
@@ -247,15 +244,15 @@ module.exports = grammar({
         optional(field("arguments", $._arg_pool)),
       ),
 
-    _term_comma: ($) => seq($._term, ","),
+    _term_comma: ($) => seq($.term, ","),
 
     _terms_trail: ($) =>
-      seq($._term, repeat1(seq(",", $._term)), optional(",")),
+      seq($.term, repeat1(seq(",", $.term)), optional(",")),
 
-    _tuple_pool_item: ($) =>
+    tuple_pool_item: ($) =>
       choice(
         alias(",", $.lone_comma),
-        $._term,
+        $.term,
         alias($._term_comma, $.terms),
         alias($._terms_trail, $.terms),
       ),
@@ -263,16 +260,16 @@ module.exports = grammar({
     _tuple_pool_n: ($) =>
       seq(
         choice(
-          $._tuple_pool_item,
+          $.tuple_pool_item,
           alias($.empty_pool_item_first, $.empty_pool_item),
         ),
-        repeat1(seq(";", choice($._tuple_pool_item, $.empty_pool_item))),
+        repeat1(seq(";", choice($.tuple_pool_item, $.empty_pool_item))),
       ),
 
     tuple: ($) =>
-      seq("(", choice(optional($._tuple_pool_item), $._tuple_pool_n), ")"),
+      seq("(", choice(optional($.tuple_pool_item), $._tuple_pool_n), ")"),
 
-    _term: ($) =>
+    term: ($) =>
       choice(
         $.infimum,
         $.supremum,
@@ -306,7 +303,7 @@ module.exports = grammar({
 
     theory_operators: ($) => repeat1($._theory_operator),
 
-    theory_terms: ($) => seq($._theory_term, repeat(seq(",", $._theory_term))),
+    theory_terms: ($) => seq($.theory_term, repeat(seq(",", $.theory_term))),
 
     _theory_arguments: ($) =>
       seq("(", optional(field("arguments", $.theory_terms)), ")"),
@@ -316,7 +313,7 @@ module.exports = grammar({
 
     _theory_terms_trail: ($) =>
       choice(
-        seq($._theory_term, repeat(seq(",", $._theory_term)), optional(",")),
+        seq($.theory_term, repeat(seq(",", $.theory_term)), optional(",")),
         alias(",", $.lone_comma),
       ),
 
@@ -329,13 +326,13 @@ module.exports = grammar({
 
     theory_unparsed_term: ($) =>
       seq(
-        optional($._theory_root_term),
-        repeat1(seq($.theory_operators, $._theory_root_term)),
+        optional($.theory_root_term),
+        repeat1(seq($.theory_operators, $.theory_root_term)),
       ),
 
-    _theory_term: ($) => choice($.theory_unparsed_term, $._theory_root_term),
+    theory_term: ($) => choice($.theory_unparsed_term, $.theory_root_term),
 
-    _theory_root_term: ($) =>
+    theory_root_term: ($) =>
       choice(
         $.theory_function,
         $.theory_tuple,
@@ -374,20 +371,20 @@ module.exports = grammar({
     relation: ($) => token(choice(">", "<", ">=", "<=", "=", "!=")),
 
     comparison: ($) =>
-      seq($._term, $.relation, $._term, repeat(seq($.relation, $._term))),
+      seq($.term, $.relation, $.term, repeat(seq($.relation, $.term))),
 
-    _simple_atom: ($) =>
+    simple_atom: ($) =>
       choice($.symbolic_atom, $.comparison, $.boolean_constant),
 
     default_negation: ($) => "not",
     double_default_negation: ($) => "not not",
 
-    _literal_sign: ($) => choice($.default_negation, $.double_default_negation),
+    literal_sign: ($) => choice($.default_negation, $.double_default_negation),
 
     literal: ($) =>
       seq(
-        optional(field("sign", $._literal_sign)),
-        field("atom", $._simple_atom),
+        optional(field("sign", $.literal_sign)),
+        field("atom", $.simple_atom),
       ),
 
     // aggregates
@@ -399,8 +396,8 @@ module.exports = grammar({
     aggregate_function: ($) =>
       token(choice("#sum", "#sum+", "#min", "#max", "#count")),
 
-    upper: ($) => seq(optional($.relation), $._term),
-    lower: ($) => seq($._term, optional($.relation)),
+    upper: ($) => seq(optional($.relation), $.term),
+    lower: ($) => seq($.term, optional($.relation)),
 
     set_aggregate_element: ($) =>
       seq(
@@ -434,7 +431,7 @@ module.exports = grammar({
     theory_elements: ($) =>
       seq($.theory_element, repeat(seq(";", $.theory_element))),
 
-    theory_atom_upper: ($) => seq($._theory_operator, $._theory_term),
+    theory_atom_upper: ($) => seq($._theory_operator, $.theory_term),
 
     theory_atom: ($) =>
       seq(
@@ -471,14 +468,14 @@ module.exports = grammar({
 
     body_literal: ($) =>
       seq(
-        optional(field("sign", $._literal_sign)),
+        optional(field("sign", $.literal_sign)),
         field(
           "atom",
           choice(
             $.set_aggregate,
             $.body_aggregate,
             $.theory_atom,
-            $._simple_atom,
+            $.simple_atom,
           ),
         ),
       ),
@@ -548,7 +545,7 @@ module.exports = grammar({
         $.conditional_literal,
       ),
 
-    _head: ($) =>
+    head: ($) =>
       choice(
         $.literal,
         $.disjunction,
@@ -561,7 +558,7 @@ module.exports = grammar({
 
     rule: ($) =>
       seq(
-        field("head", $._head),
+        field("head", $.head),
         optional(seq(":-", field("body", $.body))),
         ".",
       ),
@@ -573,8 +570,8 @@ module.exports = grammar({
 
     weight: ($) =>
       seq(
-        field("term", $._term),
-        optional(seq("@", field("priority", $._term))),
+        field("term", $.term),
+        optional(seq("@", field("priority", $.term))),
       ),
 
     optimize_element: ($) =>
@@ -619,7 +616,7 @@ module.exports = grammar({
 
     show: ($) => seq("#show", "."),
 
-    show_term: ($) => seq("#show", field("term", $._term), $._colon_body),
+    show_term: ($) => seq("#show", field("term", $.term), $._colon_body),
 
     show_signature: ($) => seq("#show", field("signature", $.signature), "."),
 
@@ -667,7 +664,7 @@ module.exports = grammar({
         optional(seq("[", field("type", $.const_type), "]")),
       ),
 
-    edge_pair: ($) => seq($._term, ",", $._term),
+    edge_pair: ($) => seq($.term, ",", $.term),
 
     edge: ($) =>
       seq(
@@ -687,7 +684,7 @@ module.exports = grammar({
         "[",
         field("weight", $.weight),
         ",",
-        field("type", $._term),
+        field("type", $.term),
         "]",
       ),
 
@@ -699,7 +696,7 @@ module.exports = grammar({
         "#external",
         field("atom", $.symbolic_atom),
         $._colon_body,
-        optional(seq("[", field("type", $._term), "]")),
+        optional(seq("[", field("type", $.term), "]")),
       ),
 
     theory_operator_arity: (_) => token("unary"),
@@ -799,7 +796,7 @@ module.exports = grammar({
         ".",
       ),
 
-    _statement: ($) =>
+    statement: ($) =>
       choice(
         $.rule,
         $.integrity_constraint,
