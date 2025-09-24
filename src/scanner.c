@@ -1,6 +1,6 @@
 #include "tree_sitter/parser.h"
 
-enum TokenType { EMPTY_POOL_ITEM_FIRST, EMPTY_POOL_ITEM, COLON_DASH, COLON };
+enum TokenType { EMPTY_POOL_ITEM_FIRST, EMPTY_POOL_ITEM, COLON };
 
 bool tree_sitter_clingo_external_scanner_scan(void *payload, TSLexer *lexer,
                                               const bool *valid_symbols) {
@@ -10,21 +10,13 @@ bool tree_sitter_clingo_external_scanner_scan(void *payload, TSLexer *lexer,
     lexer->advance(lexer, true);
   }
 
-  if ((valid_symbols[COLON] || valid_symbols[COLON_DASH]) &&
-      lexer->lookahead == ':') {
+  if (valid_symbols[COLON] && lexer->lookahead == ':') {
     lexer->advance(lexer, false);
-    // NOTE: This is a workaronud for one of the many quirks of the tree-sitter
-    // implementation. We cannot return false here if ":-" is inactive because
-    // tree-sitter would fallback to the internal scanner and match ":".
-    if (lexer->lookahead == '-') {
-      lexer->advance(lexer, false);
-      lexer->result_symbol = COLON_DASH;
-      return true;
-    }
-    if (valid_symbols[COLON]) {
+    if (lexer->lookahead != '-') {
       lexer->result_symbol = COLON;
       return true;
     }
+    return false;
   }
 
   if (valid_symbols[EMPTY_POOL_ITEM_FIRST]) {

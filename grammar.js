@@ -23,7 +23,7 @@ module.exports = grammar({
 
   extras: ($) => [$.line_comment, $.block_comment, /\s/],
 
-  externals: ($) => [$.empty_pool_item_first, $.empty_pool_item, ":-", ":"],
+  externals: ($) => [$.empty_pool_item_first, $.empty_pool_item, $.colon],
 
   // Note that the conflict below between signature and function in show statements
   // does not necessarily have to be resolved in the grammar. It could also
@@ -390,7 +390,8 @@ module.exports = grammar({
 
     condition: ($) => seq($.literal, repeat(seq(",", $.literal))),
 
-    _condition: ($) => seq(":", optional(field("condition", $.condition))),
+    _condition: ($) =>
+      seq(alias($.colon, ":"), optional(field("condition", $.condition))),
 
     aggregate_function: ($) =>
       token(choice("#sum", "#sum+", "#min", "#max", "#count")),
@@ -492,14 +493,17 @@ module.exports = grammar({
       ),
 
     _colon_body: ($) =>
-      seq(optional(seq(":", optional(field("body", $.body)))), "."),
+      seq(
+        optional(seq(alias($.colon, ":"), optional(field("body", $.body)))),
+        ".",
+      ),
 
     // head literals
 
     head_aggregate_element: ($) =>
       seq(
         optional(field("terms", $.terms)),
-        ":",
+        alias($.colon, ":"),
         field("literal", $.literal),
         optional(field("condition", $._condition)),
       ),
@@ -518,9 +522,14 @@ module.exports = grammar({
       ),
 
     _conditional_literal_n: ($) =>
-      seq(field("literal", $.literal), ":", field("condition", $.condition)),
+      seq(
+        field("literal", $.literal),
+        alias($.colon, ":"),
+        field("condition", $.condition),
+      ),
 
-    _conditional_literal_0: ($) => seq(field("literal", $.literal), ":"),
+    _conditional_literal_0: ($) =>
+      seq(field("literal", $.literal), alias($.colon, ":")),
 
     conditional_literal: ($) =>
       choice($._conditional_literal_n, $._conditional_literal_0),
@@ -704,14 +713,14 @@ module.exports = grammar({
       choice(
         seq(
           field("operator", $._theory_operator),
-          ":",
+          alias($.colon, ":"),
           field("priority", $.number),
           ",",
           field("arity", $.theory_operator_arity),
         ),
         seq(
           field("operator", $._theory_operator),
-          ":",
+          alias($.colon, ":"),
           field("priority", $.number),
           ",",
           field(
@@ -748,7 +757,7 @@ module.exports = grammar({
         field("name", $.identifier),
         "/",
         field("arity", $.number),
-        ":",
+        alias($.colon, ":"),
         field("theory_term_name", $.identifier),
         ",",
         optional(

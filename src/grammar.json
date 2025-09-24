@@ -2287,7 +2287,12 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "STRING",
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "colon"
+          },
+          "named": false,
           "value": ":"
         },
         {
@@ -2912,7 +2917,12 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "STRING",
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "colon"
+                  },
+                  "named": false,
                   "value": ":"
                 },
                 {
@@ -2964,7 +2974,12 @@
           ]
         },
         {
-          "type": "STRING",
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "colon"
+          },
+          "named": false,
           "value": ":"
         },
         {
@@ -3099,7 +3114,12 @@
           }
         },
         {
-          "type": "STRING",
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "colon"
+          },
+          "named": false,
           "value": ":"
         },
         {
@@ -3124,7 +3144,12 @@
           }
         },
         {
-          "type": "STRING",
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "colon"
+          },
+          "named": false,
           "value": ":"
         }
       ]
@@ -4239,7 +4264,12 @@
               }
             },
             {
-              "type": "STRING",
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "colon"
+              },
+              "named": false,
               "value": ":"
             },
             {
@@ -4276,7 +4306,12 @@
               }
             },
             {
-              "type": "STRING",
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "colon"
+              },
+              "named": false,
               "value": ":"
             },
             {
@@ -4459,7 +4494,12 @@
           }
         },
         {
-          "type": "STRING",
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "colon"
+          },
+          "named": false,
           "value": ":"
         },
         {
@@ -4767,12 +4807,8 @@
       "name": "empty_pool_item"
     },
     {
-      "type": "STRING",
-      "value": ":-"
-    },
-    {
-      "type": "STRING",
-      "value": ":"
+      "type": "SYMBOL",
+      "name": "colon"
     }
   ],
   "inline": [
