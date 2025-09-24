@@ -1,6 +1,7 @@
 ==================
 theory guard
 :cst
+:skip
 ==================
 
 &p <= 5.
@@ -20,6 +21,7 @@ theory guard
 ==================
 theory elements
 :cst
+:skip
 ==================
 
 &p { : ; 1; 1,2; 1:a,b; 1,2:a }.
@@ -75,6 +77,7 @@ theory elements
 ==================
 theory tuple
 :cst
+:skip
 ==================
 
 &p { (); (,); (1); (1,); (1,2); (1,2,) }.
@@ -145,6 +148,7 @@ theory tuple
 ==================
 theory list
 :cst
+:skip
 ==================
 
 &p { []; [1]; [1,2] }.
@@ -187,6 +191,7 @@ theory list
 ==================
 theory set
 :cst
+:skip
 ==================
 
 &p { {}; {1}; {1,2} }.
@@ -229,6 +234,7 @@ theory set
 ==================
 theory function
 :cst
+:skip
 ==================
 
 &p { f, f(), f(1), f(1,2) }.
@@ -273,6 +279,7 @@ theory function
 ==================
 theory terms
 :cst
+:skip
 ==================
 
 &p { 1, #sup, #inf, "str", X, _ }.
@@ -308,6 +315,7 @@ theory terms
 ==================
 theory unparsed
 :cst
+:skip
 ==================
 
 &p { - 1, -1 * f(2), - + 1 * 2 ** 3, not f }.
@@ -364,6 +372,7 @@ theory unparsed
 ==================
 theory definition
 :cst
+:skip
 ==================
 
 #theory lp { 

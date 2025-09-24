@@ -1,6 +1,7 @@
 ==================
 comments
 :cst
+:skip
 ==================
 
 % foo
@@ -20,6 +21,7 @@ comments
 ==================
 rules
 :cst
+:skip
 ==================
 
 head.
@@ -47,6 +49,7 @@ head :-  body.
 ==================
 constraints
 :cst
+:skip
 ==================
 
 :- body.
@@ -69,6 +72,7 @@ constraints
 ==================
 weak constraint
 :cst
+:skip
 ==================
 
 :~ a, b. [1@2,1,2,3]
@@ -112,6 +116,7 @@ weak constraint
 ==================
 minimize
 :cst
+:skip
 ==================
 
 #minimize{ 1@3: a; 1: b; 2,3: b,c  }.
@@ -164,6 +169,7 @@ minimize
 ==================
 maximize
 :cst
+:skip
 ==================
 
 #maximize{ }.
@@ -180,6 +186,7 @@ maximize
 ==================
 show
 :cst
+:skip
 ==================
 
 #show.
@@ -270,6 +277,7 @@ show
 ==================
 defined
 :cst
+:skip
 ==================
 
 #defined a/2.
@@ -297,6 +305,7 @@ defined
 ==================
 project
 :cst
+:skip
 ==================
 
 #project a/2.
@@ -348,6 +357,7 @@ project
 ==================
 const
 :cst
+:skip
 ==================
 
 #const x = 1.
@@ -415,6 +425,7 @@ const
 ==================
 script
 :cst
+:skip
 ==================
 
 #script (python)
@@ -444,6 +455,7 @@ def main(ctl):
 ==================
 include
 :cst
+:skip
 ==================
 
 #include "a".
@@ -469,6 +481,7 @@ include
 ==================
 program
 :cst
+:skip
 ==================
 
 #program base.
@@ -502,6 +515,7 @@ program
 ==================
 external
 :cst
+:skip
 ==================
 
 #external a.
@@ -565,6 +579,7 @@ external
 ==================
 edge
 :cst
+:skip
 ==================
 
 #edge (a,b).
@@ -630,6 +645,7 @@ edge
 ==================
 heuristic
 :cst
+:skip
 ==================
 
 #heuristic a(). [true,blub]

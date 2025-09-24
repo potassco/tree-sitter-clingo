@@ -37,6 +37,15 @@ head :-  body.
           name: (identifier))))))
 
 ==================
+rule error double arrow
+:error
+==================
+
+head :- body :- body.
+
+---
+
+==================
 constraints
 ==================
 
