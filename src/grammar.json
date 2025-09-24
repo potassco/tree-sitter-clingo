@@ -1530,7 +1530,7 @@
         }
       ]
     },
-    "_tuple_pool_item": {
+    "tuple_pool_item": {
       "type": "CHOICE",
       "members": [
         {
@@ -1574,7 +1574,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "_tuple_pool_item"
+              "name": "tuple_pool_item"
             },
             {
               "type": "ALIAS",
@@ -1601,7 +1601,7 @@
                 "members": [
                   {
                     "type": "SYMBOL",
-                    "name": "_tuple_pool_item"
+                    "name": "tuple_pool_item"
                   },
                   {
                     "type": "SYMBOL",
@@ -1629,7 +1629,7 @@
               "members": [
                 {
                   "type": "SYMBOL",
-                  "name": "_tuple_pool_item"
+                  "name": "tuple_pool_item"
                 },
                 {
                   "type": "BLANK"
@@ -1968,7 +1968,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "_theory_root_term"
+              "name": "theory_root_term"
             },
             {
               "type": "BLANK"
@@ -1986,7 +1986,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "_theory_root_term"
+                "name": "theory_root_term"
               }
             ]
           }
@@ -2002,11 +2002,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_theory_root_term"
+          "name": "theory_root_term"
         }
       ]
     },
-    "_theory_root_term": {
+    "theory_root_term": {
       "type": "CHOICE",
       "members": [
         {
@@ -2216,7 +2216,7 @@
       "type": "STRING",
       "value": "not not"
     },
-    "_literal_sign": {
+    "literal_sign": {
       "type": "CHOICE",
       "members": [
         {
@@ -2240,7 +2240,7 @@
               "name": "sign",
               "content": {
                 "type": "SYMBOL",
-                "name": "_literal_sign"
+                "name": "literal_sign"
               }
             },
             {
@@ -2802,7 +2802,7 @@
               "name": "sign",
               "content": {
                 "type": "SYMBOL",
-                "name": "_literal_sign"
+                "name": "literal_sign"
               }
             },
             {
@@ -4765,15 +4765,20 @@
     {
       "type": "SYMBOL",
       "name": "empty_pool_item"
+    },
+    {
+      "type": "STRING",
+      "value": ":-"
+    },
+    {
+      "type": "STRING",
+      "value": ":"
     }
   ],
   "inline": [
     "atom_identifier",
-    "_tuple_pool_item",
     "_const_tuple_item",
     "_theory_operator",
-    "simple_atom",
-    "_literal_sign",
     "_condition",
     "_body_literal_sep",
     "_colon_body",
@@ -4784,11 +4789,11 @@
   "supertypes": [
     "statement",
     "term",
-    "_tuple_pool_item",
-    "_theory_root_term",
+    "tuple_pool_item",
+    "theory_root_term",
     "simple_atom",
     "head",
-    "_literal_sign",
+    "literal_sign",
     "theory_term"
   ],
   "reserved": {}

@@ -23,7 +23,7 @@ module.exports = grammar({
 
   extras: ($) => [$.line_comment, $.block_comment, /\s/],
 
-  externals: ($) => [$.empty_pool_item_first, $.empty_pool_item],
+  externals: ($) => [$.empty_pool_item_first, $.empty_pool_item, ":-", ":"],
 
   // Note that the conflict below between signature and function in show statements
   // does not necessarily have to be resolved in the grammar. It could also
@@ -246,8 +246,7 @@ module.exports = grammar({
 
     _term_comma: ($) => seq($.term, ","),
 
-    _terms_trail: ($) =>
-      seq($.term, repeat1(seq(",", $.term)), optional(",")),
+    _terms_trail: ($) => seq($.term, repeat1(seq(",", $.term)), optional(",")),
 
     tuple_pool_item: ($) =>
       choice(
@@ -569,10 +568,7 @@ module.exports = grammar({
     _optimize_tuple: ($) => seq(",", $.terms),
 
     weight: ($) =>
-      seq(
-        field("term", $.term),
-        optional(seq("@", field("priority", $.term))),
-      ),
+      seq(field("term", $.term), optional(seq("@", field("priority", $.term)))),
 
     optimize_element: ($) =>
       seq(
