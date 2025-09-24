@@ -1,29 +1,27 @@
 #include "tree_sitter/parser.h"
 
-enum TokenType { EMPTY_POOL_ITEM_FIRST , EMPTY_POOL_ITEM};
+enum TokenType { EMPTY_POOL_ITEM_FIRST, EMPTY_POOL_ITEM };
 
 bool tree_sitter_clingo_external_scanner_scan(void *payload, TSLexer *lexer,
-                                             const bool *valid_symbols) {
+                                              const bool *valid_symbols) {
   if (valid_symbols[EMPTY_POOL_ITEM_FIRST]) {
-        if (lexer->lookahead == ';') {
-	    lexer->result_symbol = EMPTY_POOL_ITEM_FIRST;
-	    return true;
-	} else {
-	    return false;
-	};
+    if (lexer->lookahead == ';') {
+      lexer->result_symbol = EMPTY_POOL_ITEM_FIRST;
+      return true;
+    }
+    return false;
   }
 
   if (valid_symbols[EMPTY_POOL_ITEM]) {
-        if (lexer->lookahead == ';' || lexer->lookahead == ')') {
-	    lexer->result_symbol = EMPTY_POOL_ITEM;
-	    return true;
-	} else {
-	    return false;
-	};
+    lexer->mark_end(lexer);
+    if (lexer->lookahead == ';' || lexer->lookahead == ')') {
+      lexer->result_symbol = EMPTY_POOL_ITEM;
+      return true;
+    }
+    return false;
   }
 
   return false;
-
 }
 
 // If we need to allocate/deallocate state, we do it in these functions.
@@ -33,10 +31,10 @@ void tree_sitter_clingo_external_scanner_destroy(void *payload) {}
 
 // If we have state, we should load and save it in these functions.
 unsigned tree_sitter_clingo_external_scanner_serialize(void *payload,
-                                                      char *buffer) {
-    return 0;
+                                                       char *buffer) {
+  return 0;
 }
 
-void tree_sitter_clingo_external_scanner_deserialize(void *payload, char *buffer,
-                                                    unsigned length) {}
-
+void tree_sitter_clingo_external_scanner_deserialize(void *payload,
+                                                     char *buffer,
+                                                     unsigned length) {}
