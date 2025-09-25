@@ -1,0 +1,266 @@
+==================
+numbers
+==================
+
+p(0,9,0xf,0b1,0o7).
+
+---
+
+(source_file
+  (rule
+    head: (literal
+      atom: (symbolic_atom
+        name: (identifier)
+        arguments: (terms
+          (number)
+          (number)
+          (number)
+          (number)
+          (number))))))
+
+==================
+constants
+==================
+
+p("abc", #inf, #sup).
+
+---
+
+(source_file
+  (rule
+    head: (literal
+      atom: (symbolic_atom
+        name: (identifier)
+        arguments: (terms
+          (string
+            (string_fragment))
+          (infimum)
+          (supremum))))))
+
+==================
+variables
+==================
+
+p(X,_,__'Xa').
+
+---
+
+(source_file
+  (rule
+    head: (literal
+      atom: (symbolic_atom
+        name: (identifier)
+        arguments: (terms
+          (variable)
+          (anonymous)
+          (variable))))))
+
+==================
+unary
+==================
+
+p(-1,~1,|1;2|).
+
+---
+
+(source_file
+  (rule
+    head: (literal
+      atom: (symbolic_atom
+        name: (identifier)
+        arguments: (terms
+          (unary_operation
+            right: (number))
+          (unary_operation
+            right: (number))
+          (abs
+            (number)
+            (number)))))))
+
+==================
+binary
+==================
+
+p(1..2,1^2,1?2,1&2,1+2,1-2,1*2,1/2,1\2,1**2).
+
+---
+
+(source_file
+  (rule
+    head: (literal
+      atom: (symbolic_atom
+        name: (identifier)
+        arguments: (terms
+          (binary_operation
+            left: (number)
+            right: (number))
+          (binary_operation
+            left: (number)
+            right: (number))
+          (binary_operation
+            left: (number)
+            right: (number))
+          (binary_operation
+            left: (number)
+            right: (number))
+          (binary_operation
+            left: (number)
+            right: (number))
+          (binary_operation
+            left: (number)
+            right: (number))
+          (binary_operation
+            left: (number)
+            right: (number))
+          (binary_operation
+            left: (number)
+            right: (number))
+          (binary_operation
+            left: (number)
+            right: (number))
+          (binary_operation
+            left: (number)
+            right: (number)))))))
+
+==================
+precedence
+==================
+
+p(1+-2*2**-3**0..1-2).
+
+---
+
+(source_file
+  (rule
+    head: (literal
+      atom: (symbolic_atom
+        name: (identifier)
+        arguments: (terms
+          (binary_operation
+            left: (binary_operation
+              left: (number)
+              right: (binary_operation
+                left: (unary_operation
+                  right: (number))
+                right: (binary_operation
+                  left: (number)
+                  right: (unary_operation
+                    right: (binary_operation
+                      left: (number)
+                      right: (number))))))
+            right: (binary_operation
+              left: (number)
+              right: (number))))))))
+
+==================
+function
+==================
+
+p(f(),g,h(;1;;-f(;;),2;),@g,@g()).
+
+---
+
+(source_file
+  (rule
+    head: (literal
+      atom: (symbolic_atom
+        name: (identifier)
+        arguments: (terms
+          (function
+            name: (identifier))
+          (function
+            name: (identifier))
+          (function
+            name: (identifier)
+            arguments: (empty_pool_item)
+            arguments: (terms
+              (number))
+            arguments: (empty_pool_item)
+            arguments: (terms
+              (unary_operation
+                right: (function
+                  name: (identifier)
+                  arguments: (empty_pool_item)
+                  arguments: (empty_pool_item)
+                  arguments: (empty_pool_item)))
+              (number))
+            arguments: (empty_pool_item))
+          (external_function
+            name: (identifier))
+          (external_function
+            name: (identifier)))))))
+
+==================
+tuple
+==================
+
+p((),(;a;a,;;a,b;a,b,),(,),(c;,)).
+
+---
+
+(source_file
+  (rule
+    head: (literal
+      atom: (symbolic_atom
+        name: (identifier)
+        arguments: (terms
+          (tuple)
+          (tuple
+            (empty_pool_item)
+            (function
+              name: (identifier))
+            (terms
+              (function
+                name: (identifier)))
+            (empty_pool_item)
+            (terms
+              (function
+                name: (identifier))
+              (function
+                name: (identifier)))
+            (terms
+              (function
+                name: (identifier))
+              (function
+                name: (identifier))))
+          (tuple
+            (lone_comma))
+          (tuple
+            (function
+              name: (identifier))
+            (lone_comma)))))))
+
+==================
+identifier
+==================
+
+p(n, no, noxt, a, -n, -no, -noxt, -a).
+
+---
+
+(source_file
+  (rule
+    head: (literal
+      atom: (symbolic_atom
+        name: (identifier)
+        arguments: (terms
+          (function
+            name: (identifier))
+          (function
+            name: (identifier))
+          (function
+            name: (identifier))
+          (function
+            name: (identifier))
+          (unary_operation
+            right: (function
+              name: (identifier)))
+          (unary_operation
+            right: (function
+              name: (identifier)))
+          (unary_operation
+            right: (function
+              name: (identifier)))
+          (unary_operation
+            right: (function
+              name: (identifier))))))))

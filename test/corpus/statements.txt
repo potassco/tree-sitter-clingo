@@ -1,444 +1,486 @@
 ==================
-comment
+comments
 ==================
 
-% Derive (varying) atoms
+% foo
+%* 
+ * bar
+ *%
 
 ---
 
 (source_file
-  (single_comment)
-)
+  (line_comment)
+  (block_comment))
 
 ==================
-multi comment
+rules
 ==================
 
-%* Derive (varying) atoms *%
+head.
+head :-  body.
 
 ---
 
 (source_file
-  (multi_comment)
-)
+  (rule
+    head: (literal
+      atom: (symbolic_atom
+        name: (identifier))))
+  (rule
+    head: (literal
+      atom: (symbolic_atom
+        name: (identifier)))
+    body: (body
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier))))))
 
 ==================
-atom with term
+rule error double arrow
+:error
 ==================
 
-atom(term()).
+head :- body :- body.
+
+---
+
+==================
+constraints
+==================
+
+:- body.
+:- .
 
 ---
 
 (source_file
-  (statement
-    (head
-      (literal
-        (atom
-          (identifier)
-          (LPAREN)
-          (argvec
-            (termvec
-              (term
-                (identifier)
-                (LPAREN)
-                (RPAREN))))
-          (RPAREN))))
-    (DOT)))
+  (integrity_constraint
+    body: (body
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier)))))
+  (integrity_constraint))
 
 ==================
-atom with @term
+weak constraint
 ==================
 
-atom(@term()).
+:~ a, b. [1@2,1,2,3]
+:~ . [0]
 
 ---
 
 (source_file
-  (statement
-    (head
-      (literal
-        (atom
-          (identifier)
-          (LPAREN)
-          (argvec
-            (termvec
-              (term
-                (AT) (identifier)
-                (LPAREN)
-                (RPAREN))))
-          (RPAREN))))
-    (DOT)))
+  (weak_constraint
+    body: (body
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier)))
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier))))
+    weight: (weight
+      term: (number)
+      priority: (number))
+    terms: (terms
+      (number)
+      (number)
+      (number)))
+  (weak_constraint
+    weight: (weight
+      term: (number))))
 
 ==================
-atom rellitvec
+minimize
 ==================
 
-a < b < c.
+#minimize{ 1@3: a; 1: b; 2,3: b,c  }.
 
 ---
 
 (source_file
-  (statement
-    (head
-      (literal
-        (term
-          (identifier))
-        (rellitvec
-          (rellitvec
-            (cmp
-              (LT))
-            (term
-              (identifier)))
-          (cmp
-            (LT))
-          (term
-            (identifier)))))
-    (DOT)))
-
-==================
-rule statements
-==================
-
-head :-  'body.
-
----
-
-(source_file
-  (statement
-    (head
-      (literal
-        (atom
-          (identifier))))
-    (IF)
-    (bodydot
-      (literal
-        (atom
-          (identifier)))
-    (DOT))))
-
-==================
-true as identifier
-==================
-
-true(A').
-
----
-
-(source_file
-  (statement
-    (head
-      (literal
-        (atom
-          (identifier) (LPAREN) 
-          (argvec
-            (termvec
-              (term
-                (VARIABLE))))
-          (RPAREN))))
-    (DOT)))
-
-==================
-constant number declaration
-==================
-
-#const n=1.
-
----
-(source_file
-  (statement
-    (CONST)
-    (identifier)
-    (EQ)
-    (constterm
-      (NUMBER
-        (dec)))
-    (DOT)))
-
-==================
-constant string declaration
-==================
-
-#const n="test%".
-
----
-(source_file
-  (statement
-    (CONST)
-    (identifier)
-    (EQ)
-    (constterm
-      (STRING
-        (string_fragment)))
-    (DOT)))
-
-==================
-show statement 1
-==================
-
-#show pred/2.
-
----
-(source_file
-  (statement
-    (SHOW)
-    (identifier)
-    (SLASH)
-    (NUMBER 
-      (dec))
-    (DOT)))
-
-==================
-show statement 2
-==================
-
-#show pred(a,X).
-
----
-(source_file
-  (statement
-    (SHOW)
-    (term
-      (identifier)
-      (LPAREN)
-      (argvec
-        (termvec
-          (termvec
-            (term
-              (identifier)))
-          (COMMA)
-          (term
-            (VARIABLE))))
-      (RPAREN))
-    (DOT)))
-
-==================
-maximize statement
-==================
-
-#maximize {atom}.
-
----
-(source_file
-  (statement
-    (MAXIMIZE)
-    (LBRACE) 
-    (maxelemlist
-      (optimizeweight
-        (term
-          (identifier))))
-    (RBRACE)
-    (DOT)))
-
-
-==================
-minimise statement
-==================
-
-#minimise {X:ccc(X)}.
----
-(source_file
-  (statement
-    (MINIMIZE)
-    (LBRACE) 
-    (minelemlist
-      (optimizeweight
-        (term
-          (VARIABLE))) 
-      (optimizecond
-        (COLON)
-        (optimizelitvec
+  (minimize
+    elements: (optimize_elements
+      (optimize_element
+        weight: (weight
+          term: (number)
+          priority: (number))
+        condition: (condition
           (literal
-            (atom
-              (identifier)
-              (LPAREN)
-              (argvec
-                (termvec
-                  (term
-                    (VARIABLE))))
-              (RPAREN))))))
-    (RBRACE)
-    (DOT)))
+            atom: (symbolic_atom
+              name: (identifier)))))
+      (optimize_element
+        weight: (weight
+          term: (number))
+        condition: (condition
+          (literal
+            atom: (symbolic_atom
+              name: (identifier)))))
+      (optimize_element
+        weight: (weight
+          term: (number))
+        terms: (terms
+          (number))
+        condition: (condition
+          (literal
+            atom: (symbolic_atom
+              name: (identifier)))
+          (literal
+            atom: (symbolic_atom
+              name: (identifier))))))))
 
 ==================
-embedded script
+maximize
 ==================
 
-#script (bla)
+#maximize{ }.
 
-some script code
-#en comment
-more script code
+---
+
+(source_file
+  (maximize))
+
+==================
+show
+==================
+
+#show.
+#show a/2.
+#show -a/2.
+#show a/2+1.
+#show -a/2+1.
+#show -p(X) : q(), c(X).
+#show a.
+
+---
+
+(source_file
+  (show)
+  (show_signature
+    signature: (signature
+      name: (identifier)
+      arity: (number)))
+  (show_signature
+    signature: (signature
+      sign: (classical_negation)
+      name: (identifier)
+      arity: (number)))
+  (show_term
+    term: (binary_operation
+      left: (binary_operation
+        left: (function
+          name: (identifier))
+        right: (number))
+      right: (number)))
+  (show_term
+    term: (binary_operation
+      left: (binary_operation
+        left: (unary_operation
+          right: (function
+            name: (identifier)))
+        right: (number))
+      right: (number)))
+  (show_term
+    term: (unary_operation
+      right: (function
+        name: (identifier)
+        arguments: (terms
+          (variable))))
+    body: (body
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier)))
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier)
+          arguments: (terms
+            (variable))))))
+  (show_term
+    term: (function
+      name: (identifier))))
+
+==================
+defined
+==================
+
+#defined a/2.
+#defined -a/2.
+
+---
+
+(source_file
+  (defined
+    signature: (signature
+      name: (identifier)
+      arity: (number)))
+  (defined
+    signature: (signature
+      sign: (classical_negation)
+      name: (identifier)
+      arity: (number))))
+
+==================
+project
+==================
+
+#project a/2.
+#project -a/2.
+#project a.
+#project a : .
+#project a : b.
+
+---
+
+(source_file
+  (project_signature
+    signature: (signature
+      name: (identifier)
+      arity: (number)))
+  (project_signature
+    signature: (signature
+      sign: (classical_negation)
+      name: (identifier)
+      arity: (number)))
+  (project_atom
+    atom: (symbolic_atom
+      name: (identifier)))
+  (project_atom
+    atom: (symbolic_atom
+      name: (identifier)))
+  (project_atom
+    atom: (symbolic_atom
+      name: (identifier))
+    body: (body
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier))))))
+
+==================
+const
+==================
+
+#const x = 1.
+#const x = f().
+#const x = f((), |x|).
+#const x = 1. [default]
+#const x = 2. [override]
+
+---
+
+(source_file
+  (const
+    name: (identifier)
+    value: (number))
+  (const
+    name: (identifier)
+    value: (function
+      name: (identifier)))
+  (const
+    name: (identifier)
+    value: (function
+      name: (identifier)
+      arguments: (terms
+        (tuple)
+        (abs
+          (function
+            name: (identifier))))))
+  (const
+    name: (identifier)
+    value: (number)
+    type: (const_type))
+  (const
+    name: (identifier)
+    value: (number)
+    type: (const_type)))
+
+==================
+script
+==================
+
+#script (python)
+
+def main(ctl):
+  ctl.ground()
 
 #end.
 
 ---
+
 (source_file
-  (statement
-    (SCRIPT)
-    (LPAREN)
-    (identifier)
-    (RPAREN)
-    (CODE)
-    (DOT)))
+  (script
+    language: (identifier)
+    code: (code)))
 
 ==================
-theory definition
+include
 ==================
 
-#theory lp { 
-    lin_term {
-    + : 0, binary, left
-    };
-    bounds{
-    + : 0, binary, left
-    };
-
-    &op/0   : lin_term, {<=,>=,>,<,=,!=}, bounds, any
-}.
+#include "a".
+#include <b>.
 
 ---
+
 (source_file
-  (statement
-    (THEORY)
-    (theory_identifier (identifier))
-    (LBRACE)
-    (theory_definition_nlist
-      (theory_term_definition
-        (theory_definition_identifier
-          (identifier))
-        (LBRACE)
-        (theory_operator_definition_nlist
-          (theory_operator_definition
-            (theory_op
-              (THEORY_OP))
-            (COLON)
-            (NUMBER
-              (dec))
-            (COMMA)
-            (BINARY)
-            (COMMA)
-            (LEFT)))
-        (RBRACE))
-      (SEM)
-      (theory_definition_nlist
-        (theory_term_definition
-          (theory_definition_identifier
-            (identifier))
-          (LBRACE)
-          (theory_operator_definition_nlist
-            (theory_operator_definition
-              (theory_op
-                (THEORY_OP))
-              (COLON)
-              (NUMBER
-                (dec))
-              (COMMA)
-              (BINARY)
-              (COMMA)
-              (LEFT)))
-          (RBRACE))
-        (SEM)
-        (theory_definition_nlist
-          (theory_atom_definition
-            (AND)
-            (theory_definition_identifier
-              (identifier))
-            (SLASH)
-            (NUMBER
-              (dec))
-            (COLON)
-            (theory_definition_identifier
-              (identifier))
-            (COMMA)
-            (LBRACE)
-            (theory_operator_nlist
-              (theory_operator_nlist
-                (theory_operator_nlist
-                  (theory_operator_nlist
-                    (theory_operator_nlist
-                      (theory_operator_nlist
-                        (theory_op
-                          (THEORY_OP)))
-                      (COMMA)
-                      (theory_op
-                        (THEORY_OP)))
-                    (COMMA)
-                    (theory_op
-                      (THEORY_OP)))
-                  (COMMA)
-                  (theory_op
-                    (THEORY_OP)))
-                (COMMA)
-                (theory_op
-                  (THEORY_OP)))
-              (COMMA)
-              (theory_op
-                (THEORY_OP)))
-            (RBRACE)
-            (COMMA)
-            (theory_definition_identifier
-              (identifier))
-            (COMMA)
-            (theory_atom_type
-              (ANY))))))
-    (RBRACE)
-    (DOT)))
+  (include
+    (string
+      (string_fragment)))
+  (include
+    (identifier)))
 
 ==================
-theory atom
+program
 ==================
 
-&sum{x} >= 4000.
+#program base.
+#program base().
+#program acid(a, b).
 
 ---
+
 (source_file
-  (statement
-    (head
-      (luheadaggregate
-        (theory_atom
-          (AND)
-          (theory_atom_name
-            (identifier))
-          (LBRACE)
-          (theory_atom_element_nlist
-            (theory_atom_element
-              (theory_opterm_nlist
-                (theory_opterm
-                  (theory_term
-                    (identifier))))))
-          (RBRACE)
-          (theory_op
-            (THEORY_OP))
-          (theory_opterm
-            (theory_term
-              (NUMBER
-                (dec)))))))
-    (DOT)))
+  (program
+    name: (identifier))
+  (program
+    name: (identifier))
+  (program
+    name: (identifier)
+    parameters: (parameters
+      (identifier)
+      (identifier))))
 
 ==================
-term modulo operator
+external
 ==================
 
-atom(5\2).
+#external a.
+#external -a.
+#external a : b.
+#external a: .
+#external a(X) : p(B). [X]
 
 ---
+
 (source_file
-  (statement
-    (head
-      (literal
-        (atom
-          (identifier)
-          (LPAREN)
-          (argvec
-            (termvec
-              (term
-                (term
-                  (NUMBER
-                    (dec)))
-                (MOD)
-                (term
-                  (NUMBER
-                    (dec))))))
-          (RPAREN))))
-    (DOT)))
+  (external
+    atom: (symbolic_atom
+      name: (identifier)))
+  (external
+    atom: (symbolic_atom
+      sign: (classical_negation)
+      name: (identifier)))
+  (external
+    atom: (symbolic_atom
+      name: (identifier))
+    body: (body
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier)))))
+  (external
+    atom: (symbolic_atom
+      name: (identifier)))
+  (external
+    atom: (symbolic_atom
+      name: (identifier)
+      arguments: (terms
+        (variable)))
+    body: (body
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier)
+          arguments: (terms
+            (variable)))))
+    type: (variable)))
+
+==================
+edge
+==================
+
+#edge (a,b).
+#edge (a,b; b, c).
+#edge (a,b; b, c) : q.
+
+---
+
+(source_file
+  (edge
+    edge_pair: (edge_pair
+      (function
+        name: (identifier))
+      (function
+        name: (identifier))))
+  (edge
+    edge_pair: (edge_pair
+      (function
+        name: (identifier))
+      (function
+        name: (identifier)))
+    edge_pair: (edge_pair
+      (function
+        name: (identifier))
+      (function
+        name: (identifier))))
+  (edge
+    edge_pair: (edge_pair
+      (function
+        name: (identifier))
+      (function
+        name: (identifier)))
+    edge_pair: (edge_pair
+      (function
+        name: (identifier))
+      (function
+        name: (identifier)))
+    body: (body
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier))))))
+
+==================
+heuristic
+==================
+
+#heuristic a(). [true,blub]
+#heuristic -a(). [true@10,blub]
+#heuristic a(X) : q(X). [true@X,blub(X)]
+
+---
+
+(source_file
+  (heuristic
+    atom: (symbolic_atom
+      name: (identifier))
+    weight: (weight
+      term: (function
+        name: (identifier)))
+    type: (function
+      name: (identifier)))
+  (heuristic
+    atom: (symbolic_atom
+      sign: (classical_negation)
+      name: (identifier))
+    weight: (weight
+      term: (function
+        name: (identifier))
+      priority: (number))
+    type: (function
+      name: (identifier)))
+  (heuristic
+    atom: (symbolic_atom
+      name: (identifier)
+      arguments: (terms
+        (variable)))
+    body: (body
+      (body_literal
+        atom: (symbolic_atom
+          name: (identifier)
+          arguments: (terms
+            (variable)))))
+    weight: (weight
+      term: (function
+        name: (identifier))
+      priority: (variable))
+    type: (function
+      name: (identifier)
+      arguments: (terms
+        (variable)))))

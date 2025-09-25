@@ -1,0 +1,42 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "clingo",
+      "camelcase": "Clingo",
+      "title": "Clingo",
+      "scope": "source.clingo",
+      "file-types": [
+        "lp"
+      ],
+      "injection-regex": "^clingo$",
+      "class-name": "TreeSitterClingo",
+      "highlights": "queries/highlights.scm",
+      "injections": "queries/injections.scm"
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "license": "MIT",
+    "description": "Clingo grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "Roland Kaminski"
+      },
+      {
+        "name": "Sven Thiele"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/potassco/tree-sitter-clingo"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": false
+  }
+}

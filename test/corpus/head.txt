@@ -1,0 +1,185 @@
+==================
+symbolic literal
+==================
+
+not p.
+
+---
+
+(source_file
+  (rule
+    head: (literal
+      sign: (default_negation)
+      atom: (symbolic_atom
+        name: (identifier)))))
+
+==================
+comparison
+==================
+
+X < Y < Z.
+ 
+---
+
+(source_file
+  (rule
+    head: (literal
+      atom: (comparison
+        (variable)
+        (relation)
+        (variable)
+        (relation)
+        (variable)))))
+
+==================
+boolean
+==================
+
+#true; #false.
+ 
+---
+
+(source_file
+  (rule
+    head: (disjunction
+      (literal
+        atom: (boolean_constant))
+      (literal
+        atom: (boolean_constant)))))
+
+==================
+disjunction
+==================
+
+p; p: q, c; d: ; |X| < 10.
+
+---
+
+(source_file
+  (rule
+    head: (disjunction
+      (literal
+        atom: (symbolic_atom
+          name: (identifier)))
+      (conditional_literal
+        literal: (literal
+          atom: (symbolic_atom
+            name: (identifier)))
+        condition: (condition
+          (literal
+            atom: (symbolic_atom
+              name: (identifier)))
+          (literal
+            atom: (symbolic_atom
+              name: (identifier)))))
+      (conditional_literal
+        literal: (literal
+          atom: (symbolic_atom
+            name: (identifier))))
+      (literal
+        atom: (comparison
+          (abs
+            (variable))
+          (relation)
+          (number))))))
+
+==================
+head set aggregate
+==================
+
+1 <= { a; a: b, c } <= 2.
+
+---
+
+(source_file
+  (rule
+    head: (set_aggregate
+      left: (lower
+        (number)
+        (relation))
+      elements: (set_aggregate_elements
+        (set_aggregate_element
+          literal: (literal
+            atom: (symbolic_atom
+              name: (identifier))))
+        (set_aggregate_element
+          literal: (literal
+            atom: (symbolic_atom
+              name: (identifier)))
+          condition: (condition
+            (literal
+              atom: (symbolic_atom
+                name: (identifier)))
+            (literal
+              atom: (symbolic_atom
+                name: (identifier))))))
+      right: (upper
+        (relation)
+        (number)))))
+
+==================
+head aggregate
+==================
+
+1 <= #count { :a; 1:a:b,c; 1:a: } <= 2.
+
+---
+
+(source_file
+  (rule
+    head: (head_aggregate
+      left: (lower
+        (number)
+        (relation))
+      function: (aggregate_function)
+      elements: (head_aggregate_elements
+        (head_aggregate_element
+          literal: (literal
+            atom: (symbolic_atom
+              name: (identifier))))
+        (head_aggregate_element
+          terms: (terms
+            (number))
+          literal: (literal
+            atom: (symbolic_atom
+              name: (identifier)))
+          condition: (condition
+            (literal
+              atom: (symbolic_atom
+                name: (identifier)))
+            (literal
+              atom: (symbolic_atom
+                name: (identifier)))))
+        (head_aggregate_element
+          terms: (terms
+            (number))
+          literal: (literal
+            atom: (symbolic_atom
+              name: (identifier)))))
+      right: (upper
+        (relation)
+        (number)))))
+
+==================
+head theory
+==================
+
+&p(;a;b;) < 1.
+
+---
+
+(source_file
+  (rule
+    head: (theory_atom
+      name: (identifier)
+      arguments: (empty_pool_item)
+      arguments: (terms
+        (function
+          name: (identifier)))
+      arguments: (terms
+        (function
+          name: (identifier)))
+      arguments: (empty_pool_item)
+      right: (theory_atom_upper
+        (theory_operator)
+        (number)))))
