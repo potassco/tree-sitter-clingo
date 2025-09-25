@@ -1,10 +1,16 @@
-Cargo.lock
-node_modules
-build
+*.a
+*.egg-info
 *.log
-package-lock.json
-example*
+*.o
+*.pc
+*.so
 /target/
+Cargo.lock
+build
+dist
+example*
+node_modules
+package-lock.json
 
 # Emacs
 *~

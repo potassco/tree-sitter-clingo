@@ -10,7 +10,9 @@
         "lp"
       ],
       "injection-regex": "^clingo$",
-      "class-name": "TreeSitterClingo"
+      "class-name": "TreeSitterClingo",
+      "highlights": "queries/highlights.scm",
+      "injections": "queries/injections.scm"
     }
   ],
   "metadata": {

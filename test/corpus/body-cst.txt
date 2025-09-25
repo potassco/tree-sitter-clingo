@@ -1,0 +1,307 @@
+==================
+symbolic literals
+:cst
+:skip
+==================
+
+:- p(X), not p(X), not not p(X), -p(X), not -p(X), not not -p(X).
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:65     integrity_constraint
+1:0  - 1:2        ":-"
+1:3  - 1:64       body: body
+1:3  - 1:7          body_literal
+1:3  - 1:7            atom: symbolic_atom
+1:3  - 1:4              name: identifier `p`
+1:4  - 1:5              "("
+1:5  - 1:6              arguments: terms
+1:5  - 1:6                variable `X`
+1:6  - 1:7              ")"
+1:7  - 1:8          ","
+1:9  - 1:17         body_literal
+1:9  - 1:12           sign: default_negation `not`
+1:13 - 1:17           atom: symbolic_atom
+1:13 - 1:14             name: identifier `p`
+1:14 - 1:15             "("
+1:15 - 1:16             arguments: terms
+1:15 - 1:16               variable `X`
+1:16 - 1:17             ")"
+1:17 - 1:18         ","
+1:19 - 1:31         body_literal
+1:19 - 1:26           sign: double_default_negation `not not`
+1:27 - 1:31           atom: symbolic_atom
+1:27 - 1:28             name: identifier `p`
+1:28 - 1:29             "("
+1:29 - 1:30             arguments: terms
+1:29 - 1:30               variable `X`
+1:30 - 1:31             ")"
+1:31 - 1:32         ","
+1:33 - 1:38         body_literal
+1:33 - 1:38           atom: symbolic_atom
+1:33 - 1:34             sign: classical_negation `-`
+1:34 - 1:35             name: identifier `p`
+1:35 - 1:36             "("
+1:36 - 1:37             arguments: terms
+1:36 - 1:37               variable `X`
+1:37 - 1:38             ")"
+1:38 - 1:39         ","
+1:40 - 1:49         body_literal
+1:40 - 1:43           sign: default_negation `not`
+1:44 - 1:49           atom: symbolic_atom
+1:44 - 1:45             sign: classical_negation `-`
+1:45 - 1:46             name: identifier `p`
+1:46 - 1:47             "("
+1:47 - 1:48             arguments: terms
+1:47 - 1:48               variable `X`
+1:48 - 1:49             ")"
+1:49 - 1:50         ","
+1:51 - 1:64         body_literal
+1:51 - 1:58           sign: double_default_negation `not not`
+1:59 - 1:64           atom: symbolic_atom
+1:59 - 1:60             sign: classical_negation `-`
+1:60 - 1:61             name: identifier `p`
+1:61 - 1:62             "("
+1:62 - 1:63             arguments: terms
+1:62 - 1:63               variable `X`
+1:63 - 1:64             ")"
+1:64 - 1:65       "."
+
+==================
+comparisons
+:cst
+:skip
+==================
+
+:- X < Y < Z, -p(X) < X < Y.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:28     integrity_constraint
+1:0  - 1:2        ":-"
+1:3  - 1:27       body: body
+1:3  - 1:12         body_literal
+1:3  - 1:12           atom: comparison
+1:3  - 1:4              variable `X`
+1:5  - 1:6              relation `<`
+1:7  - 1:8              variable `Y`
+1:9  - 1:10             relation `<`
+1:11 - 1:12             variable `Z`
+1:12 - 1:13         ","
+1:14 - 1:27         body_literal
+1:14 - 1:27           atom: comparison
+1:14 - 1:19             unary_operation
+1:14 - 1:15               "-"
+1:15 - 1:19               right: function
+1:15 - 1:16                 name: identifier `p`
+1:16 - 1:17                 "("
+1:17 - 1:18                 arguments: terms
+1:17 - 1:18                   variable `X`
+1:18 - 1:19                 ")"
+1:20 - 1:21             relation `<`
+1:22 - 1:23             variable `X`
+1:24 - 1:25             relation `<`
+1:26 - 1:27             variable `Y`
+1:27 - 1:28       "."
+
+==================
+conditional literals
+:cst
+:skip
+==================
+
+:- a, not b: p, c; p(X):; not not X < Y < Z: p(X); b:.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:54     integrity_constraint
+1:0  - 1:2        ":-"
+1:3  - 1:53       body: body
+1:3  - 1:4          body_literal
+1:3  - 1:4            atom: symbolic_atom
+1:3  - 1:4              name: identifier `a`
+1:4  - 1:5          ","
+1:6  - 1:17         conditional_literal
+1:6  - 1:11           literal: literal
+1:6  - 1:9              sign: default_negation `not`
+1:10 - 1:11             atom: symbolic_atom
+1:10 - 1:11               name: identifier `b`
+1:11 - 1:12           ":"
+1:13 - 1:17           condition: condition
+1:13 - 1:14             literal
+1:13 - 1:14               atom: symbolic_atom
+1:13 - 1:14                 name: identifier `p`
+1:14 - 1:15             ","
+1:16 - 1:17             literal
+1:16 - 1:17               atom: symbolic_atom
+1:16 - 1:17                 name: identifier `c`
+1:17 - 1:18         ";"
+1:19 - 1:24         conditional_literal
+1:19 - 1:23           literal: literal
+1:19 - 1:23             atom: symbolic_atom
+1:19 - 1:20               name: identifier `p`
+1:20 - 1:21               "("
+1:21 - 1:22               arguments: terms
+1:21 - 1:22                 variable `X`
+1:22 - 1:23               ")"
+1:23 - 1:24           ":"
+1:24 - 1:25         ";"
+1:26 - 1:49         conditional_literal
+1:26 - 1:43           literal: literal
+1:26 - 1:33             sign: double_default_negation `not not`
+1:34 - 1:43             atom: comparison
+1:34 - 1:35               variable `X`
+1:36 - 1:37               relation `<`
+1:38 - 1:39               variable `Y`
+1:40 - 1:41               relation `<`
+1:42 - 1:43               variable `Z`
+1:43 - 1:44           ":"
+1:45 - 1:49           condition: condition
+1:45 - 1:49             literal
+1:45 - 1:49               atom: symbolic_atom
+1:45 - 1:46                 name: identifier `p`
+1:46 - 1:47                 "("
+1:47 - 1:48                 arguments: terms
+1:47 - 1:48                   variable `X`
+1:48 - 1:49                 ")"
+1:49 - 1:50         ";"
+1:51 - 1:53         conditional_literal
+1:51 - 1:52           literal: literal
+1:51 - 1:52             atom: symbolic_atom
+1:51 - 1:52               name: identifier `b`
+1:52 - 1:53           ":"
+1:53 - 1:54       "."
+
+==================
+body set aggregates
+:cst
+:skip
+==================
+
+:- not 1 { a; a: ; a: b; a: b, c } <= 3.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:40     integrity_constraint
+1:0  - 1:2        ":-"
+1:3  - 1:39       body: body
+1:3  - 1:39         body_literal
+1:3  - 1:6            sign: default_negation `not`
+1:7  - 1:39           atom: set_aggregate
+1:7  - 1:8              left: lower
+1:7  - 1:8                number `1`
+1:9  - 1:10             "{"
+1:11 - 1:32             elements: set_aggregate_elements
+1:11 - 1:12               set_aggregate_element
+1:11 - 1:12                 literal: literal
+1:11 - 1:12                   atom: symbolic_atom
+1:11 - 1:12                     name: identifier `a`
+1:12 - 1:13               ";"
+1:14 - 1:16               set_aggregate_element
+1:14 - 1:15                 literal: literal
+1:14 - 1:15                   atom: symbolic_atom
+1:14 - 1:15                     name: identifier `a`
+1:15 - 1:16                 ":"
+1:17 - 1:18               ";"
+1:19 - 1:23               set_aggregate_element
+1:19 - 1:20                 literal: literal
+1:19 - 1:20                   atom: symbolic_atom
+1:19 - 1:20                     name: identifier `a`
+1:20 - 1:21                 ":"
+1:22 - 1:23                 condition: condition
+1:22 - 1:23                   literal
+1:22 - 1:23                     atom: symbolic_atom
+1:22 - 1:23                       name: identifier `b`
+1:23 - 1:24               ";"
+1:25 - 1:32               set_aggregate_element
+1:25 - 1:26                 literal: literal
+1:25 - 1:26                   atom: symbolic_atom
+1:25 - 1:26                     name: identifier `a`
+1:26 - 1:27                 ":"
+1:28 - 1:32                 condition: condition
+1:28 - 1:29                   literal
+1:28 - 1:29                     atom: symbolic_atom
+1:28 - 1:29                       name: identifier `b`
+1:29 - 1:30                   ","
+1:31 - 1:32                   literal
+1:31 - 1:32                     atom: symbolic_atom
+1:31 - 1:32                       name: identifier `c`
+1:33 - 1:34             "}"
+1:35 - 1:39             right: upper
+1:35 - 1:37               relation `<=`
+1:38 - 1:39               number `3`
+1:39 - 1:40       "."
+
+==================
+body aggregates
+:cst
+:skip
+==================
+
+:- not 1 #count { :; :a; a; a: ; a: b, c; a, b } <= 3.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:54     integrity_constraint
+1:0  - 1:2        ":-"
+1:3  - 1:53       body: body
+1:3  - 1:53         body_literal
+1:3  - 1:6            sign: default_negation `not`
+1:7  - 1:53           atom: body_aggregate
+1:7  - 1:8              left: lower
+1:7  - 1:8                number `1`
+1:9  - 1:15             function: aggregate_function `#count`
+1:16 - 1:17             "{"
+1:18 - 1:46             elements: body_aggregate_elements
+1:18 - 1:19               body_aggregate_element
+1:18 - 1:19                 ":"
+1:19 - 1:20               ";"
+1:21 - 1:23               body_aggregate_element
+1:21 - 1:22                 ":"
+1:22 - 1:23                 condition: condition
+1:22 - 1:23                   literal
+1:22 - 1:23                     atom: symbolic_atom
+1:22 - 1:23                       name: identifier `a`
+1:23 - 1:24               ";"
+1:25 - 1:26               body_aggregate_element
+1:25 - 1:26                 terms: terms
+1:25 - 1:26                   function
+1:25 - 1:26                     name: identifier `a`
+1:26 - 1:27               ";"
+1:28 - 1:30               body_aggregate_element
+1:28 - 1:29                 terms: terms
+1:28 - 1:29                   function
+1:28 - 1:29                     name: identifier `a`
+1:29 - 1:30                 ":"
+1:31 - 1:32               ";"
+1:33 - 1:40               body_aggregate_element
+1:33 - 1:34                 terms: terms
+1:33 - 1:34                   function
+1:33 - 1:34                     name: identifier `a`
+1:34 - 1:35                 ":"
+1:36 - 1:40                 condition: condition
+1:36 - 1:37                   literal
+1:36 - 1:37                     atom: symbolic_atom
+1:36 - 1:37                       name: identifier `b`
+1:37 - 1:38                   ","
+1:39 - 1:40                   literal
+1:39 - 1:40                     atom: symbolic_atom
+1:39 - 1:40                       name: identifier `c`
+1:40 - 1:41               ";"
+1:42 - 1:46               body_aggregate_element
+1:42 - 1:46                 terms: terms
+1:42 - 1:43                   function
+1:42 - 1:43                     name: identifier `a`
+1:43 - 1:44                   ","
+1:45 - 1:46                   function
+1:45 - 1:46                     name: identifier `b`
+1:47 - 1:48             "}"
+1:49 - 1:53             right: upper
+1:49 - 1:51               relation `<=`
+1:52 - 1:53               number `3`
+1:53 - 1:54       "."

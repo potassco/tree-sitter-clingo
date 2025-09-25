@@ -1,0 +1,471 @@
+==================
+theory guard
+:cst
+:skip
+==================
+
+&p <= 5.
+
+---
+
+1:0 - 2:0   source_file
+1:0 - 1:8     rule
+1:0 - 1:7       head: theory_atom
+1:0 - 1:1         "&"
+1:1 - 1:2         name: identifier `p`
+1:3 - 1:7         right: theory_atom_upper
+1:3 - 1:5           theory_operator `<=`
+1:6 - 1:7           number `5`
+1:7 - 1:8       "."
+
+==================
+theory elements
+:cst
+:skip
+==================
+
+&p { : ; 1; 1,2; 1:a,b; 1,2:a }.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:32     rule
+1:0  - 1:31       head: theory_atom
+1:0  - 1:1          "&"
+1:1  - 1:2          name: identifier `p`
+1:3  - 1:4          "{"
+1:5  - 1:29         elements: theory_elements
+1:5  - 1:6            theory_element
+1:5  - 1:6              ":"
+1:7  - 1:8            ";"
+1:9  - 1:10           theory_element
+1:9  - 1:10             theory_terms: theory_terms
+1:9  - 1:10               number `1`
+1:10 - 1:11           ";"
+1:12 - 1:15           theory_element
+1:12 - 1:15             theory_terms: theory_terms
+1:12 - 1:13               number `1`
+1:13 - 1:14               ","
+1:14 - 1:15               number `2`
+1:15 - 1:16           ";"
+1:17 - 1:22           theory_element
+1:17 - 1:18             theory_terms: theory_terms
+1:17 - 1:18               number `1`
+1:18 - 1:19             ":"
+1:19 - 1:22             condition: condition
+1:19 - 1:20               literal
+1:19 - 1:20                 atom: symbolic_atom
+1:19 - 1:20                   name: identifier `a`
+1:20 - 1:21               ","
+1:21 - 1:22               literal
+1:21 - 1:22                 atom: symbolic_atom
+1:21 - 1:22                   name: identifier `b`
+1:22 - 1:23           ";"
+1:24 - 1:29           theory_element
+1:24 - 1:27             theory_terms: theory_terms
+1:24 - 1:25               number `1`
+1:25 - 1:26               ","
+1:26 - 1:27               number `2`
+1:27 - 1:28             ":"
+1:28 - 1:29             condition: condition
+1:28 - 1:29               literal
+1:28 - 1:29                 atom: symbolic_atom
+1:28 - 1:29                   name: identifier `a`
+1:30 - 1:31         "}"
+1:31 - 1:32       "."
+
+==================
+theory tuple
+:cst
+:skip
+==================
+
+&p { (); (,); (1); (1,); (1,2); (1,2,) }.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:41     rule
+1:0  - 1:40       head: theory_atom
+1:0  - 1:1          "&"
+1:1  - 1:2          name: identifier `p`
+1:3  - 1:4          "{"
+1:5  - 1:38         elements: theory_elements
+1:5  - 1:7            theory_element
+1:5  - 1:7              theory_terms: theory_terms
+1:5  - 1:7                theory_tuple
+1:5  - 1:6                  "("
+1:6  - 1:7                  ")"
+1:7  - 1:8            ";"
+1:9  - 1:12           theory_element
+1:9  - 1:12             theory_terms: theory_terms
+1:9  - 1:12               theory_tuple
+1:9  - 1:10                 "("
+1:10 - 1:11                 theory_terms
+1:10 - 1:11                   lone_comma `,`
+1:11 - 1:12                 ")"
+1:12 - 1:13           ";"
+1:14 - 1:17           theory_element
+1:14 - 1:17             theory_terms: theory_terms
+1:14 - 1:17               theory_tuple
+1:14 - 1:15                 "("
+1:15 - 1:16                 theory_terms
+1:15 - 1:16                   number `1`
+1:16 - 1:17                 ")"
+1:17 - 1:18           ";"
+1:19 - 1:23           theory_element
+1:19 - 1:23             theory_terms: theory_terms
+1:19 - 1:23               theory_tuple
+1:19 - 1:20                 "("
+1:20 - 1:22                 theory_terms
+1:20 - 1:21                   number `1`
+1:21 - 1:22                   ","
+1:22 - 1:23                 ")"
+1:23 - 1:24           ";"
+1:25 - 1:30           theory_element
+1:25 - 1:30             theory_terms: theory_terms
+1:25 - 1:30               theory_tuple
+1:25 - 1:26                 "("
+1:26 - 1:29                 theory_terms
+1:26 - 1:27                   number `1`
+1:27 - 1:28                   ","
+1:28 - 1:29                   number `2`
+1:29 - 1:30                 ")"
+1:30 - 1:31           ";"
+1:32 - 1:38           theory_element
+1:32 - 1:38             theory_terms: theory_terms
+1:32 - 1:38               theory_tuple
+1:32 - 1:33                 "("
+1:33 - 1:37                 theory_terms
+1:33 - 1:34                   number `1`
+1:34 - 1:35                   ","
+1:35 - 1:36                   number `2`
+1:36 - 1:37                   ","
+1:37 - 1:38                 ")"
+1:39 - 1:40         "}"
+1:40 - 1:41       "."
+
+==================
+theory list
+:cst
+:skip
+==================
+
+&p { []; [1]; [1,2] }.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:22     rule
+1:0  - 1:21       head: theory_atom
+1:0  - 1:1          "&"
+1:1  - 1:2          name: identifier `p`
+1:3  - 1:4          "{"
+1:5  - 1:19         elements: theory_elements
+1:5  - 1:7            theory_element
+1:5  - 1:7              theory_terms: theory_terms
+1:5  - 1:7                theory_list
+1:5  - 1:6                  "["
+1:6  - 1:7                  "]"
+1:7  - 1:8            ";"
+1:9  - 1:12           theory_element
+1:9  - 1:12             theory_terms: theory_terms
+1:9  - 1:12               theory_list
+1:9  - 1:10                 "["
+1:10 - 1:11                 theory_terms
+1:10 - 1:11                   number `1`
+1:11 - 1:12                 "]"
+1:12 - 1:13           ";"
+1:14 - 1:19           theory_element
+1:14 - 1:19             theory_terms: theory_terms
+1:14 - 1:19               theory_list
+1:14 - 1:15                 "["
+1:15 - 1:18                 theory_terms
+1:15 - 1:16                   number `1`
+1:16 - 1:17                   ","
+1:17 - 1:18                   number `2`
+1:18 - 1:19                 "]"
+1:20 - 1:21         "}"
+1:21 - 1:22       "."
+
+==================
+theory set
+:cst
+:skip
+==================
+
+&p { {}; {1}; {1,2} }.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:22     rule
+1:0  - 1:21       head: theory_atom
+1:0  - 1:1          "&"
+1:1  - 1:2          name: identifier `p`
+1:3  - 1:4          "{"
+1:5  - 1:19         elements: theory_elements
+1:5  - 1:7            theory_element
+1:5  - 1:7              theory_terms: theory_terms
+1:5  - 1:7                theory_set
+1:5  - 1:6                  "{"
+1:6  - 1:7                  "}"
+1:7  - 1:8            ";"
+1:9  - 1:12           theory_element
+1:9  - 1:12             theory_terms: theory_terms
+1:9  - 1:12               theory_set
+1:9  - 1:10                 "{"
+1:10 - 1:11                 theory_terms
+1:10 - 1:11                   number `1`
+1:11 - 1:12                 "}"
+1:12 - 1:13           ";"
+1:14 - 1:19           theory_element
+1:14 - 1:19             theory_terms: theory_terms
+1:14 - 1:19               theory_set
+1:14 - 1:15                 "{"
+1:15 - 1:18                 theory_terms
+1:15 - 1:16                   number `1`
+1:16 - 1:17                   ","
+1:17 - 1:18                   number `2`
+1:18 - 1:19                 "}"
+1:20 - 1:21         "}"
+1:21 - 1:22       "."
+
+==================
+theory function
+:cst
+:skip
+==================
+
+&p { f, f(), f(1), f(1,2) }.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:28     rule
+1:0  - 1:27       head: theory_atom
+1:0  - 1:1          "&"
+1:1  - 1:2          name: identifier `p`
+1:3  - 1:4          "{"
+1:5  - 1:25         elements: theory_elements
+1:5  - 1:25           theory_element
+1:5  - 1:25             theory_terms: theory_terms
+1:5  - 1:6                theory_function
+1:5  - 1:6                  name: identifier `f`
+1:6  - 1:7                ","
+1:8  - 1:11               theory_function
+1:8  - 1:9                  name: identifier `f`
+1:9  - 1:10                 "("
+1:10 - 1:11                 ")"
+1:11 - 1:12               ","
+1:13 - 1:17               theory_function
+1:13 - 1:14                 name: identifier `f`
+1:14 - 1:15                 "("
+1:15 - 1:16                 arguments: theory_terms
+1:15 - 1:16                   number `1`
+1:16 - 1:17                 ")"
+1:17 - 1:18               ","
+1:19 - 1:25               theory_function
+1:19 - 1:20                 name: identifier `f`
+1:20 - 1:21                 "("
+1:21 - 1:24                 arguments: theory_terms
+1:21 - 1:22                   number `1`
+1:22 - 1:23                   ","
+1:23 - 1:24                   number `2`
+1:24 - 1:25                 ")"
+1:26 - 1:27         "}"
+1:27 - 1:28       "."
+
+==================
+theory terms
+:cst
+:skip
+==================
+
+&p { 1, #sup, #inf, "str", X, _ }.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:34     rule
+1:0  - 1:33       head: theory_atom
+1:0  - 1:1          "&"
+1:1  - 1:2          name: identifier `p`
+1:3  - 1:4          "{"
+1:5  - 1:31         elements: theory_elements
+1:5  - 1:31           theory_element
+1:5  - 1:31             theory_terms: theory_terms
+1:5  - 1:6                number `1`
+1:6  - 1:7                ","
+1:8  - 1:12               supremum `#sup`
+1:12 - 1:13               ","
+1:14 - 1:18               infimum `#inf`
+1:18 - 1:19               ","
+1:20 - 1:25               string
+1:20 - 1:21                 "\""
+1:21 - 1:24                 string_fragment `str`
+1:24 - 1:25                 "\""
+1:25 - 1:26               ","
+1:27 - 1:28               variable `X`
+1:28 - 1:29               ","
+1:30 - 1:31               anonymous `_`
+1:32 - 1:33         "}"
+1:33 - 1:34       "."
+
+==================
+theory unparsed
+:cst
+:skip
+==================
+
+&p { - 1, -1 * f(2), - + 1 * 2 ** 3, not f }.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:45     rule
+1:0  - 1:44       head: theory_atom
+1:0  - 1:1          "&"
+1:1  - 1:2          name: identifier `p`
+1:3  - 1:4          "{"
+1:5  - 1:42         elements: theory_elements
+1:5  - 1:42           theory_element
+1:5  - 1:42             theory_terms: theory_terms
+1:5  - 1:8                theory_unparsed_term
+1:5  - 1:6                  theory_operators
+1:5  - 1:6                    theory_operator `-`
+1:7  - 1:8                  number `1`
+1:8  - 1:9                ","
+1:10 - 1:19               theory_unparsed_term
+1:10 - 1:11                 theory_operators
+1:10 - 1:11                   theory_operator `-`
+1:11 - 1:12                 number `1`
+1:13 - 1:14                 theory_operators
+1:13 - 1:14                   theory_operator `*`
+1:15 - 1:19                 theory_function
+1:15 - 1:16                   name: identifier `f`
+1:16 - 1:17                   "("
+1:17 - 1:18                   arguments: theory_terms
+1:17 - 1:18                     number `2`
+1:18 - 1:19                   ")"
+1:19 - 1:20               ","
+1:21 - 1:35               theory_unparsed_term
+1:21 - 1:24                 theory_operators
+1:21 - 1:22                   theory_operator `-`
+1:23 - 1:24                   theory_operator `+`
+1:25 - 1:26                 number `1`
+1:27 - 1:28                 theory_operators
+1:27 - 1:28                   theory_operator `*`
+1:29 - 1:30                 number `2`
+1:31 - 1:33                 theory_operators
+1:31 - 1:33                   theory_operator `**`
+1:34 - 1:35                 number `3`
+1:35 - 1:36               ","
+1:37 - 1:42               theory_unparsed_term
+1:37 - 1:40                 theory_operators
+1:37 - 1:40                   theory_operator `not`
+1:41 - 1:42                 theory_function
+1:41 - 1:42                   name: identifier `f`
+1:43 - 1:44         "}"
+1:44 - 1:45       "."
+
+==================
+theory definition
+:cst
+:skip
+==================
+
+#theory lp { 
+    lin_term {
+    + : 0, binary, left;
+    + : 1, binary, right;
+    + : 2, unary
+    };
+    bounds{ };
+
+    &op/0   : lin_term, any;
+    &op/1   : lin_term, { <=, >=, <, >, !=, = }, bounds, any
+}.
+
+---
+
+1:0   - 12:0    source_file
+1:0   - 11:2      theory
+1:0   - 1:7         "#theory"
+1:8   - 1:10        name: identifier `lp`
+1:11  - 1:12        "{"
+2:4   - 6:5         theory_term_definition
+2:4   - 2:12          name: identifier `lin_term`
+2:13  - 2:14          "{"
+3:4   - 5:16          operators: theory_operator_definitions
+3:4   - 3:23            theory_operator_definition
+3:4   - 3:5               operator: theory_operator `+`
+3:6   - 3:7               ":"
+3:8   - 3:9               priority: number `0`
+3:9   - 3:10              ","
+3:11  - 3:17              arity: theory_operator_arity
+3:11  - 3:17                "binary"
+3:17  - 3:18              ","
+3:19  - 3:23              associativity: theory_operator_associativity `left`
+3:23  - 3:24            ";"
+4:4   - 4:24            theory_operator_definition
+4:4   - 4:5               operator: theory_operator `+`
+4:6   - 4:7               ":"
+4:8   - 4:9               priority: number `1`
+4:9   - 4:10              ","
+4:11  - 4:17              arity: theory_operator_arity
+4:11  - 4:17                "binary"
+4:17  - 4:18              ","
+4:19  - 4:24              associativity: theory_operator_associativity `right`
+4:24  - 4:25            ";"
+5:4   - 5:16            theory_operator_definition
+5:4   - 5:5               operator: theory_operator `+`
+5:6   - 5:7               ":"
+5:8   - 5:9               priority: number `2`
+5:9   - 5:10              ","
+5:11  - 5:16              arity: theory_operator_arity `unary`
+6:4   - 6:5           "}"
+6:5   - 6:6         ";"
+7:4   - 7:13        theory_term_definition
+7:4   - 7:10          name: identifier `bounds`
+7:10  - 7:11          "{"
+7:12  - 7:13          "}"
+7:13  - 7:14        ";"
+9:4   - 9:27        theory_atom_definition
+9:4   - 9:5           "&"
+9:5   - 9:7           name: identifier `op`
+9:7   - 9:8           "/"
+9:8   - 9:9           arity: number `0`
+9:12  - 9:13          ":"
+9:14  - 9:22          theory_term_name: identifier `lin_term`
+9:22  - 9:23          ","
+9:24  - 9:27          atom_type: theory_atom_type `any`
+9:27  - 9:28        ";"
+10:4  - 10:60       theory_atom_definition
+10:4  - 10:5          "&"
+10:5  - 10:7          name: identifier `op`
+10:7  - 10:8          "/"
+10:8  - 10:9          arity: number `1`
+10:12 - 10:13         ":"
+10:14 - 10:22         theory_term_name: identifier `lin_term`
+10:22 - 10:23         ","
+10:24 - 10:25         "{"
+10:26 - 10:45         operators: theory_operators
+10:26 - 10:28           theory_operator `<=`
+10:28 - 10:29           ","
+10:30 - 10:32           theory_operator `>=`
+10:32 - 10:33           ","
+10:34 - 10:35           theory_operator `<`
+10:35 - 10:36           ","
+10:37 - 10:38           theory_operator `>`
+10:38 - 10:39           ","
+10:40 - 10:42           theory_operator `!=`
+10:42 - 10:43           ","
+10:44 - 10:45           theory_operator `=`
+10:46 - 10:47         "}"
+10:47 - 10:48         ","
+10:49 - 10:55         guard: identifier `bounds`
+10:55 - 10:56         ","
+10:57 - 10:60         atom_type: theory_atom_type `any`
+11:0  - 11:1        "}"
+11:1  - 11:2        "."

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tree-sitter-clingo"
 description = "Clingo grammar for tree-sitter"
-version = "0.1.0"
+version = "1.0.0"
 keywords = ["incremental", "parsing", "tree-sitter", "clingo"]
 classifiers = [
   "Intended Audience :: Developers",
@@ -25,7 +25,7 @@ readme = "README.md"
 Homepage = "https://github.com/potassco/tree-sitter-clingo"
 
 [project.optional-dependencies]
-core = ["tree-sitter~=0.24"]
+core = ["tree-sitter~=0.25"]
 
 [tool.cibuildwheel]
 build = "cp310-*"
