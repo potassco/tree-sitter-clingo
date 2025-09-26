@@ -112,6 +112,7 @@
 (number) @number
 (escape_sequence) @string.escape
 (string) @string
+(fstring) @string
 
 (supremum) @constant.builtin
 (infimum) @constant.builtin

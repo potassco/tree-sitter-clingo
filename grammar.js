@@ -78,39 +78,85 @@ module.exports = grammar({
 
     identifier: (_) => /[_']*[a-z][A-Za-z0-9_']*/,
 
-    // TODO: clingo does something simpler!
     string: ($) =>
       choice(
         seq(
           '"',
           repeat(
             choice(
-              alias($.unescaped_double_string_fragment, $.string_fragment),
-              $.escape_sequence,
+              alias($._string_fragment, $.string_fragment),
+              alias($._string_escape, $.escape_sequence),
             ),
           ),
           '"',
         ),
       ),
 
-    // Workaround to https://github.com/tree-sitter/tree-sitter/issues/1156
-    // We give names to the token() constructs containing a regexp
-    // so as to obtain a node in the CST.
-    unescaped_double_string_fragment: (_) =>
-      token.immediate(prec(1, /[^"\\]+/)),
-
-    escape_sequence: (_) =>
-      token.immediate(
+    fstring: ($) =>
+      choice(
         seq(
-          "\\",
-          choice(
-            /[^xu0-7]/,
-            /[0-7]{1,3}/,
-            /x[0-9a-fA-F]{2}/,
-            /u[0-9a-fA-F]{4}/,
-            /u\{[0-9a-fA-F]+\}/,
+          'f"',
+          repeat(
+            choice(
+              alias($._fstring_fragment, $.string_fragment),
+              alias($._fstring_escape, $.escape_sequence),
+              $.fstring_field,
+            ),
+          ),
+          '"',
+        ),
+      ),
+
+    _string_fragment: (_) => token.immediate(prec(1, /[^"\\\x00]+/)),
+    _fstring_fragment: (_) => token.immediate(prec(1, /[^{}"\\\x00]+/)),
+
+    _string_escape: (_) => token.immediate(/\\[n"\\]/),
+    _fstring_escape: (_) => token.immediate(/\\[n"\\]|\{\{|\}\}/),
+
+    // NOTE: We use immediate tokens here to prevent extra parsing between spec
+    // elements. This grammare permits a bit more whitespace before accessors,
+    // conversions, and specs as compared to clingo. Matching exactly clingo's
+    // behavior would somewhat complicate the grammar.
+    fstring_accessor: ($) =>
+      repeat1(
+        choice(
+          alias(/[.][a-z][A-Za-z0-9_]*/, $.identifier),
+          seq(
+            /\[/,
+            alias(token.immediate(/(0|[1-9][0-9]*)/), $.number),
+            token.immediate(/\]/),
           ),
         ),
+      ),
+    fstring_conversion: (_) => seq(/!/, token.immediate(/[rs]?/)),
+    // NOTE: We match align and fill together becase the scanner does not
+    // support lookahead.
+    fstring_align: (_) => token.immediate(/[^\n\x00]?[<>=^]/),
+    fstring_sign: (_) => token.immediate(/[-+ ]/),
+    fstring_alternate: (_) => token.immediate(/#/),
+    fstring_width: (_) => token.immediate(/(0|[1-9][0-9]*)/),
+    fstring_grouping: (_) => token.immediate(/[,_]/),
+    fstring_type: (_) => token.immediate(/[bcdoxXns]/),
+
+    fstring_spec: ($) =>
+      seq(
+        /:/,
+        optional($.fstring_align),
+        optional($.fstring_sign),
+        optional($.fstring_alternate),
+        optional($.fstring_width),
+        optional($.fstring_grouping),
+        optional($.fstring_type),
+      ),
+
+    fstring_field: ($) =>
+      seq(
+        "{",
+        $.term,
+        optional($.fstring_accessor),
+        optional($.fstring_conversion),
+        optional($.fstring_spec),
+        token.immediate("}"),
       ),
 
     supremum: (_) => token(choice("#sup", "#supremum")),
@@ -274,6 +320,7 @@ module.exports = grammar({
         $.supremum,
         $.number,
         $.string,
+        $.fstring,
         $.anonymous,
         $.variable,
         $.binary_operation,
@@ -285,7 +332,7 @@ module.exports = grammar({
       ),
 
     // theory terms
-    theory_operator: ($) =>
+    theory_operator: (_) =>
       token(
         choice(
           // the general pattern would be [/!<=>+\-*\\?&@|:;~\^\.]+,
@@ -347,7 +394,7 @@ module.exports = grammar({
 
     // Literals
 
-    boolean_constant: ($) => token(choice("#true", "#false")),
+    boolean_constant: (_) => token(choice("#true", "#false")),
 
     atom_identifier: ($) =>
       seq(
@@ -367,7 +414,7 @@ module.exports = grammar({
     symbolic_atom: ($) =>
       seq($.atom_identifier, optional(field("arguments", $._arg_pool))),
 
-    relation: ($) => token(choice(">", "<", ">=", "<=", "=", "!=")),
+    relation: (_) => token(choice(">", "<", ">=", "<=", "=", "!=")),
 
     comparison: ($) =>
       seq($.term, $.relation, $.term, repeat(seq($.relation, $.term))),
@@ -375,8 +422,8 @@ module.exports = grammar({
     simple_atom: ($) =>
       choice($.symbolic_atom, $.comparison, $.boolean_constant),
 
-    default_negation: ($) => "not",
-    double_default_negation: ($) => "not not",
+    default_negation: (_) => "not",
+    double_default_negation: (_) => "not not",
 
     literal_sign: ($) => choice($.default_negation, $.double_default_negation),
 
@@ -393,7 +440,7 @@ module.exports = grammar({
     _condition: ($) =>
       seq(alias($.colon, ":"), optional(field("condition", $.condition))),
 
-    aggregate_function: ($) =>
+    aggregate_function: (_) =>
       token(choice("#sum", "#sum+", "#min", "#max", "#count")),
 
     upper: ($) => seq(optional($.relation), $.term),
@@ -619,7 +666,7 @@ module.exports = grammar({
 
     signature: ($) => seq($.atom_identifier, "/", field("arity", $.number)),
 
-    show: ($) => seq("#show", "."),
+    show: (_) => seq("#show", "."),
 
     show_term: ($) => seq("#show", field("term", $.term), $._colon_body),
 
@@ -643,7 +690,7 @@ module.exports = grammar({
         ".",
       ),
 
-    code: ($) =>
+    code: (_) =>
       token(repeat(choice(/[^#]/, /#[^e][^#]/, /#e[^n][^#]/, /#en[^d][^#]/))),
 
     script: ($) =>
@@ -657,7 +704,7 @@ module.exports = grammar({
         ".",
       ),
 
-    const_type: ($) => token(choice("default", "override")),
+    const_type: (_) => token(choice("default", "override")),
 
     const: ($) =>
       seq(
