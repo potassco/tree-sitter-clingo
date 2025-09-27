@@ -407,3 +407,46 @@ p(n, no, noxt, a, -n, -no, -noxt, -a).
 1:35 - 1:36                 name: identifier `a`
 1:36 - 1:37           ")"
 1:37 - 1:38       "."
+
+==================
+f-string
+:cst
+:skip
+==================
+
+p(f"abc{{x}}\n{X.name[0]!r:0<+#15_x}").
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:39     rule
+1:0  - 1:38       head: literal
+1:0  - 1:38         atom: symbolic_atom
+1:0  - 1:1            name: identifier `p`
+1:1  - 1:2            "("
+1:2  - 1:37           arguments: terms
+1:2  - 1:37             fstring
+1:2  - 1:4                "f\""
+1:4  - 1:7                string_fragment `abc`
+1:7  - 1:9                escape_sequence `{{`
+1:9  - 1:10               string_fragment `x`
+1:10 - 1:12               escape_sequence `}}`
+1:12 - 1:14               escape_sequence `\\n`
+1:14 - 1:36               fstring_field
+1:14 - 1:15                 "{"
+1:15 - 1:16                 variable `X`
+1:16 - 1:24                 fstring_accessor
+1:16 - 1:21                   identifier `.name`
+1:22 - 1:23                   number `0`
+1:24 - 1:26                 fstring_conversion `!r`
+1:26 - 1:35                 fstring_spec
+1:27 - 1:29                   fstring_align `0<`
+1:29 - 1:30                   fstring_sign `+`
+1:30 - 1:31                   fstring_alternate `#`
+1:31 - 1:33                   fstring_width `15`
+1:33 - 1:34                   fstring_grouping `_`
+1:34 - 1:35                   fstring_type `x`
+1:35 - 1:36                 "}"
+1:36 - 1:37               "\""
+1:37 - 1:38           ")"
+1:38 - 1:39       "."

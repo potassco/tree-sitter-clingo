@@ -264,3 +264,37 @@ p(n, no, noxt, a, -n, -no, -noxt, -a).
           (unary_operation
             right: (function
               name: (identifier))))))))
+
+==================
+f-string
+==================
+
+p(f"abc{{x}}\n{X.name[0]!r:0<+#15_x}").
+
+---
+
+(source_file
+  (rule
+    (literal
+      (symbolic_atom
+        (identifier)
+        (terms
+          (fstring
+            (string_fragment)
+            (escape_sequence)
+            (string_fragment)
+            (escape_sequence)
+            (escape_sequence)
+            (fstring_field
+              (variable)
+              (fstring_accessor
+                (identifier)
+                (number))
+              (fstring_conversion)
+              (fstring_spec
+                (fstring_align)
+                (fstring_sign)
+                (fstring_alternate)
+                (fstring_width)
+                (fstring_grouping)
+                (fstring_type)))))))))

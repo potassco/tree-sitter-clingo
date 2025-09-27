@@ -160,6 +160,10 @@
         "named": true
       },
       {
+        "type": "fstring",
+        "named": true
+      },
+      {
         "type": "function",
         "named": true
       },
@@ -787,6 +791,120 @@
         ]
       }
     }
+  },
+  {
+    "type": "fstring",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "escape_sequence",
+          "named": true
+        },
+        {
+          "type": "fstring_field",
+          "named": true
+        },
+        {
+          "type": "string_fragment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "fstring_accessor",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "fstring_conversion",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "fstring_field",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "fstring_accessor",
+          "named": true
+        },
+        {
+          "type": "fstring_conversion",
+          "named": true
+        },
+        {
+          "type": "fstring_spec",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "fstring_spec",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "fstring_align",
+          "named": true
+        },
+        {
+          "type": "fstring_alternate",
+          "named": true
+        },
+        {
+          "type": "fstring_grouping",
+          "named": true
+        },
+        {
+          "type": "fstring_sign",
+          "named": true
+        },
+        {
+          "type": "fstring_type",
+          "named": true
+        },
+        {
+          "type": "fstring_width",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "fstring_width",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "function",
@@ -2356,6 +2474,30 @@
   },
   {
     "type": "escape_sequence",
+    "named": true
+  },
+  {
+    "type": "f\"",
+    "named": false
+  },
+  {
+    "type": "fstring_align",
+    "named": true
+  },
+  {
+    "type": "fstring_alternate",
+    "named": true
+  },
+  {
+    "type": "fstring_grouping",
+    "named": true
+  },
+  {
+    "type": "fstring_sign",
+    "named": true
+  },
+  {
+    "type": "fstring_type",
     "named": true
   },
   {
