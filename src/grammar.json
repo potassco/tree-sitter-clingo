@@ -2683,12 +2683,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "condition",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_condition"
-              }
+              "type": "SYMBOL",
+              "name": "_condition"
             },
             {
               "type": "BLANK"
@@ -2801,12 +2797,8 @@
               "type": "CHOICE",
               "members": [
                 {
-                  "type": "FIELD",
-                  "name": "condition",
-                  "content": {
-                    "type": "SYMBOL",
-                    "name": "_condition"
-                  }
+                  "type": "SYMBOL",
+                  "name": "_condition"
                 },
                 {
                   "type": "BLANK"
@@ -2949,12 +2941,8 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "FIELD",
-          "name": "condition",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_condition"
-          }
+          "type": "SYMBOL",
+          "name": "_condition"
         },
         {
           "type": "SEQ",
@@ -2971,12 +2959,8 @@
               "type": "CHOICE",
               "members": [
                 {
-                  "type": "FIELD",
-                  "name": "condition",
-                  "content": {
-                    "type": "SYMBOL",
-                    "name": "_condition"
-                  }
+                  "type": "SYMBOL",
+                  "name": "_condition"
                 },
                 {
                   "type": "BLANK"
@@ -3279,12 +3263,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "condition",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_condition"
-              }
+              "type": "SYMBOL",
+              "name": "_condition"
             },
             {
               "type": "BLANK"
@@ -3740,12 +3720,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "condition",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_condition"
-              }
+              "type": "SYMBOL",
+              "name": "_condition"
             },
             {
               "type": "BLANK"

@@ -41,3 +41,8 @@
 ((conditional_literal) @indent.align
                        (#set! indent.open_delimiter ":") 
                        (#set! indent.increment 2))
+
+; indent conditions
+((_ ":" . (condition))@indent.align
+       (#set! indent.open_delimiter ":") 
+       (#set! indent.increment 2))

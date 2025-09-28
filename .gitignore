@@ -4,6 +4,7 @@
 *.o
 *.pc
 *.so
+*.wasm
 /target/
 Cargo.lock
 build

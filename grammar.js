@@ -447,10 +447,7 @@ module.exports = grammar({
     lower: ($) => seq($.term, optional($.relation)),
 
     set_aggregate_element: ($) =>
-      seq(
-        field("literal", $.literal),
-        optional(field("condition", $._condition)),
-      ),
+      seq(field("literal", $.literal), optional($._condition)),
 
     set_aggregate_elements: ($) =>
       seq($.set_aggregate_element, repeat(seq(";", $.set_aggregate_element))),
@@ -468,10 +465,7 @@ module.exports = grammar({
 
     theory_element: ($) =>
       choice(
-        seq(
-          field("theory_terms", $.theory_terms),
-          optional(field("condition", $._condition)),
-        ),
+        seq(field("theory_terms", $.theory_terms), optional($._condition)),
         $._condition,
       ),
 
@@ -493,11 +487,8 @@ module.exports = grammar({
 
     body_aggregate_element: ($) =>
       choice(
-        field("condition", $._condition),
-        seq(
-          field("terms", $.terms),
-          optional(field("condition", $._condition)),
-        ),
+        $._condition,
+        seq(field("terms", $.terms), optional($._condition)),
       ),
 
     body_aggregate_elements: ($) =>
@@ -552,7 +543,7 @@ module.exports = grammar({
         optional(field("terms", $.terms)),
         alias($.colon, ":"),
         field("literal", $.literal),
-        optional(field("condition", $._condition)),
+        optional($._condition),
       ),
 
     head_aggregate_elements: ($) =>
@@ -630,7 +621,7 @@ module.exports = grammar({
       seq(
         field("weight", $.weight),
         optional(field("terms", $._optimize_tuple)),
-        optional(field("condition", $._condition)),
+        optional($._condition),
       ),
     optimize_elements: ($) =>
       seq($.optimize_element, repeat(seq(";", $.optimize_element))),
