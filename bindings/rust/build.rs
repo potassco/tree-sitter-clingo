@@ -1,11 +1,4 @@
 fn main() {
-    let status = std::process::Command::new("tree-sitter")
-        .arg("generate")
-        .status()
-        .expect("Failed to run tree-sitter generate");
-
-    assert!(status.success());
-
     let src_dir = std::path::Path::new("src");
 
     let mut c_config = cc::Build::new();
