@@ -10,6 +10,9 @@
   "author": {
     "name": "Roland Kaminski"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "bindings/node",
   "types": "bindings/node",
   "keywords": [
