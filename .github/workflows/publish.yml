@@ -18,14 +18,10 @@ jobs:
   #     attestations: true
   npm:
     uses: tree-sitter/workflows/.github/workflows/package-npm.yml@main
-    with:
-      generate: true
     secrets:
       NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
   crates:
     uses: tree-sitter/workflows/.github/workflows/package-crates.yml@main
-    with:
-      generate: true
     secrets:
       CARGO_REGISTRY_TOKEN: ${{secrets.CARGO_REGISTRY_TOKEN}}
   pypi:

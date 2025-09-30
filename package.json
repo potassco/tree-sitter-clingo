@@ -33,11 +33,12 @@
   ],
   "dependencies": {
     "node-addon-api": "^8.3.1",
+    "node-gyp": "^11.4.2",
     "node-gyp-build": "^4.8.4"
   },
   "devDependencies": {
     "prebuildify": "^6.0.1",
-    "tree-sitter-cli": ">=0.25.0 <0.27.0"
+    "tree-sitter-cli": "^0.25.10"
   },
   "peerDependencies": {
     "tree-sitter": "^0.22.4"
