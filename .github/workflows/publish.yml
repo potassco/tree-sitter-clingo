@@ -2,7 +2,8 @@ name: Publish packages
 
 on:
   push:
-    tags: ["*"]
+    tags:
+      - "v*.*.*"
 
 permissions:
   contents: write
@@ -15,9 +16,16 @@ jobs:
     with:
       generate: true
       attestations: true
-  pypi:
-    uses: tree-sitter/workflows/.github/workflows/package-pypi.yml@main
-    secrets:
-      PYPI_API_TOKEN: ${{secrets.PYPI_API_TOKEN}}
+  npm:
+    uses: tree-sitter/workflows/.github/workflows/package-npm.yml@main
     with:
       generate: true
+  crates:
+    uses: tree-sitter/workflows/.github/workflows/package-crates.yml@main
+    with:
+      generate: true
+  pypi:
+    uses: tree-sitter/workflows/.github/workflows/package-pypi.yml@main
+    with:
+      generate: true
+

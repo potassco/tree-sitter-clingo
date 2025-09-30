@@ -1,5 +1,5 @@
 {
-  "name": "tree-sitter-clingo",
+  "name": "@potassco/tree-sitter-clingo",
   "version": "1.0.0",
   "description": "Clingo grammar for tree-sitter",
   "repository": {
