@@ -6,11 +6,14 @@
 *.so
 *.wasm
 /target/
-Cargo.lock
 build
 dist
 example*
 node_modules
+src/grammar.json
+src/node-types.json
+src/parser.c
+src/tree_sitter/
 
 # Emacs
 *~
