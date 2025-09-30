@@ -1,6 +1,6 @@
 {
   "name": "@potassco/tree-sitter-clingo",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "Clingo grammar for tree-sitter",
   "repository": {
     "type": "git",
