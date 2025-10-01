@@ -1,7 +1,7 @@
 [package]
 name = "tree-sitter-clingo"
 description = "Clingo grammar for tree-sitter"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Roland Kaminski", "Sven Thiele"]
 license = "MIT"
 readme = "README.md"
@@ -31,4 +31,4 @@ tree-sitter-language = "0.1"
 cc = "1.2"
 
 [dev-dependencies]
-tree-sitter = "0.25.8"
+tree-sitter = "0.25.10"

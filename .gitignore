@@ -6,12 +6,10 @@
 *.so
 *.wasm
 /target/
-Cargo.lock
 build
 dist
 example*
 node_modules
-package-lock.json
 
 # Emacs
 *~
