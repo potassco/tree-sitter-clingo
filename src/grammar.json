@@ -4983,12 +4983,20 @@
           "name": "show"
         },
         {
-          "type": "SYMBOL",
-          "name": "show_term"
+          "type": "PREC_DYNAMIC",
+          "value": 1,
+          "content": {
+            "type": "SYMBOL",
+            "name": "show_term"
+          }
         },
         {
-          "type": "SYMBOL",
-          "name": "show_signature"
+          "type": "PREC_DYNAMIC",
+          "value": 2,
+          "content": {
+            "type": "SYMBOL",
+            "name": "show_signature"
+          }
         },
         {
           "type": "SYMBOL",
