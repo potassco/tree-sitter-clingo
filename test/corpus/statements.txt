@@ -201,6 +201,20 @@ show
       name: (identifier))))
 
 ==================
+single show
+==================
+
+#show a/0.
+
+---
+
+(source_file
+    (show_signature
+    (signature
+        (identifier)
+        (number))))
+
+==================
 defined
 ==================
 

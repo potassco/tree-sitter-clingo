@@ -303,6 +303,25 @@ defined
 2:13 - 2:14       "."
 
 ==================
+single show
+:cst
+:skip
+==================
+
+#show a/0.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:10     show_signature
+1:0  - 1:5        "#show"
+1:6  - 1:9        signature: signature
+1:6  - 1:7          name: identifier `a`
+1:7  - 1:8          "/"
+1:8  - 1:9          arity: number `0`
+1:9  - 1:10       "."
+
+==================
 project
 :cst
 :skip
