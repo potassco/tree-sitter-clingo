@@ -18,6 +18,28 @@ comments
 3:0 - 3:7       ` * bar\n`
 4:0 - 4:3       ` *%`
 
+
+==================
+line comments
+:cst
+:skip
+==================
+
+%
+% xyz
+%  
+%
+%
+
+---
+
+1:0 - 6:0   source_file
+1:0 - 1:1     line_comment `%`
+2:0 - 2:5     line_comment `% xyz`
+3:0 - 3:3     line_comment `%  `
+4:0 - 4:1     line_comment `%`
+5:0 - 5:1     line_comment `%`
+
 ==================
 rules
 :cst

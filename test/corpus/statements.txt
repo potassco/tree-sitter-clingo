@@ -14,6 +14,25 @@ comments
   (block_comment))
 
 ==================
+line comments
+==================
+
+%
+% xyz
+%  
+%
+%
+
+---
+
+(source_file
+  (line_comment)
+  (line_comment)
+  (line_comment)
+  (line_comment)
+  (line_comment))
+
+==================
 rules
 ==================
 
