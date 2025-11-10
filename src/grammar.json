@@ -16,7 +16,7 @@
         "members": [
           {
             "type": "PATTERN",
-            "value": "%[^*].*"
+            "value": "%[^*\\n\\r][^\\n\\r]*"
           },
           {
             "type": "STRING",

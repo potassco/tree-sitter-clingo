@@ -69,9 +69,9 @@ module.exports = grammar({
 
     // comments
 
-    line_comment: (_) => token(choice(/%[^*].*/, "%")),
+    line_comment: (_) => token(choice(/%[^*\n\r][^\n\r]*/, "%")),
 
-    // TODO: clingo counts nested %* *% blocks
+    // TODO: clingo counts nested %* *% blocks, this can only be done with a C scanner
     block_comment: (_) => token(seq("%*", /[^*]*\*+([^%*][^*]*\*+)*/, "%")),
 
     // terms
