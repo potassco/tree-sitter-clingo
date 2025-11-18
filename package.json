@@ -32,8 +32,8 @@
     "*.wasm"
   ],
   "dependencies": {
-    "node-addon-api": "^8.3.1",
-    "node-gyp": "^11.4.2",
+    "node-addon-api": "^8.5.0",
+    "node-gyp": "^12.1.0",
     "node-gyp-build": "^4.8.4"
   },
   "devDependencies": {
@@ -41,7 +41,7 @@
     "tree-sitter-cli": "^0.25.10"
   },
   "peerDependencies": {
-    "tree-sitter": "^0.22.4"
+    "tree-sitter": "^0.25.10"
   },
   "peerDependenciesMeta": {
     "tree-sitter": {
