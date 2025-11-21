@@ -517,3 +517,46 @@ heuristic
       name: (identifier)
       arguments: (terms
         (variable)))))
+
+==================
+doc comments
+==================
+
+%*! some_predicate (A, B ,C )
+Here is `some` documentation for the prediate.
+
+Maybe a *longer* one
+over _multiple_ lines
+
+Args:
+- A: **some** description for *A*
+     maybe also over _multiple_ lines?
+- B: some description for B
+*%
+
+---
+
+(source_file
+    (doc_comment
+    (doc_predicate
+        (doc_var)
+        (doc_var)
+        (doc_var))
+    (doc_desc
+        (doc_fragment_string)
+        (doc_fragment_code)
+        (doc_fragment_string)
+        (doc_fragment_emph)
+        (doc_fragment_string)
+        (doc_fragment_italic)
+        (doc_fragment_string))
+    (doc_args
+        (doc_arg
+        (doc_var)
+        (doc_arg_desc
+            (doc_fragment_bold)
+            (doc_fragment_string)
+            (doc_fragment_emph)
+            (doc_fragment_string)
+            (doc_fragment_italic)
+            (doc_fragment_string))))))

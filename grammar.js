@@ -18,6 +18,10 @@ const unary_expression = function (pre, op, rhs) {
   return prec.left(pre, seq(field("operator", op), field("right", rhs)));
 };
 
+const lexeme = function ($, rule) {
+  return seq(token.immediate(rule), $._doc_ws);
+};
+
 module.exports = grammar({
   name: "clingo",
 
@@ -71,8 +75,86 @@ module.exports = grammar({
 
     line_comment: (_) => token(choice(/%[^*\n\r][^\n\r]*/, "%")),
 
-    // TODO: clingo counts nested %* *% blocks, this can only be done with a C scanner
-    block_comment: (_) => token(seq("%*", /[^*]*\*+([^%*][^*]*\*+)*/, "%")),
+    // TODO:
+    // - clingo counts nested %* *% blocks, this can only be done with a C scanner
+    block_comment: (_) => token(/%\*(([^!*]|\*+[^%])([^*]|\*+[^%])*)?\*%/),
+
+    _doc_ws: (_) => token.immediate(/[\s\r\n]*/),
+
+    doc_comment: ($) =>
+      seq(
+        "%*!",
+        $._doc_ws,
+        $.doc_predicate,
+        optional($.doc_desc),
+        optional($.doc_args),
+        token.immediate("*%"),
+      ),
+
+    doc_predicate: ($) =>
+      seq(
+        lexeme($, /[_']*[a-z][A-Za-z0-9_']*/),
+        optional(
+          seq(
+            lexeme($, "("),
+            optional(seq($.doc_var, repeat(seq(lexeme($, ","), $.doc_var)))),
+            lexeme($, ")"),
+          ),
+        ),
+      ),
+
+    doc_var: ($) => seq(lexeme($, /[A-Z]+/)),
+
+    doc_fragment_emph: (_) => token.immediate(/\*[^`%*_\r\n][^`*_\r\n]*\*/),
+    doc_fragment_bold: (_) => token.immediate(/\*\*[^`%*_\r\n][^`*_\r\n]*\*\*/),
+    doc_fragment_italic: (_) => token.immediate(/_[^`*_\r\n]*_/),
+    doc_fragment_code: (_) => token.immediate(/`[^`%*_\r\n][^`*_\r\n]*`/),
+    doc_fragment_string: (_) => token.immediate(/[^`*_]+/),
+    doc_fragment_string_start: (_) =>
+      seq(token.immediate(/[^-*_]/), token.immediate(/[^*_]+/)),
+    // NOTE: we make the tokens small so that `Args:` and `(` match separately.
+    // (the alternative is a C scanner)
+    doc_fragment_string_separate: (_) =>
+      prec.right(
+        0,
+        seq(token.immediate(/[^*_]/), repeat(token.immediate(/[^*_]/))),
+      ),
+
+    doc_desc: ($) =>
+      repeat1(
+        choice(
+          $.doc_fragment_bold,
+          $.doc_fragment_emph,
+          $.doc_fragment_italic,
+          $.doc_fragment_code,
+          alias($.doc_fragment_string_separate, $.doc_fragment_string),
+        ),
+      ),
+
+    doc_args: ($) => seq(lexeme($, /Args:/), repeat1($.doc_arg)),
+
+    doc_arg: ($) =>
+      seq(lexeme($, "-"), $.doc_var, lexeme($, ":"), $.doc_arg_desc),
+
+    doc_arg_desc: ($) =>
+      seq(
+        choice(
+          $.doc_fragment_bold,
+          $.doc_fragment_emph,
+          $.doc_fragment_italic,
+          $.doc_fragment_code,
+          alias($.doc_fragment_string_start, $.doc_fragment_string),
+        ),
+        repeat(
+          choice(
+            $.doc_fragment_bold,
+            $.doc_fragment_emph,
+            $.doc_fragment_italic,
+            $.doc_fragment_code,
+            $.doc_fragment_string,
+          ),
+        ),
+      ),
 
     // terms
 
@@ -841,6 +923,7 @@ module.exports = grammar({
 
     statement: ($) =>
       choice(
+        $.doc_comment,
         $.rule,
         $.integrity_constraint,
         $.weak_constraint,
