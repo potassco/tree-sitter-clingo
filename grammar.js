@@ -27,7 +27,16 @@ module.exports = grammar({
 
   extras: ($) => [$.line_comment, $.block_comment, /\s/],
 
-  externals: ($) => [$.empty_pool_item_first, $.empty_pool_item, $.colon],
+  externals: ($) => [
+    $.empty_pool_item_first,
+    $.empty_pool_item,
+    $.colon,
+    $.block_comment,
+    $.doc_fragment_string,
+    $._doc_token_args,
+    $._doc_token_paren,
+    $._doc_token_minus,
+  ],
 
   // Note that the conflict below between signature and function in show statements
   // does not necessarily have to be resolved in the grammar. It could also
@@ -75,10 +84,6 @@ module.exports = grammar({
 
     line_comment: (_) => token(choice(/%[^*\n\r][^\n\r]*/, "%")),
 
-    // TODO:
-    // - clingo counts nested %* *% blocks, this can only be done with a C scanner
-    block_comment: (_) => token(/%\*(([^!*]|\*+[^%])([^*]|\*+[^%])*)?\*%/),
-
     _doc_ws: (_) => token.immediate(/[\s\r\n]*/),
 
     doc_comment: ($) =>
@@ -96,7 +101,7 @@ module.exports = grammar({
         lexeme($, /[_']*[a-z][A-Za-z0-9_']*/),
         optional(
           seq(
-            lexeme($, "("),
+            alias($._doc_token_paren, ")"),
             optional(seq($.doc_var, repeat(seq(lexeme($, ","), $.doc_var)))),
             lexeme($, ")"),
           ),
@@ -109,16 +114,6 @@ module.exports = grammar({
     doc_fragment_bold: (_) => token.immediate(/\*\*[^`%*_\r\n][^`*_\r\n]*\*\*/),
     doc_fragment_italic: (_) => token.immediate(/_[^`*_\r\n]*_/),
     doc_fragment_code: (_) => token.immediate(/`[^`%*_\r\n][^`*_\r\n]*`/),
-    doc_fragment_string: (_) => token.immediate(/[^`*_]+/),
-    doc_fragment_string_start: (_) =>
-      seq(token.immediate(/[^-*_]/), token.immediate(/[^*_]+/)),
-    // NOTE: we make the tokens small so that `Args:` and `(` match separately.
-    // (the alternative is a C scanner)
-    doc_fragment_string_separate: (_) =>
-      prec.right(
-        0,
-        seq(token.immediate(/[^*_]/), repeat(token.immediate(/[^*_]/))),
-      ),
 
     doc_desc: ($) =>
       repeat1(
@@ -127,34 +122,17 @@ module.exports = grammar({
           $.doc_fragment_emph,
           $.doc_fragment_italic,
           $.doc_fragment_code,
-          alias($.doc_fragment_string_separate, $.doc_fragment_string),
+          // NOTE: since tree-sitter does not support more than one token of
+          // lookahead in the lexer, we have to resort to this hack to match
+          // `Args:` via `$._doc_token_args`, separately.
+          prec.right(0, repeat1($.doc_fragment_string)),
         ),
       ),
 
-    doc_args: ($) => seq(lexeme($, /Args:/), repeat1($.doc_arg)),
+    doc_args: ($) => seq($._doc_token_args, repeat1($.doc_arg)),
 
     doc_arg: ($) =>
-      seq(lexeme($, "-"), $.doc_var, lexeme($, ":"), $.doc_arg_desc),
-
-    doc_arg_desc: ($) =>
-      seq(
-        choice(
-          $.doc_fragment_bold,
-          $.doc_fragment_emph,
-          $.doc_fragment_italic,
-          $.doc_fragment_code,
-          alias($.doc_fragment_string_start, $.doc_fragment_string),
-        ),
-        repeat(
-          choice(
-            $.doc_fragment_bold,
-            $.doc_fragment_emph,
-            $.doc_fragment_italic,
-            $.doc_fragment_code,
-            $.doc_fragment_string,
-          ),
-        ),
-      ),
+      seq($._doc_token_minus, $.doc_var, lexeme($, ":"), $.doc_desc),
 
     // terms
 

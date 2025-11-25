@@ -553,10 +553,14 @@ Args:
     (doc_args
         (doc_arg
         (doc_var)
-        (doc_arg_desc
+        (doc_desc
             (doc_fragment_bold)
             (doc_fragment_string)
             (doc_fragment_emph)
             (doc_fragment_string)
             (doc_fragment_italic)
+            (doc_fragment_string)))
+        (doc_arg
+        (doc_var)
+        (doc_desc  
             (doc_fragment_string))))))

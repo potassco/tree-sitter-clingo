@@ -682,42 +682,11 @@
       "required": true,
       "types": [
         {
-          "type": "doc_arg_desc",
+          "type": "doc_desc",
           "named": true
         },
         {
           "type": "doc_var",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "doc_arg_desc",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "doc_fragment_bold",
-          "named": true
-        },
-        {
-          "type": "doc_fragment_code",
-          "named": true
-        },
-        {
-          "type": "doc_fragment_emph",
-          "named": true
-        },
-        {
-          "type": "doc_fragment_italic",
-          "named": true
-        },
-        {
-          "type": "doc_fragment_string",
           "named": true
         }
       ]
@@ -791,11 +760,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "doc_fragment_string",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "doc_predicate",
@@ -2614,6 +2578,10 @@
   },
   {
     "type": "doc_fragment_italic",
+    "named": true
+  },
+  {
+    "type": "doc_fragment_string",
     "named": true
   },
   {
