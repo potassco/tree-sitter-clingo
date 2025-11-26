@@ -25,13 +25,6 @@
         ]
       }
     },
-    "_doc_ws": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "PATTERN",
-        "value": "[\\s\\r\\n]*"
-      }
-    },
     "doc_comment": {
       "type": "SEQ",
       "members": [
@@ -40,8 +33,11 @@
           "value": "%*!"
         },
         {
-          "type": "SYMBOL",
-          "name": "_doc_ws"
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
         },
         {
           "type": "FIELD",
@@ -92,24 +88,90 @@
         }
       ]
     },
+    "variables": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "doc_var"
+          },
+          "named": true,
+          "value": "variable"
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "STRING",
+                  "value": ","
+                }
+              },
+              {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "PATTERN",
+                  "value": "[\\s\\r\\n]*"
+                }
+              },
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "doc_var"
+                },
+                "named": true,
+                "value": "variable"
+              },
+              {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "PATTERN",
+                  "value": "[\\s\\r\\n]*"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
     "doc_predicate": {
       "type": "SEQ",
       "members": [
         {
-          "type": "SEQ",
-          "members": [
-            {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "ALIAS",
+            "content": {
               "type": "IMMEDIATE_TOKEN",
               "content": {
                 "type": "PATTERN",
                 "value": "[_']*[a-z][A-Za-z0-9_']*"
               }
             },
-            {
-              "type": "SYMBOL",
-              "name": "_doc_ws"
-            }
-          ]
+            "named": true,
+            "value": "identifier"
+          }
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
         },
         {
           "type": "CHOICE",
@@ -127,41 +189,24 @@
                   "value": "("
                 },
                 {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "[\\s\\r\\n]*"
+                  }
+                },
+                {
                   "type": "CHOICE",
                   "members": [
                     {
                       "type": "SEQ",
                       "members": [
                         {
-                          "type": "SYMBOL",
-                          "name": "doc_var"
-                        },
-                        {
-                          "type": "REPEAT",
+                          "type": "FIELD",
+                          "name": "variables",
                           "content": {
-                            "type": "SEQ",
-                            "members": [
-                              {
-                                "type": "SEQ",
-                                "members": [
-                                  {
-                                    "type": "IMMEDIATE_TOKEN",
-                                    "content": {
-                                      "type": "STRING",
-                                      "value": ","
-                                    }
-                                  },
-                                  {
-                                    "type": "SYMBOL",
-                                    "name": "_doc_ws"
-                                  }
-                                ]
-                              },
-                              {
-                                "type": "SYMBOL",
-                                "name": "doc_var"
-                              }
-                            ]
+                            "type": "SYMBOL",
+                            "name": "variables"
                           }
                         }
                       ]
@@ -172,20 +217,18 @@
                   ]
                 },
                 {
-                  "type": "SEQ",
-                  "members": [
-                    {
-                      "type": "IMMEDIATE_TOKEN",
-                      "content": {
-                        "type": "STRING",
-                        "value": ")"
-                      }
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "_doc_ws"
-                    }
-                  ]
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "STRING",
+                    "value": ")"
+                  }
+                },
+                {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "[\\s\\r\\n]*"
+                  }
                 }
               ]
             },
@@ -197,25 +240,11 @@
       ]
     },
     "doc_var": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "IMMEDIATE_TOKEN",
-              "content": {
-                "type": "PATTERN",
-                "value": "[A-Z]+"
-              }
-            },
-            {
-              "type": "SYMBOL",
-              "name": "_doc_ws"
-            }
-          ]
-        }
-      ]
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[A-Z]+"
+      }
     },
     "doc_fragment_emph": {
       "type": "IMMEDIATE_TOKEN",
@@ -281,8 +310,11 @@
           "name": "_doc_token_args"
         },
         {
-          "type": "SYMBOL",
-          "name": "_doc_ws"
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
         },
         {
           "type": "REPEAT",
@@ -301,32 +333,38 @@
           "name": "_doc_token_minus"
         },
         {
-          "type": "SYMBOL",
-          "name": "_doc_ws"
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
         },
         {
           "type": "FIELD",
           "name": "variable",
           "content": {
-            "type": "SYMBOL",
-            "name": "doc_var"
+            "type": "ALIAS",
+            "content": {
+              "type": "SYMBOL",
+              "name": "doc_var"
+            },
+            "named": true,
+            "value": "variable"
           }
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "IMMEDIATE_TOKEN",
-              "content": {
-                "type": "STRING",
-                "value": ":"
-              }
-            },
-            {
-              "type": "SYMBOL",
-              "name": "_doc_ws"
-            }
-          ]
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": ":"
+          }
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
         },
         {
           "type": "FIELD",

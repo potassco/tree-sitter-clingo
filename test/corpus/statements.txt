@@ -535,32 +535,33 @@ Args:
 *%
 
 ---
-
 (source_file
-    (doc_comment
+  (doc_comment
     (doc_predicate
-        (doc_var)
-        (doc_var)
-        (doc_var))
+      (identifier)
+      (variables
+        (variable)
+        (variable)
+        (variable)))
     (doc_desc
-        (doc_fragment_string)
-        (doc_fragment_code)
-        (doc_fragment_string)
-        (doc_fragment_emph)
-        (doc_fragment_string)
-        (doc_fragment_italic)
-        (doc_fragment_string))
+      (doc_fragment_string)
+      (doc_fragment_code)
+      (doc_fragment_string)
+      (doc_fragment_emph)
+      (doc_fragment_string)
+      (doc_fragment_italic)
+      (doc_fragment_string))
     (doc_args
-        (doc_arg
-        (doc_var)
+      (doc_arg
+        (variable)
         (doc_desc
-            (doc_fragment_bold)
-            (doc_fragment_string)
-            (doc_fragment_emph)
-            (doc_fragment_string)
-            (doc_fragment_italic)
-            (doc_fragment_string)))
-        (doc_arg
-        (doc_var)
-        (doc_desc  
-            (doc_fragment_string))))))
+          (doc_fragment_bold)
+          (doc_fragment_string)
+          (doc_fragment_emph)
+          (doc_fragment_string)
+          (doc_fragment_italic)
+          (doc_fragment_string)))
+      (doc_arg
+        (variable)
+        (doc_desc
+          (doc_fragment_string))))))

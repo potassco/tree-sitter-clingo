@@ -31,15 +31,30 @@ static bool match_string(TSLexer *lexer, const char *literal) {
   return true;
 }
 
+/**
+ * Handles parsing of documentation comments and their fragments.
+ *
+ * This function attempts to match specific documentation-related tokens:
+ * - DOC_LPAREN: Matches '(' if active.
+ * - DOC_MINUS: Matches '-' if active.
+ * - DOC_ARGS: Matches "Args:" at the start of a fragment if active.
+ * - DOC_STRING_FRAGMENT: Consumes a fragment of the docstring, stopping at
+ *   '-', markdown characters (`*`, '`', `_`), or "Args:".
+ *
+ * Returns true if a valid documentation token is found and sets
+ * lexer->result_symbol accordingly.
+ */
 static bool doc_comment(TSLexer *lexer, const bool *valid_symbols) {
   if (lexer->lookahead == 0) {
     return false;
   }
   // prefer `(` if active
-  if (valid_symbols[DOC_LPAREN] && lexer->lookahead == '(') {
-    lexer->advance(lexer, false);
-    lexer->result_symbol = DOC_LPAREN;
-    return true;
+  if (valid_symbols[DOC_LPAREN]) {
+    if (lexer->lookahead == '(') {
+      lexer->advance(lexer, false);
+      lexer->result_symbol = DOC_LPAREN;
+      return true;
+    }
   }
   // prefer `-` if active
   if (valid_symbols[DOC_MINUS] && lexer->lookahead == '-') {
@@ -60,7 +75,6 @@ static bool doc_comment(TSLexer *lexer, const bool *valid_symbols) {
           if (empty) {
             // we just matched `Args:` at the start of the token
             lexer->mark_end(lexer);
-            skip_whitespace(lexer, false);
             lexer->result_symbol = DOC_ARGS;
             return true;
           } else {
@@ -130,7 +144,8 @@ static bool consume_blockcomment(TSLexer *lexer) {
 
 bool tree_sitter_clingo_external_scanner_scan(void *payload, TSLexer *lexer,
                                               const bool *valid_symbols) {
-  if (valid_symbols[DOC_MINUS] || valid_symbols[DOC_STRING_FRAGMENT]) {
+  if (valid_symbols[DOC_ARGS] || valid_symbols[DOC_LPAREN] ||
+      valid_symbols[DOC_MINUS] || valid_symbols[DOC_STRING_FRAGMENT]) {
     return doc_comment(lexer, valid_symbols);
   }
 

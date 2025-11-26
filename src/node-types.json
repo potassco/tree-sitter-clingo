@@ -692,7 +692,7 @@
         "required": true,
         "types": [
           {
-            "type": "doc_var",
+            "type": "variable",
             "named": true
           }
         ]
@@ -784,22 +784,28 @@
   {
     "type": "doc_predicate",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "doc_var",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "variables": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "variables",
+            "named": true
+          }
+        ]
+      }
     }
-  },
-  {
-    "type": "doc_var",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "edge",
@@ -2304,6 +2310,21 @@
         },
         {
           "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "variables",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "variable",
           "named": true
         }
       ]

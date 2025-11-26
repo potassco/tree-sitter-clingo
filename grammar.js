@@ -18,9 +18,7 @@ const unary_expression = function (pre, op, rhs) {
   return prec.left(pre, seq(field("operator", op), field("right", rhs)));
 };
 
-const lexeme = function ($, rule) {
-  return seq(token.immediate(rule), $._doc_ws);
-};
+const doc_ws = token.immediate(/[\s\r\n]*/);
 
 module.exports = grammar({
   name: "clingo",
@@ -84,37 +82,62 @@ module.exports = grammar({
 
     line_comment: (_) => token(choice(/%[^*\n\r][^\n\r]*/, "%")),
 
-    _doc_ws: (_) => token.immediate(/[\s\r\n]*/),
-
     doc_comment: ($) =>
       seq(
         "%*!",
-        $._doc_ws,
+        doc_ws,
         field("predicate", $.doc_predicate),
+        // no doc_ws
         optional(field("description", $.doc_desc)),
+        // no doc_ws
         optional(field("arguments", $.doc_args)),
+        // no doc_ws
         token.immediate("*%"),
       ),
 
-    doc_predicate: ($) =>
+    // NOTE: gobbles up trailing whitespace
+    variables: ($) =>
       seq(
-        lexeme($, /[_']*[a-z][A-Za-z0-9_']*/),
-        optional(
+        alias($.doc_var, $.variable),
+        doc_ws,
+        repeat(
           seq(
-            alias($._doc_token_paren, "("),
-            optional(seq($.doc_var, repeat(seq(lexeme($, ","), $.doc_var)))),
-            lexeme($, ")"),
+            token.immediate(","),
+            doc_ws,
+            alias($.doc_var, $.variable),
+            doc_ws,
           ),
         ),
       ),
 
-    doc_var: ($) => seq(lexeme($, /[A-Z]+/)),
+    // NOTE: gobbles up trailing whitespace
+    doc_predicate: ($) =>
+      seq(
+        field(
+          "name",
+          alias(token.immediate(/[_']*[a-z][A-Za-z0-9_']*/), $.identifier),
+        ),
+        doc_ws,
+        optional(
+          seq(
+            alias($._doc_token_paren, "("),
+            doc_ws,
+            optional(seq(field("variables", $.variables))),
+            // no doc_ws
+            token.immediate(")"),
+            doc_ws,
+          ),
+        ),
+      ),
+
+    doc_var: (_) => token.immediate(/[A-Z]+/),
 
     doc_fragment_emph: (_) => token.immediate(/\*[^`%*_\r\n][^`*_\r\n]*\*/),
     doc_fragment_bold: (_) => token.immediate(/\*\*[^`%*_\r\n][^`*_\r\n]*\*\*/),
     doc_fragment_italic: (_) => token.immediate(/_[^`*_\r\n]*_/),
     doc_fragment_code: (_) => token.immediate(/`[^`%*_\r\n][^`*_\r\n]*`/),
 
+    // NOTE: gobbles up trailing whitespace
     doc_desc: ($) =>
       repeat1(
         choice(
@@ -126,13 +149,17 @@ module.exports = grammar({
         ),
       ),
 
-    doc_args: ($) => seq($._doc_token_args, $._doc_ws, repeat($.doc_arg)),
+    // NOTE: gobbles up trailing whitespace
+    doc_args: ($) => seq($._doc_token_args, doc_ws, repeat($.doc_arg)),
+    // NOTE: gobbles up trailing whitespace
     doc_arg: ($) =>
       seq(
         $._doc_token_minus,
-        $._doc_ws,
-        field("variable", $.doc_var),
-        lexeme($, ":"),
+        doc_ws,
+        field("variable", alias($.doc_var, $.variable)),
+        // no doc_ws
+        token.immediate(":"),
+        doc_ws,
         field("description", $.doc_desc),
       ),
 

@@ -765,6 +765,7 @@ heuristic
 ==================
 doc comments
 :cst
+:skip
 ==================
 
 %*! some_predicate (A, B ,C )
@@ -781,3 +782,52 @@ Args:
 
 ---
 
+1:0   - 12:0    source_file
+1:0   - 11:2      doc_comment
+1:0   - 1:3         "%*!"
+1:4   - 1:29        predicate: doc_predicate
+1:4   - 1:18          name: identifier `some_predicate`
+1:19  - 1:20          "("
+1:20  - 1:28          variables: variables
+1:20  - 1:21            variable `A`
+1:21  - 1:22            ","
+1:23  - 1:24            variable `B`
+1:25  - 1:26            ","
+1:26  - 1:27            variable `C`
+1:28  - 1:29          ")"
+2:0   - 7:0         description: doc_desc
+2:0   - 2:8           doc_fragment_string `Here is `
+2:8   - 2:14          doc_fragment_code `\`some\``
+2:14  - 4:8           doc_fragment_string 
+2:14  - 2:47            ` documentation for the prediate.\n`
+3:14  - 3:1             `\n`
+4:14  - 4:8             `Maybe a `
+4:8   - 4:16          doc_fragment_emph `*longer*`
+4:16  - 5:5           doc_fragment_string 
+4:16  - 4:21            ` one\n`
+5:16  - 5:5             `over `
+5:5   - 5:15          doc_fragment_italic `_multiple_`
+5:15  - 7:0           doc_fragment_string 
+5:15  - 5:22            ` lines\n`
+6:15  - 6:1             `\n`
+7:0   - 11:0        arguments: doc_args
+8:0   - 10:0          doc_arg
+8:2   - 8:3             variable: variable `A`
+8:3   - 8:4             ":"
+8:5   - 10:0            description: doc_desc
+8:5   - 8:13              doc_fragment_bold `**some**`
+8:13  - 8:30              doc_fragment_string ` description for `
+8:30  - 8:33              doc_fragment_emph `*A*`
+8:33  - 9:21              doc_fragment_string 
+8:33  - 8:34                `\n`
+9:33  - 9:21                `     maybe also over `
+9:21  - 9:31              doc_fragment_italic `_multiple_`
+9:31  - 10:0              doc_fragment_string 
+9:31  - 9:39                ` lines?\n`
+10:0  - 11:0          doc_arg
+10:2  - 10:3            variable: variable `B`
+10:3  - 10:4            ":"
+10:5  - 11:0            description: doc_desc
+10:5  - 11:0              doc_fragment_string 
+10:5  - 10:28               `some description for B\n`
+11:0  - 11:2        "*%"
