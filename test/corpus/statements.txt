@@ -523,7 +523,7 @@ doc comments
 ==================
 
 %*! some_predicate (A, B ,C )
-Here is `some` documentation for the prediate.
+Here is `some` documentation for the predicate.
 
 Maybe a *longer* one
 over _multiple_ lines
@@ -532,9 +532,20 @@ Args:
 - A: **some** description for *A*
      maybe also over _multiple_ lines?
 - B: some description for B
+- C: some description for C
+- D:
+*%
+
+%*! some_predicate
+
+brief
+
+Args:
+
 *%
 
 ---
+
 (source_file
   (doc_comment
     (doc_predicate
@@ -564,4 +575,16 @@ Args:
       (doc_arg
         (variable)
         (doc_desc
-          (doc_fragment_string))))))
+          (doc_fragment_string)))
+      (doc_arg
+        (variable)
+        (doc_desc
+          (doc_fragment_string)))
+      (doc_arg
+        (variable))))
+  (doc_comment
+    (doc_predicate
+      (identifier))
+    (doc_desc
+      (doc_fragment_string))
+    (doc_args)))

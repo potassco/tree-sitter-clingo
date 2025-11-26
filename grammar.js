@@ -160,7 +160,7 @@ module.exports = grammar({
         // no doc_ws
         token.immediate(":"),
         doc_ws,
-        field("description", $.doc_desc),
+        optional(field("description", $.doc_desc)),
       ),
 
     // terms

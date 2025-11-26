@@ -679,7 +679,7 @@
     "fields": {
       "description": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "doc_desc",
