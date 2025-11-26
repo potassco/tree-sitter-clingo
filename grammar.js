@@ -90,9 +90,9 @@ module.exports = grammar({
       seq(
         "%*!",
         $._doc_ws,
-        $.doc_predicate,
-        optional($.doc_desc),
-        optional($.doc_args),
+        field("predicate", $.doc_predicate),
+        optional(field("description", $.doc_desc)),
+        optional(field("arguments", $.doc_args)),
         token.immediate("*%"),
       ),
 
@@ -101,7 +101,7 @@ module.exports = grammar({
         lexeme($, /[_']*[a-z][A-Za-z0-9_']*/),
         optional(
           seq(
-            alias($._doc_token_paren, ")"),
+            alias($._doc_token_paren, "("),
             optional(seq($.doc_var, repeat(seq(lexeme($, ","), $.doc_var)))),
             lexeme($, ")"),
           ),
@@ -122,17 +122,19 @@ module.exports = grammar({
           $.doc_fragment_emph,
           $.doc_fragment_italic,
           $.doc_fragment_code,
-          // NOTE: since tree-sitter does not support more than one token of
-          // lookahead in the lexer, we have to resort to this hack to match
-          // `Args:` via `$._doc_token_args`, separately.
-          prec.right(0, repeat1($.doc_fragment_string)),
+          $.doc_fragment_string,
         ),
       ),
 
-    doc_args: ($) => seq($._doc_token_args, repeat1($.doc_arg)),
-
+    doc_args: ($) => seq($._doc_token_args, $._doc_ws, repeat($.doc_arg)),
     doc_arg: ($) =>
-      seq($._doc_token_minus, $.doc_var, lexeme($, ":"), $.doc_desc),
+      seq(
+        $._doc_token_minus,
+        $._doc_ws,
+        field("variable", $.doc_var),
+        lexeme($, ":"),
+        field("description", $.doc_desc),
+      ),
 
     // terms
 

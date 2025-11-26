@@ -676,20 +676,27 @@
   {
     "type": "doc_arg",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "doc_desc",
-          "named": true
-        },
-        {
-          "type": "doc_var",
-          "named": true
-        }
-      ]
+    "fields": {
+      "description": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "doc_desc",
+            "named": true
+          }
+        ]
+      },
+      "variable": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "doc_var",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -698,7 +705,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "doc_arg",
@@ -710,24 +717,37 @@
   {
     "type": "doc_comment",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "doc_args",
-          "named": true
-        },
-        {
-          "type": "doc_desc",
-          "named": true
-        },
-        {
-          "type": "doc_predicate",
-          "named": true
-        }
-      ]
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_args",
+            "named": true
+          }
+        ]
+      },
+      "description": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_desc",
+            "named": true
+          }
+        ]
+      },
+      "predicate": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "doc_predicate",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

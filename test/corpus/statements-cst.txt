@@ -761,3 +761,23 @@ heuristic
 3:37 - 3:38           variable `X`
 3:38 - 3:39         ")"
 3:39 - 3:40       "]"
+
+==================
+doc comments
+:cst
+==================
+
+%*! some_predicate (A, B ,C )
+Here is `some` documentation for the prediate.
+
+Maybe a *longer* one
+over _multiple_ lines
+
+Args:
+- A: **some** description for *A*
+     maybe also over _multiple_ lines?
+- B: some description for B
+*%
+
+---
+

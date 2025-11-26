@@ -44,15 +44,23 @@
           "name": "_doc_ws"
         },
         {
-          "type": "SYMBOL",
-          "name": "doc_predicate"
+          "type": "FIELD",
+          "name": "predicate",
+          "content": {
+            "type": "SYMBOL",
+            "name": "doc_predicate"
+          }
         },
         {
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "doc_desc"
+              "type": "FIELD",
+              "name": "description",
+              "content": {
+                "type": "SYMBOL",
+                "name": "doc_desc"
+              }
             },
             {
               "type": "BLANK"
@@ -63,8 +71,12 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "doc_args"
+              "type": "FIELD",
+              "name": "arguments",
+              "content": {
+                "type": "SYMBOL",
+                "name": "doc_args"
+              }
             },
             {
               "type": "BLANK"
@@ -112,7 +124,7 @@
                     "name": "_doc_token_paren"
                   },
                   "named": false,
-                  "value": ")"
+                  "value": "("
                 },
                 {
                   "type": "CHOICE",
@@ -255,15 +267,8 @@
             "name": "doc_fragment_code"
           },
           {
-            "type": "PREC_RIGHT",
-            "value": 0,
-            "content": {
-              "type": "REPEAT1",
-              "content": {
-                "type": "SYMBOL",
-                "name": "doc_fragment_string"
-              }
-            }
+            "type": "SYMBOL",
+            "name": "doc_fragment_string"
           }
         ]
       }
@@ -276,7 +281,11 @@
           "name": "_doc_token_args"
         },
         {
-          "type": "REPEAT1",
+          "type": "SYMBOL",
+          "name": "_doc_ws"
+        },
+        {
+          "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
             "name": "doc_arg"
@@ -293,7 +302,15 @@
         },
         {
           "type": "SYMBOL",
-          "name": "doc_var"
+          "name": "_doc_ws"
+        },
+        {
+          "type": "FIELD",
+          "name": "variable",
+          "content": {
+            "type": "SYMBOL",
+            "name": "doc_var"
+          }
         },
         {
           "type": "SEQ",
@@ -312,8 +329,12 @@
           ]
         },
         {
-          "type": "SYMBOL",
-          "name": "doc_desc"
+          "type": "FIELD",
+          "name": "description",
+          "content": {
+            "type": "SYMBOL",
+            "name": "doc_desc"
+          }
         }
       ]
     },
