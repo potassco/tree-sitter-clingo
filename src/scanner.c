@@ -1,7 +1,5 @@
 #include "tree_sitter/parser.h"
 
-#include <stdio.h>
-
 enum TokenType {
   EMPTY_POOL_ITEM_FIRST,
   EMPTY_POOL_ITEM,

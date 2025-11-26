@@ -134,8 +134,8 @@ module.exports = grammar({
 
     doc_fragment_emph: (_) => token.immediate(/\*[^`%*_\r\n][^`*_\r\n]*\*/),
     doc_fragment_bold: (_) => token.immediate(/\*\*[^`%*_\r\n][^`*_\r\n]*\*\*/),
-    doc_fragment_italic: (_) => token.immediate(/_[^`*_\r\n]*_/),
-    doc_fragment_code: (_) => token.immediate(/`[^`%*_\r\n][^`*_\r\n]*`/),
+    doc_fragment_italic: (_) => token.immediate(/_[^`*_\r\n]+_/),
+    doc_fragment_code: (_) => token.immediate(/`[^`*_\r\n]+`/),
 
     // NOTE: gobbles up trailing whitespace
     doc_desc: ($) =>

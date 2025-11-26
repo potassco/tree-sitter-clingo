@@ -264,14 +264,14 @@
       "type": "IMMEDIATE_TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "_[^`*_\\r\\n]*_"
+        "value": "_[^`*_\\r\\n]+_"
       }
     },
     "doc_fragment_code": {
       "type": "IMMEDIATE_TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "`[^`%*_\\r\\n][^`*_\\r\\n]*`"
+        "value": "`[^`*_\\r\\n]+`"
       }
     },
     "doc_desc": {
