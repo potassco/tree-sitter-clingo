@@ -18,8 +18,8 @@ const unary_expression = function (pre, op, rhs) {
   return prec.left(pre, seq(field("operator", op), field("right", rhs)));
 };
 
-const doc_ws = token.immediate(/[\s\r\n]*/);
-
+const ws_rgx = token.immediate(/[\s\r\n]*/);
+const identifier_rgx = /[_']*[a-z][A-Za-z0-9_']*/;
 const variable_rgx = /[_']*[A-Z][A-Za-z0-9_']*/;
 
 module.exports = grammar({
@@ -87,7 +87,7 @@ module.exports = grammar({
     doc_comment: ($) =>
       seq(
         "%*!",
-        doc_ws,
+        ws_rgx,
         field("predicate", $.doc_predicate),
         // no doc_ws
         optional(field("description", $.doc_desc)),
@@ -101,13 +101,13 @@ module.exports = grammar({
     variables: ($) =>
       seq(
         alias($.doc_var, $.variable),
-        doc_ws,
+        ws_rgx,
         repeat(
           seq(
             token.immediate(","),
-            doc_ws,
+            ws_rgx,
             alias($.doc_var, $.variable),
-            doc_ws,
+            ws_rgx,
           ),
         ),
       ),
@@ -115,19 +115,16 @@ module.exports = grammar({
     // NOTE: gobbles up trailing whitespace
     doc_predicate: ($) =>
       seq(
-        field(
-          "name",
-          alias(token.immediate(/[_']*[a-z][A-Za-z0-9_']*/), $.identifier),
-        ),
-        doc_ws,
+        field("name", alias(token.immediate(identifier_rgx), $.identifier)),
+        ws_rgx,
         optional(
           seq(
             alias($._doc_token_paren, "("),
-            doc_ws,
+            ws_rgx,
             optional(seq(field("variables", $.variables))),
             // no doc_ws
             token.immediate(")"),
-            doc_ws,
+            ws_rgx,
           ),
         ),
       ),
@@ -152,22 +149,22 @@ module.exports = grammar({
       ),
 
     // NOTE: gobbles up trailing whitespace
-    doc_args: ($) => seq($._doc_token_args, doc_ws, repeat($.doc_arg)),
+    doc_args: ($) => seq($._doc_token_args, ws_rgx, repeat($.doc_arg)),
     // NOTE: gobbles up trailing whitespace
     doc_arg: ($) =>
       seq(
         $._doc_token_minus,
-        doc_ws,
+        ws_rgx,
         field("variable", alias($.doc_var, $.variable)),
         // no doc_ws
         token.immediate(":"),
-        doc_ws,
+        ws_rgx,
         optional(field("description", $.doc_desc)),
       ),
 
     // terms
 
-    identifier: (_) => /[_']*[a-z][A-Za-z0-9_']*/,
+    identifier: (_) => identifier_rgx,
 
     string: ($) =>
       choice(
