@@ -20,6 +20,8 @@ const unary_expression = function (pre, op, rhs) {
 
 const doc_ws = token.immediate(/[\s\r\n]*/);
 
+const variable_rgx = /[_']*[A-Z][A-Za-z0-9_']*/;
+
 module.exports = grammar({
   name: "clingo",
 
@@ -130,7 +132,7 @@ module.exports = grammar({
         ),
       ),
 
-    doc_var: (_) => token.immediate(/[A-Z]+/),
+    doc_var: (_) => token.immediate(variable_rgx),
 
     doc_fragment_emph: (_) => token.immediate(/\*[^`%*_\r\n][^`*_\r\n]*\*/),
     doc_fragment_bold: (_) => token.immediate(/\*\*[^`%*_\r\n][^`*_\r\n]*\*\*/),
@@ -264,7 +266,7 @@ module.exports = grammar({
 
     anonymous: (_) => "_",
 
-    variable: (_) => /[_']*[A-Z][A-Za-z0-9_']*/,
+    variable: (_) => variable_rgx,
 
     _const_term: ($) =>
       choice(
