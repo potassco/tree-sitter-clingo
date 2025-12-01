@@ -65,6 +65,25 @@
 ;;
 (line_comment) @comment
 (block_comment) @comment
+(doc_comment) @comment
+
+;;
+;; doc comments
+;;
+;; We use raw for variables with elevated priority here because this nicely
+;; aligns with raw tags.
+;;
+(doc_comment) @comment
+(doc_predicate (identifier) @function)
+(doc_predicate (variables (variable) @markup.raw (#set! "priority" 200)))
+(doc_fragment_code) @markup.raw
+(doc_fragment_bold) @markup.strong
+[(doc_fragment_emph) (doc_fragment_italic)] @markup.italic
+(doc_args ("Args:") @markup.heading)
+(doc_arg 
+  ("-") @punctuation.delimiter (#set! "priority" 200)
+  (variable) @markup.raw (#set! "priority" 200)
+  (":") @punctuation.delimiter (#set! "priority" 200))
 
 ;;
 ;; punctuation

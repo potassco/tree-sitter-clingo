@@ -820,7 +820,9 @@ Args:
 5:15  - 5:22            ` lines\n`
 6:15  - 6:1             `\n`
 7:0   - 13:0        arguments: doc_args
+7:0   - 7:5           "Args:"
 8:0   - 10:0          doc_arg
+8:0   - 8:1             "-"
 8:2   - 8:3             variable: variable `A`
 8:3   - 8:4             ":"
 8:5   - 10:0            description: doc_desc
@@ -834,18 +836,21 @@ Args:
 9:31  - 10:0              doc_fragment_string 
 9:31  - 9:39                ` lines?\n`
 10:0  - 11:0          doc_arg
+10:0  - 10:1            "-"
 10:2  - 10:3            variable: variable `B`
 10:3  - 10:4            ":"
 10:5  - 11:0            description: doc_desc
 10:5  - 11:0              doc_fragment_string 
 10:5  - 10:28               `some description for B\n`
 11:0  - 12:0          doc_arg
+11:0  - 11:1            "-"
 11:2  - 11:3            variable: variable `C`
 11:3  - 11:4            ":"
 11:5  - 12:0            description: doc_desc
 11:5  - 12:0              doc_fragment_string 
 11:5  - 11:28               `some description for C\n`
 12:0  - 13:0          doc_arg
+12:0  - 12:1            "-"
 12:2  - 12:3            variable: variable `D`
 12:3  - 12:4            ":"
 13:0  - 13:2        "*%"
@@ -857,7 +862,6 @@ Args:
 17:0  - 19:0          doc_fragment_string 
 17:0  - 17:6            `brief\n`
 18:0  - 18:1            `\n`
-19:0  - 21:0        arguments: doc_args 
-19:0  - 19:6          `Args:\n`
-20:0  - 20:1          `\n`
+19:0  - 21:0        arguments: doc_args
+19:0  - 19:5          "Args:"
 21:0  - 21:2        "*%"
