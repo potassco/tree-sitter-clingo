@@ -25,25 +25,364 @@
         ]
       }
     },
-    "block_comment": {
-      "type": "TOKEN",
+    "doc_comment": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "%*!"
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "predicate",
+          "content": {
+            "type": "SYMBOL",
+            "name": "doc_predicate"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "description",
+              "content": {
+                "type": "SYMBOL",
+                "name": "doc_desc"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "arguments",
+              "content": {
+                "type": "SYMBOL",
+                "name": "doc_args"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "*%"
+          }
+        }
+      ]
+    },
+    "variables": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "doc_var"
+          },
+          "named": true,
+          "value": "variable"
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "STRING",
+                  "value": ","
+                }
+              },
+              {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "PATTERN",
+                  "value": "[\\s\\r\\n]*"
+                }
+              },
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "doc_var"
+                },
+                "named": true,
+                "value": "variable"
+              },
+              {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "PATTERN",
+                  "value": "[\\s\\r\\n]*"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "doc_predicate": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "ALIAS",
+            "content": {
+              "type": "IMMEDIATE_TOKEN",
+              "content": {
+                "type": "PATTERN",
+                "value": "[_']*[a-z][A-Za-z0-9_']*"
+              }
+            },
+            "named": true,
+            "value": "identifier"
+          }
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "_doc_token_paren"
+                  },
+                  "named": false,
+                  "value": "("
+                },
+                {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "[\\s\\r\\n]*"
+                  }
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "FIELD",
+                          "name": "variables",
+                          "content": {
+                            "type": "SYMBOL",
+                            "name": "variables"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                },
+                {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "STRING",
+                    "value": ")"
+                  }
+                },
+                {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "[\\s\\r\\n]*"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "doc_var": {
+      "type": "IMMEDIATE_TOKEN",
       "content": {
-        "type": "SEQ",
+        "type": "PATTERN",
+        "value": "[_']*[A-Z][A-Za-z0-9_']*"
+      }
+    },
+    "doc_fragment_emph": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\*[^`%*_\\r\\n][^`*_\\r\\n]*\\*"
+      }
+    },
+    "doc_fragment_bold": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\*\\*[^`%*_\\r\\n][^`*_\\r\\n]*\\*\\*"
+      }
+    },
+    "doc_fragment_italic": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "_[^`*_\\r\\n]+_"
+      }
+    },
+    "doc_fragment_code": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "`[^`*_\\r\\n]+`"
+      }
+    },
+    "doc_desc": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "CHOICE",
         "members": [
           {
-            "type": "STRING",
-            "value": "%*"
+            "type": "SYMBOL",
+            "name": "doc_fragment_bold"
           },
           {
-            "type": "PATTERN",
-            "value": "[^*]*\\*+([^%*][^*]*\\*+)*"
+            "type": "SYMBOL",
+            "name": "doc_fragment_emph"
           },
           {
-            "type": "STRING",
-            "value": "%"
+            "type": "SYMBOL",
+            "name": "doc_fragment_italic"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "doc_fragment_code"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "doc_fragment_string"
           }
         ]
       }
+    },
+    "doc_args": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_doc_token_args"
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "doc_arg"
+          }
+        }
+      ]
+    },
+    "doc_arg": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_doc_token_minus"
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "variable",
+          "content": {
+            "type": "ALIAS",
+            "content": {
+              "type": "SYMBOL",
+              "name": "doc_var"
+            },
+            "named": true,
+            "value": "variable"
+          }
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": ":"
+          }
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "description",
+              "content": {
+                "type": "SYMBOL",
+                "name": "doc_desc"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
     },
     "identifier": {
       "type": "PATTERN",
@@ -4960,6 +5299,10 @@
       "members": [
         {
           "type": "SYMBOL",
+          "name": "doc_comment"
+        },
+        {
+          "type": "SYMBOL",
           "name": "rule"
         },
         {
@@ -5078,6 +5421,26 @@
     {
       "type": "SYMBOL",
       "name": "colon"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "block_comment"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "doc_fragment_string"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_doc_token_args"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_doc_token_paren"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_doc_token_minus"
     }
   ],
   "inline": [

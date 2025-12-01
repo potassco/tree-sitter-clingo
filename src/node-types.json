@@ -70,6 +70,10 @@
         "named": true
       },
       {
+        "type": "doc_comment",
+        "named": true
+      },
+      {
         "type": "edge",
         "named": true
       },
@@ -667,6 +671,140 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "doc_arg",
+    "named": true,
+    "fields": {
+      "description": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_desc",
+            "named": true
+          }
+        ]
+      },
+      "variable": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "variable",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "doc_args",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "doc_arg",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "doc_comment",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_args",
+            "named": true
+          }
+        ]
+      },
+      "description": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "doc_desc",
+            "named": true
+          }
+        ]
+      },
+      "predicate": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "doc_predicate",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "doc_desc",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "doc_fragment_bold",
+          "named": true
+        },
+        {
+          "type": "doc_fragment_code",
+          "named": true
+        },
+        {
+          "type": "doc_fragment_emph",
+          "named": true
+        },
+        {
+          "type": "doc_fragment_italic",
+          "named": true
+        },
+        {
+          "type": "doc_fragment_string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "doc_predicate",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "variables": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "variables",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -2178,6 +2316,21 @@
     }
   },
   {
+    "type": "variables",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "weak_constraint",
     "named": true,
     "fields": {
@@ -2312,6 +2465,10 @@
     "named": false
   },
   {
+    "type": "%*!",
+    "named": false
+  },
+  {
     "type": "&",
     "named": false
   },
@@ -2325,6 +2482,10 @@
   },
   {
     "type": "*",
+    "named": false
+  },
+  {
+    "type": "*%",
     "named": false
   },
   {
@@ -2442,6 +2603,26 @@
   },
   {
     "type": "default_negation",
+    "named": true
+  },
+  {
+    "type": "doc_fragment_bold",
+    "named": true
+  },
+  {
+    "type": "doc_fragment_code",
+    "named": true
+  },
+  {
+    "type": "doc_fragment_emph",
+    "named": true
+  },
+  {
+    "type": "doc_fragment_italic",
+    "named": true
+  },
+  {
+    "type": "doc_fragment_string",
     "named": true
   },
   {

@@ -761,3 +761,103 @@ heuristic
 3:37 - 3:38           variable `X`
 3:38 - 3:39         ")"
 3:39 - 3:40       "]"
+
+==================
+doc comments
+:cst
+:skip
+==================
+
+%*! some_predicate (A, B ,C )
+Here is `some` documentation for the predicate.
+
+Maybe a *longer* one
+over _multiple_ lines
+
+Args:
+- A: **some** description for *A*
+     maybe also over _multiple_ lines?
+- B: some description for B
+- C: some description for C
+- D:
+*%
+
+%*! some_predicate
+
+brief
+
+Args:
+
+*%
+---
+
+1:0   - 21:2    source_file
+1:0   - 13:2      doc_comment
+1:0   - 1:3         "%*!"
+1:4   - 2:0         predicate: doc_predicate
+1:4   - 1:18          name: identifier `some_predicate`
+1:19  - 1:20          "("
+1:20  - 1:28          variables: variables
+1:20  - 1:21            variable `A`
+1:21  - 1:22            ","
+1:23  - 1:24            variable `B`
+1:25  - 1:26            ","
+1:26  - 1:27            variable `C`
+1:28  - 1:29          ")"
+2:0   - 7:0         description: doc_desc
+2:0   - 2:8           doc_fragment_string `Here is `
+2:8   - 2:14          doc_fragment_code `\`some\``
+2:14  - 4:8           doc_fragment_string 
+2:14  - 2:48            ` documentation for the predicate.\n`
+3:14  - 3:1             `\n`
+4:14  - 4:8             `Maybe a `
+4:8   - 4:16          doc_fragment_emph `*longer*`
+4:16  - 5:5           doc_fragment_string 
+4:16  - 4:21            ` one\n`
+5:16  - 5:5             `over `
+5:5   - 5:15          doc_fragment_italic `_multiple_`
+5:15  - 7:0           doc_fragment_string 
+5:15  - 5:22            ` lines\n`
+6:15  - 6:1             `\n`
+7:0   - 13:0        arguments: doc_args
+8:0   - 10:0          doc_arg
+8:2   - 8:3             variable: variable `A`
+8:3   - 8:4             ":"
+8:5   - 10:0            description: doc_desc
+8:5   - 8:13              doc_fragment_bold `**some**`
+8:13  - 8:30              doc_fragment_string ` description for `
+8:30  - 8:33              doc_fragment_emph `*A*`
+8:33  - 9:21              doc_fragment_string 
+8:33  - 8:34                `\n`
+9:33  - 9:21                `     maybe also over `
+9:21  - 9:31              doc_fragment_italic `_multiple_`
+9:31  - 10:0              doc_fragment_string 
+9:31  - 9:39                ` lines?\n`
+10:0  - 11:0          doc_arg
+10:2  - 10:3            variable: variable `B`
+10:3  - 10:4            ":"
+10:5  - 11:0            description: doc_desc
+10:5  - 11:0              doc_fragment_string 
+10:5  - 10:28               `some description for B\n`
+11:0  - 12:0          doc_arg
+11:2  - 11:3            variable: variable `C`
+11:3  - 11:4            ":"
+11:5  - 12:0            description: doc_desc
+11:5  - 12:0              doc_fragment_string 
+11:5  - 11:28               `some description for C\n`
+12:0  - 13:0          doc_arg
+12:2  - 12:3            variable: variable `D`
+12:3  - 12:4            ":"
+13:0  - 13:2        "*%"
+15:0  - 21:2      doc_comment
+15:0  - 15:3        "%*!"
+15:4  - 17:0        predicate: doc_predicate
+15:4  - 15:18         name: identifier `some_predicate`
+17:0  - 19:0        description: doc_desc
+17:0  - 19:0          doc_fragment_string 
+17:0  - 17:6            `brief\n`
+18:0  - 18:1            `\n`
+19:0  - 21:0        arguments: doc_args 
+19:0  - 19:6          `Args:\n`
+20:0  - 20:1          `\n`
+21:0  - 21:2        "*%"

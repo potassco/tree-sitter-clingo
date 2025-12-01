@@ -18,12 +18,25 @@ const unary_expression = function (pre, op, rhs) {
   return prec.left(pre, seq(field("operator", op), field("right", rhs)));
 };
 
+const ws_rgx = token.immediate(/[\s\r\n]*/);
+const identifier_rgx = /[_']*[a-z][A-Za-z0-9_']*/;
+const variable_rgx = /[_']*[A-Z][A-Za-z0-9_']*/;
+
 module.exports = grammar({
   name: "clingo",
 
   extras: ($) => [$.line_comment, $.block_comment, /\s/],
 
-  externals: ($) => [$.empty_pool_item_first, $.empty_pool_item, $.colon],
+  externals: ($) => [
+    $.empty_pool_item_first,
+    $.empty_pool_item,
+    $.colon,
+    $.block_comment,
+    $.doc_fragment_string,
+    $._doc_token_args,
+    $._doc_token_paren,
+    $._doc_token_minus,
+  ],
 
   // Note that the conflict below between signature and function in show statements
   // does not necessarily have to be resolved in the grammar. It could also
@@ -71,12 +84,87 @@ module.exports = grammar({
 
     line_comment: (_) => token(choice(/%[^*\n\r][^\n\r]*/, "%")),
 
-    // TODO: clingo counts nested %* *% blocks, this can only be done with a C scanner
-    block_comment: (_) => token(seq("%*", /[^*]*\*+([^%*][^*]*\*+)*/, "%")),
+    doc_comment: ($) =>
+      seq(
+        "%*!",
+        ws_rgx,
+        field("predicate", $.doc_predicate),
+        // no doc_ws
+        optional(field("description", $.doc_desc)),
+        // no doc_ws
+        optional(field("arguments", $.doc_args)),
+        // no doc_ws
+        token.immediate("*%"),
+      ),
+
+    // NOTE: gobbles up trailing whitespace
+    variables: ($) =>
+      seq(
+        alias($.doc_var, $.variable),
+        ws_rgx,
+        repeat(
+          seq(
+            token.immediate(","),
+            ws_rgx,
+            alias($.doc_var, $.variable),
+            ws_rgx,
+          ),
+        ),
+      ),
+
+    // NOTE: gobbles up trailing whitespace
+    doc_predicate: ($) =>
+      seq(
+        field("name", alias(token.immediate(identifier_rgx), $.identifier)),
+        ws_rgx,
+        optional(
+          seq(
+            alias($._doc_token_paren, "("),
+            ws_rgx,
+            optional(seq(field("variables", $.variables))),
+            // no doc_ws
+            token.immediate(")"),
+            ws_rgx,
+          ),
+        ),
+      ),
+
+    doc_var: (_) => token.immediate(variable_rgx),
+
+    doc_fragment_emph: (_) => token.immediate(/\*[^`%*_\r\n][^`*_\r\n]*\*/),
+    doc_fragment_bold: (_) => token.immediate(/\*\*[^`%*_\r\n][^`*_\r\n]*\*\*/),
+    doc_fragment_italic: (_) => token.immediate(/_[^`*_\r\n]+_/),
+    doc_fragment_code: (_) => token.immediate(/`[^`*_\r\n]+`/),
+
+    // NOTE: gobbles up trailing whitespace
+    doc_desc: ($) =>
+      repeat1(
+        choice(
+          $.doc_fragment_bold,
+          $.doc_fragment_emph,
+          $.doc_fragment_italic,
+          $.doc_fragment_code,
+          $.doc_fragment_string,
+        ),
+      ),
+
+    // NOTE: gobbles up trailing whitespace
+    doc_args: ($) => seq($._doc_token_args, ws_rgx, repeat($.doc_arg)),
+    // NOTE: gobbles up trailing whitespace
+    doc_arg: ($) =>
+      seq(
+        $._doc_token_minus,
+        ws_rgx,
+        field("variable", alias($.doc_var, $.variable)),
+        // no doc_ws
+        token.immediate(":"),
+        ws_rgx,
+        optional(field("description", $.doc_desc)),
+      ),
 
     // terms
 
-    identifier: (_) => /[_']*[a-z][A-Za-z0-9_']*/,
+    identifier: (_) => identifier_rgx,
 
     string: ($) =>
       choice(
@@ -175,7 +263,7 @@ module.exports = grammar({
 
     anonymous: (_) => "_",
 
-    variable: (_) => /[_']*[A-Z][A-Za-z0-9_']*/,
+    variable: (_) => variable_rgx,
 
     _const_term: ($) =>
       choice(
@@ -841,6 +929,7 @@ module.exports = grammar({
 
     statement: ($) =>
       choice(
+        $.doc_comment,
         $.rule,
         $.integrity_constraint,
         $.weak_constraint,
