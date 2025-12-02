@@ -306,8 +306,13 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "_doc_token_args"
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_doc_token_args"
+          },
+          "named": false,
+          "value": "Args:"
         },
         {
           "type": "IMMEDIATE_TOKEN",
@@ -329,8 +334,13 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "_doc_token_minus"
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_doc_token_minus"
+          },
+          "named": false,
+          "value": "-"
         },
         {
           "type": "IMMEDIATE_TOKEN",

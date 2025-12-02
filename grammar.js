@@ -149,11 +149,12 @@ module.exports = grammar({
       ),
 
     // NOTE: gobbles up trailing whitespace
-    doc_args: ($) => seq($._doc_token_args, ws_rgx, repeat($.doc_arg)),
+    doc_args: ($) =>
+      seq(alias($._doc_token_args, "Args:"), ws_rgx, repeat($.doc_arg)),
     // NOTE: gobbles up trailing whitespace
     doc_arg: ($) =>
       seq(
-        $._doc_token_minus,
+        alias($._doc_token_minus, "-"),
         ws_rgx,
         field("variable", alias($.doc_var, $.variable)),
         // no doc_ws
