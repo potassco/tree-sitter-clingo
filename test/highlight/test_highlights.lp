@@ -223,3 +223,40 @@ p(~1, -1, |1|)
 %                       ^ operator
 %                               ^ operator
 %                                       ^ operator
+
+% this is a comment
+%   ^ comment
+
+%*
+this is a block comment 
+*%
+%       ^ comment
+
+%*! some_predicate (A, B ,C ) *%
+%    ^ function
+%                   ^ markup.raw
+
+%*! some_predicate (A, B ,C )
+Here is `some` documentation for the *predicate*.
+*%
+% ^ comment
+%         ^ markup.raw
+%                   ^ comment
+%                                        ^ markup.italic
+
+%*! some_predicate (A, B ,C )
+Maybe a *longer* one
+over _multiple_ lines 
+*%
+% ^ comment
+%        ^ markup.italic
+%                ^ comment
+
+%*! some_predicate (A, B ,C )
+Args:
+- A: **some** description for *A* *%
+% <- punctuation.delimiter
+% ^ markup.raw
+%  ^ punctuation.delimiter
+%       ^ markup.strong
+%                              ^ markup.italic
