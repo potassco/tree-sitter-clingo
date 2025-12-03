@@ -4,7 +4,7 @@ endif
 
 LANGUAGE_NAME := tree-sitter-clingo
 HOMEPAGE_URL := https://github.com/potassco/tree-sitter-clingo
-VERSION := 1.0.1
+VERSION := 1.0.3
 
 # repository
 SRC_DIR := src
