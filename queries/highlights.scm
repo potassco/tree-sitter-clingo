@@ -56,6 +56,7 @@
 [
  (theory_atom_type)
  (const_type)
+ (boolean)
  (theory_operator_arity)
  (theory_operator_associativity)
 ] @keyword
