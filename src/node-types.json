@@ -511,6 +511,11 @@
     }
   },
   {
+    "type": "boolean",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "comparison",
     "named": true,
     "fields": {},
@@ -1610,6 +1615,16 @@
             "named": true
           }
         ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "boolean",
+            "named": true
+          }
+        ]
       }
     }
   },
@@ -2646,6 +2661,10 @@
     "named": false
   },
   {
+    "type": "false",
+    "named": false
+  },
+  {
     "type": "fstring_align",
     "named": true
   },
@@ -2709,6 +2728,10 @@
   {
     "type": "theory_operator_associativity",
     "named": true
+  },
+  {
+    "type": "true",
+    "named": false
   },
   {
     "type": "variable",

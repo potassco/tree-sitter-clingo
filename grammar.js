@@ -750,7 +750,15 @@ module.exports = grammar({
 
     show_term: ($) => seq("#show", field("term", $.term), $._colon_body),
 
-    show_signature: ($) => seq("#show", field("signature", $.signature), "."),
+    boolean: ($) => choice("true", "false"),
+
+    show_signature: ($) =>
+      seq(
+        "#show",
+        field("signature", $.signature),
+        ".",
+        optional(seq("[", field("value", $.boolean), "]")),
+      ),
 
     defined: ($) => seq("#defined", field("signature", $.signature), "."),
 
