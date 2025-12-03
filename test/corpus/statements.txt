@@ -171,6 +171,8 @@ show
 #show -a/2+1.
 #show -p(X) : q(), c(X).
 #show a.
+#show a/2. [true]
+#show a/2. [false]
 
 ---
 
@@ -217,8 +219,17 @@ show
             (variable))))))
   (show_term
     term: (function
-      name: (identifier))))
-
+      name: (identifier)))
+  (show_signature
+    signature: (signature
+      name: (identifier)
+      arity: (number))
+    value: (boolean))
+  (show_signature
+    signature: (signature
+      name: (identifier)
+      arity: (number))
+    value: (boolean)))
 ==================
 single show
 ==================

@@ -218,10 +218,12 @@ show
 #show -a/2+1.
 #show -p(X) : q(), c(X).
 #show a.
+#show a/2. [true]
+#show a/2. [false]
 
 ---
 
-1:0  - 8:0    source_file
+1:0  - 10:0   source_file
 1:0  - 1:6      show
 1:0  - 1:5        "#show"
 1:5  - 1:6        "."
@@ -295,7 +297,28 @@ show
 7:6  - 7:7        term: function
 7:6  - 7:7          name: identifier `a`
 7:7  - 7:8        "."
-
+8:0  - 8:17     show_signature
+8:0  - 8:5        "#show"
+8:6  - 8:9        signature: signature
+8:6  - 8:7          name: identifier `a`
+8:7  - 8:8          "/"
+8:8  - 8:9          arity: number `2`
+8:9  - 8:10       "."
+8:11 - 8:12       "["
+8:12 - 8:16       value: boolean
+8:12 - 8:16         "true"
+8:16 - 8:17       "]"
+9:0  - 9:18     show_signature
+9:0  - 9:5        "#show"
+9:6  - 9:9        signature: signature
+9:6  - 9:7          name: identifier `a`
+9:7  - 9:8          "/"
+9:8  - 9:9          arity: number `2`
+9:9  - 9:10       "."
+9:11 - 9:12       "["
+9:12 - 9:17       value: boolean
+9:12 - 9:17         "false"
+9:17 - 9:18       "]"
 ==================
 defined
 :cst
