@@ -750,7 +750,7 @@ module.exports = grammar({
 
     show_term: ($) => seq("#show", field("term", $.term), $._colon_body),
 
-    boolean: ($) => choice("true", "false"),
+    boolean: (_) => choice("true", "false"),
 
     show_signature: ($) =>
       seq(
