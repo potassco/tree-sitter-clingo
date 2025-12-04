@@ -17,11 +17,20 @@ group.
 
 ## 📋 Release Checklist
 
+We bundle generated files for easier deployment. Ensure to generate (build and
+test) the parser using the following commands:
+
+```bash
+npx tree-sitter generate
+npx tree-sitter build
+npx tree-sitter test
+```
+
 When preparing a new release, ensure the version is updated consistently in the
 following files:
 
 - `package.json`
-- `package-lock.json` (run `tree-sitter generate` to update)
+- `package-lock.json` (run `npm update -S` to update)
 - `Cargo.toml`
 - `Cargo.lock` (run `cargo update` to update)
 - `pyproject.toml`
