@@ -373,11 +373,7 @@ module.exports = grammar({
     function: ($) => seq(field("name", $.identifier), optional($._arg_pool)),
 
     external_function: ($) =>
-      seq(
-        "@",
-        field("name", $.identifier),
-        optional(field("arguments", $._arg_pool)),
-      ),
+      seq("@", field("name", $.identifier), optional($._arg_pool)),
 
     _term_comma: ($) => seq($.term, ","),
 
@@ -500,8 +496,7 @@ module.exports = grammar({
     // this does no work expected due to a bug:
     // https://github.com/tree-sitter/tree-sitter/issues/2299
     // so we leave things as is for now.
-    symbolic_atom: ($) =>
-      seq($.atom_identifier, optional(field("arguments", $._arg_pool))),
+    symbolic_atom: ($) => seq($.atom_identifier, optional($._arg_pool)),
 
     relation: (_) => token(choice(">", "<", ">=", "<=", "=", "!=")),
 

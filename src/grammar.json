@@ -2096,12 +2096,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "arguments",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_arg_pool"
-              }
+              "type": "SYMBOL",
+              "name": "_arg_pool"
             },
             {
               "type": "BLANK"
@@ -2746,12 +2742,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "arguments",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_arg_pool"
-              }
+              "type": "SYMBOL",
+              "name": "_arg_pool"
             },
             {
               "type": "BLANK"
