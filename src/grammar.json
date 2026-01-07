@@ -365,6 +365,13 @@
         {
           "type": "IMMEDIATE_TOKEN",
           "content": {
+            "type": "PATTERN",
+            "value": "[\\s\\r\\n]*"
+          }
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
             "type": "STRING",
             "value": ":"
           }

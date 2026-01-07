@@ -800,7 +800,7 @@ over _multiple_ lines
 Args:
 - A: **some** description for *A*
      maybe also over _multiple_ lines?
-- B: some description for B
+- B  : some description for B
 - C: some description for C
 - D:
 *%
@@ -861,10 +861,10 @@ Args:
 10:0  - 11:0          doc_arg
 10:0  - 10:1            "-"
 10:2  - 10:3            variable: variable `B`
-10:3  - 10:4            ":"
-10:5  - 11:0            description: doc_desc
-10:5  - 11:0              doc_fragment_string 
-10:5  - 10:28               `some description for B\n`
+10:5  - 10:6            ":"
+10:7  - 11:0            description: doc_desc
+10:7  - 11:0              doc_fragment_string 
+10:7  - 10:30               `some description for B\n`
 11:0  - 12:0          doc_arg
 11:0  - 11:1            "-"
 11:2  - 11:3            variable: variable `C`

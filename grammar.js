@@ -157,7 +157,7 @@ module.exports = grammar({
         alias($._doc_token_minus, "-"),
         ws_rgx,
         field("variable", alias($.doc_var, $.variable)),
-        // no doc_ws
+        ws_rgx,
         token.immediate(":"),
         ws_rgx,
         optional(field("description", $.doc_desc)),

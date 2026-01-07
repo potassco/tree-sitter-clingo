@@ -542,7 +542,7 @@ over _multiple_ lines
 Args:
 - A: **some** description for *A*
      maybe also over _multiple_ lines?
-- B: some description for B
+- B  : some description for B
 - C: some description for C
 - D:
 *%
