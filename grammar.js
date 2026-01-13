@@ -352,21 +352,38 @@ module.exports = grammar({
 
     terms: ($) => seq($.term, repeat(seq(",", $.term))),
 
+    projection: (_) => "*",
+    _term_or_projection: ($) => choice($.term, $.projection),
+    _terms_or_projection: ($) =>
+      seq($._term_or_projection, repeat(seq(",", $._term_or_projection))),
+
     _arg_pool_n: ($) =>
       seq(
         field(
           "arguments",
-          choice($.terms, alias($.empty_pool_item_first, $.empty_pool_item)),
+          choice(
+            alias($._terms_or_projection, $.terms),
+            alias($.empty_pool_item_first, $.empty_pool_item),
+          ),
         ),
         repeat1(
-          seq(";", field("arguments", choice($.terms, $.empty_pool_item))),
+          seq(
+            ";",
+            field(
+              "arguments",
+              choice(alias($._terms_or_projection, $.terms), $.empty_pool_item),
+            ),
+          ),
         ),
       ),
 
     _arg_pool: ($) =>
       seq(
         "(",
-        choice(field("arguments", optional($.terms)), $._arg_pool_n),
+        choice(
+          field("arguments", optional(alias($._terms_or_projection, $.terms))),
+          $._arg_pool_n,
+        ),
         ")",
       ),
 
@@ -375,9 +392,14 @@ module.exports = grammar({
     external_function: ($) =>
       seq("@", field("name", $.identifier), optional($._arg_pool)),
 
-    _term_comma: ($) => seq($.term, ","),
+    _term_comma: ($) => seq($._term_or_projection, ","),
 
-    _terms_trail: ($) => seq($.term, repeat1(seq(",", $.term)), optional(",")),
+    _terms_trail: ($) =>
+      seq(
+        $._term_or_projection,
+        repeat1(seq(",", $._term_or_projection)),
+        optional(","),
+      ),
 
     tuple_pool_item: ($) =>
       choice(

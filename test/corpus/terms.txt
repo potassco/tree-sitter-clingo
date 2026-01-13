@@ -298,3 +298,27 @@ p(f"abc{{x}}\n{X.name[0]!r:0<+#15_x}").
                 (fstring_width)
                 (fstring_grouping)
                 (fstring_type)))))))))
+
+
+==================
+projection
+==================
+
+p(*,f(*),(*,)).
+
+---
+
+(source_file
+    (rule
+    (literal
+        (symbolic_atom
+        (identifier)
+        (terms
+            (projection)
+            (function
+            (identifier)
+            (terms
+                (projection)))
+            (tuple
+            (terms
+                (projection))))))))

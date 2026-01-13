@@ -1457,6 +1457,11 @@
     }
   },
   {
+    "type": "projection",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "rule",
     "named": true,
     "fields": {
@@ -1761,6 +1766,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "projection",
+          "named": true
+        },
         {
           "type": "term",
           "named": true
