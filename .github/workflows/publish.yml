@@ -13,10 +13,11 @@ permissions:
 jobs:
   github:
     uses: tree-sitter/workflows/.github/workflows/release.yml@main
-    with:
-      attestations: true
   npm:
     uses: tree-sitter/workflows/.github/workflows/package-npm.yml@main
+    with:
+      package-name: "@potassco/tree-sitter-clingo"
+      environment-name: npm
     secrets:
       NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
   crates:
