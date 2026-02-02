@@ -1,6 +1,6 @@
 {
   "name": "@potassco/tree-sitter-clingo",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Clingo grammar for tree-sitter",
   "repository": {
     "type": "git",
@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "node-addon-api": "^8.5.0",
-    "node-gyp": "^12.1.0",
+    "node-gyp": "^12.2.0",
     "node-gyp-build": "^4.8.4"
   },
   "devDependencies": {
