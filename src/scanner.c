@@ -1,3 +1,7 @@
+#include <assert.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "tree_sitter/parser.h"
 
 enum TokenType {
@@ -10,6 +14,10 @@ enum TokenType {
   DOC_LPAREN,
   DOC_MINUS,
 };
+
+typedef struct clingo_lexer_state {
+  bool enable_doc_minus;
+} clingo_lexer_state_t;
 
 static void skip_whitespace(TSLexer *lexer, bool skip) {
   while (lexer->lookahead == ' ' ||
@@ -42,7 +50,8 @@ static bool match_string(TSLexer *lexer, const char *literal) {
  * Returns true if a valid documentation token is found and sets
  * lexer->result_symbol accordingly.
  */
-static bool doc_comment(TSLexer *lexer, const bool *valid_symbols) {
+static bool doc_comment(clingo_lexer_state_t *state, TSLexer *lexer,
+                        const bool *valid_symbols) {
   if (lexer->lookahead == 0) {
     return false;
   }
@@ -55,7 +64,8 @@ static bool doc_comment(TSLexer *lexer, const bool *valid_symbols) {
     }
   }
   // prefer `-` if active
-  if (valid_symbols[DOC_MINUS] && lexer->lookahead == '-') {
+  if (valid_symbols[DOC_MINUS] && state->enable_doc_minus &&
+      lexer->lookahead == '-') {
     lexer->advance(lexer, false);
     lexer->result_symbol = DOC_MINUS;
     return true;
@@ -66,6 +76,13 @@ static bool doc_comment(TSLexer *lexer, const bool *valid_symbols) {
       if (lexer->lookahead == 0) {
         return false;
       }
+      // permit '-' at the start of a line
+      if (lexer->lookahead == '\n') {
+        state->enable_doc_minus = true;
+      } else if (lexer->lookahead != ' ' && lexer->lookahead != '\t' &&
+                 lexer->lookahead != '\r' && lexer->lookahead != '-') {
+        state->enable_doc_minus = false;
+      }
       // try to match `Args:` if active; continue if it did not match
       if (valid_symbols[DOC_ARGS] && lexer->lookahead == 'A') {
         lexer->mark_end(lexer);
@@ -74,6 +91,8 @@ static bool doc_comment(TSLexer *lexer, const bool *valid_symbols) {
             // we just matched `Args:` at the start of the token
             lexer->mark_end(lexer);
             lexer->result_symbol = DOC_ARGS;
+            // permit '-' after 'Args:'
+            state->enable_doc_minus = true;
             return true;
           } else {
             // we matched `Args:` but not at the start, so stop here
@@ -85,11 +104,13 @@ static bool doc_comment(TSLexer *lexer, const bool *valid_symbols) {
         }
       }
       // stop at `-` (for arguments) if active
-      if (valid_symbols[DOC_MINUS] && lexer->lookahead == '-') {
+      // we can gobble the minus if we have not seen a newline
+      if (valid_symbols[DOC_MINUS] && state->enable_doc_minus &&
+          lexer->lookahead == '-') {
         lexer->mark_end(lexer);
         break;
       }
-      // stop at nested markdown
+      // stop at nested markdown (or closing block comment in case of `*`)
       if (lexer->lookahead == '`' || lexer->lookahead == '*' ||
           lexer->lookahead == '_') {
         lexer->mark_end(lexer);
@@ -144,7 +165,7 @@ bool tree_sitter_clingo_external_scanner_scan(void *payload, TSLexer *lexer,
                                               const bool *valid_symbols) {
   if (valid_symbols[DOC_ARGS] || valid_symbols[DOC_LPAREN] ||
       valid_symbols[DOC_MINUS] || valid_symbols[DOC_STRING_FRAGMENT]) {
-    return doc_comment(lexer, valid_symbols);
+    return doc_comment(payload, lexer, valid_symbols);
   }
 
   skip_whitespace(lexer, true);
@@ -189,16 +210,28 @@ bool tree_sitter_clingo_external_scanner_scan(void *payload, TSLexer *lexer,
 }
 
 // If we need to allocate/deallocate state, we do it in these functions.
-void *tree_sitter_clingo_external_scanner_create() { return NULL; }
+void *tree_sitter_clingo_external_scanner_create() {
+  clingo_lexer_state_t *s = malloc(sizeof(clingo_lexer_state_t));
+  memset(s, 0, sizeof(*s));
+  return s;
+}
 
-void tree_sitter_clingo_external_scanner_destroy(void *payload) {}
+void tree_sitter_clingo_external_scanner_destroy(void *payload) {
+  free(payload);
+}
 
 // If we have state, we should load and save it in these functions.
 unsigned tree_sitter_clingo_external_scanner_serialize(void *payload,
                                                        char *buffer) {
-  return 0;
+  size_t n = sizeof(clingo_lexer_state_t);
+  assert(n <= TREE_SITTER_SERIALIZATION_BUFFER_SIZE);
+  memcpy(buffer, payload, n);
+  return n;
 }
 
 void tree_sitter_clingo_external_scanner_deserialize(void *payload,
                                                      char *buffer,
-                                                     unsigned length) {}
+                                                     unsigned length) {
+  size_t n = sizeof(clingo_lexer_state_t);
+  memcpy(payload, buffer, length < n ? length : n);
+}
