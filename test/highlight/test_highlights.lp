@@ -56,7 +56,7 @@
 
 #defined a/3.
 %  ^ keyword.directive
- 
+
 
 #include "bar.lp".
 % ^ keyword.import
@@ -116,7 +116,7 @@ not not a.
 %                 ^ punctuation.delimiter
 %                     ^ keyword
      + : 1, binary, right;
-%                    ^ keyword	
+%                    ^ keyword
      + : 2, unary
 %            ^ keyword
     };
@@ -216,19 +216,22 @@ p(~1, -1, |1|)
 %         ^ operator
 %           ^ operator
 
-1 < 1, 1 > 1, 1 <= 1, 1 >= 1, 1 = 1, 1 != 1.
+1 < 1, 1 > 1, 1 <= 1, 1 >= 1.
 % ^ operator
 %        ^ operator
 %               ^ operator
 %                       ^ operator
-%                               ^ operator
-%                                       ^ operator
+
+1 = 1, 1 != 1, 1 <> 1.
+% ^ operator
+%         ^ operator
+%                 ^ operator
 
 % this is a comment
 %   ^ comment
 
 %*
-this is a block comment 
+this is a block comment
 *%
 %       ^ comment
 
@@ -246,7 +249,7 @@ Here is `some` documentation for the *predicate*.
 
 %*! some_predicate (A, B ,C )
 Maybe a *longer* one
-over _multiple_ lines 
+over _multiple_ lines
 *%
 % ^ comment
 %        ^ markup.italic

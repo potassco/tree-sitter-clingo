@@ -74,14 +74,14 @@ comparisons
 :skip
 ==================
 
-:- X < Y < Z, -p(X) < X < Y.
+:- X < Y < Z, -p(X) < X < Y, 1 <> 2.
 
 ---
 
 1:0  - 2:0    source_file
-1:0  - 1:28     integrity_constraint
+1:0  - 1:36     integrity_constraint
 1:0  - 1:2        ":-"
-1:3  - 1:27       body: body
+1:3  - 1:35       body: body
 1:3  - 1:12         body_literal
 1:3  - 1:12           atom: comparison
 1:3  - 1:4              variable `X`
@@ -104,7 +104,13 @@ comparisons
 1:22 - 1:23             variable `X`
 1:24 - 1:25             relation `<`
 1:26 - 1:27             variable `Y`
-1:27 - 1:28       "."
+1:27 - 1:28         ","
+1:29 - 1:35         body_literal
+1:29 - 1:35           atom: comparison
+1:29 - 1:30             number `1`
+1:31 - 1:33             relation `<>`
+1:34 - 1:35             number `2`
+1:35 - 1:36       "."
 
 ==================
 conditional literals

@@ -51,7 +51,7 @@ symbolic literals
 comparisons
 ==================
 
-:- X < Y < Z, -p(X) < X < Y.
+:- X < Y < Z, -p(X) < X < Y, 1 <> 2.
 
 ---
 
@@ -75,7 +75,12 @@ comparisons
           (relation)
           (variable)
           (relation)
-          (variable))))))
+          (variable)))
+      (body_literal
+        atom: (comparison
+          (number)
+          (relation)
+          (number))))))
 
 ==================
 conditional literals
