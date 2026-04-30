@@ -71,6 +71,7 @@ static bool doc_comment(clingo_lexer_state_t *state, TSLexer *lexer,
     return true;
   }
   bool empty = true;
+  bool markdown = true;
   if (valid_symbols[DOC_STRING_FRAGMENT]) {
     while (true) {
       if (lexer->lookahead == 0) {
@@ -83,6 +84,15 @@ static bool doc_comment(clingo_lexer_state_t *state, TSLexer *lexer,
                  lexer->lookahead != '\r' && lexer->lookahead != '-') {
         state->enable_doc_minus = false;
       }
+      // permit markdown only after whitespace
+      if (lexer->lookahead == ' ' || lexer->lookahead == ' ' ||
+          lexer->lookahead == '\n') {
+        markdown = true;
+      } else if (lexer->lookahead != '*' && lexer->lookahead != '_' &&
+                 lexer->lookahead != '`') {
+        markdown = false;
+      }
+
       // try to match `Args:` if active; continue if it did not match
       if (valid_symbols[DOC_ARGS] && lexer->lookahead == 'A') {
         lexer->mark_end(lexer);
@@ -111,10 +121,16 @@ static bool doc_comment(clingo_lexer_state_t *state, TSLexer *lexer,
         break;
       }
       // stop at nested markdown (or closing block comment in case of `*`)
-      if (lexer->lookahead == '`' || lexer->lookahead == '*' ||
-          lexer->lookahead == '_') {
+      if (markdown && (lexer->lookahead == '`' || lexer->lookahead == '*' ||
+                       lexer->lookahead == '_')) {
         lexer->mark_end(lexer);
-        break;
+        lexer->advance(lexer, false);
+        if (lexer->lookahead != ' ' && lexer->lookahead != '\t' &&
+            lexer->lookahead != '\r' && lexer->lookahead != '\n') {
+          break;
+        }
+        empty = false;
+        continue;
       }
       empty = false;
       lexer->advance(lexer, false);

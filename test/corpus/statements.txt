@@ -600,3 +600,34 @@ Args:
     (doc_desc
       (doc_fragment_string))
     (doc_args)))
+
+==================
+doc comments markdown
+==================
+
+%*! p(X)
+Description for `p(X)`.
+
+Not markdown *
+*markdown*
+p_x
+p _x_ _p_x_
+*%
+---
+
+(source_file
+  (doc_comment
+    (doc_predicate
+      (identifier)
+      (variables
+        (variable)))
+    (doc_desc
+      (doc_fragment_string)
+      (doc_fragment_code)
+      (doc_fragment_string)
+      (doc_fragment_emph)
+      (doc_fragment_string)
+      (doc_fragment_italic)
+      (doc_fragment_string)
+      (doc_fragment_italic)
+      (doc_fragment_string))))
