@@ -44,8 +44,7 @@ static bool match_string(TSLexer *lexer, const char *literal) {
  * - DOC_LPAREN: Matches '(' if active.
  * - DOC_MINUS: Matches '-' if active.
  * - DOC_ARGS: Matches "Args:" at the start of a fragment if active.
- * - DOC_STRING_FRAGMENT: Consumes a fragment of the docstring, stopping at '-'
- *   or "Args:".
+ * - DOC_DESC: Matches a description stopping at '-' or "Args:".
  *
  * Returns true if a valid documentation token is found and sets
  * lexer->result_symbol accordingly.
@@ -115,13 +114,12 @@ static bool doc_comment(clingo_lexer_state_t *state, TSLexer *lexer,
       if (lexer->lookahead == '*') {
         lexer->mark_end(lexer);
         lexer->advance(lexer, false);
-        if (lexer->lookahead == 0) {
-          return false;
-        }
         // stop at closing block comment
         if (lexer->lookahead == '%') {
           break;
         }
+        empty = false;
+        continue;
       }
       empty = false;
       lexer->advance(lexer, false);
