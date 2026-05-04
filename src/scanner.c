@@ -9,7 +9,7 @@ enum TokenType {
   EMPTY_POOL_ITEM,
   COLON,
   BLOCK_COMMENT,
-  DOC_STRING_FRAGMENT,
+  DOC_DESC,
   DOC_ARGS,
   DOC_LPAREN,
   DOC_MINUS,
@@ -44,8 +44,8 @@ static bool match_string(TSLexer *lexer, const char *literal) {
  * - DOC_LPAREN: Matches '(' if active.
  * - DOC_MINUS: Matches '-' if active.
  * - DOC_ARGS: Matches "Args:" at the start of a fragment if active.
- * - DOC_STRING_FRAGMENT: Consumes a fragment of the docstring, stopping at
- *   '-', markdown characters (`*`, '`', `_`), or "Args:".
+ * - DOC_STRING_FRAGMENT: Consumes a fragment of the docstring, stopping at '-'
+ *   or "Args:".
  *
  * Returns true if a valid documentation token is found and sets
  * lexer->result_symbol accordingly.
@@ -71,8 +71,7 @@ static bool doc_comment(clingo_lexer_state_t *state, TSLexer *lexer,
     return true;
   }
   bool empty = true;
-  bool markdown = true;
-  if (valid_symbols[DOC_STRING_FRAGMENT]) {
+  if (valid_symbols[DOC_DESC]) {
     while (true) {
       if (lexer->lookahead == 0) {
         return false;
@@ -83,14 +82,6 @@ static bool doc_comment(clingo_lexer_state_t *state, TSLexer *lexer,
       } else if (lexer->lookahead != ' ' && lexer->lookahead != '\t' &&
                  lexer->lookahead != '\r' && lexer->lookahead != '-') {
         state->enable_doc_minus = false;
-      }
-      // permit markdown only after whitespace
-      if (lexer->lookahead == ' ' || lexer->lookahead == ' ' ||
-          lexer->lookahead == '\n') {
-        markdown = true;
-      } else if (lexer->lookahead != '*' && lexer->lookahead != '_' &&
-                 lexer->lookahead != '`') {
-        markdown = false;
       }
 
       // try to match `Args:` if active; continue if it did not match
@@ -120,22 +111,27 @@ static bool doc_comment(clingo_lexer_state_t *state, TSLexer *lexer,
         lexer->mark_end(lexer);
         break;
       }
-      // stop at nested markdown (or closing block comment in case of `*`)
-      if (markdown && (lexer->lookahead == '`' || lexer->lookahead == '*' ||
-                       lexer->lookahead == '_')) {
+      // stop at a closing block comment
+      if (lexer->lookahead == '*') {
         lexer->mark_end(lexer);
         lexer->advance(lexer, false);
-        if (lexer->lookahead != ' ' && lexer->lookahead != '\t' &&
-            lexer->lookahead != '\r' && lexer->lookahead != '\n') {
+        if (lexer->lookahead == 0) {
+          return false;
+        }
+        // stop at closing block comment
+        if (lexer->lookahead == '%') {
           break;
         }
-        empty = false;
-        continue;
       }
       empty = false;
       lexer->advance(lexer, false);
     }
-    lexer->result_symbol = DOC_STRING_FRAGMENT;
+    lexer->result_symbol = DOC_DESC;
+  } else if (valid_symbols[DOC_ARGS] && match_string(lexer, "Args:")) {
+    lexer->mark_end(lexer);
+    lexer->result_symbol = DOC_ARGS;
+    state->enable_doc_minus = true;
+    return true;
   }
   return !empty;
 }
@@ -180,7 +176,7 @@ static bool consume_blockcomment(TSLexer *lexer) {
 bool tree_sitter_clingo_external_scanner_scan(void *payload, TSLexer *lexer,
                                               const bool *valid_symbols) {
   if (valid_symbols[DOC_ARGS] || valid_symbols[DOC_LPAREN] ||
-      valid_symbols[DOC_MINUS] || valid_symbols[DOC_STRING_FRAGMENT]) {
+      valid_symbols[DOC_MINUS] || valid_symbols[DOC_DESC]) {
     return doc_comment(payload, lexer, valid_symbols);
   }
 

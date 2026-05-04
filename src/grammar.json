@@ -246,62 +246,6 @@
         "value": "[_']*[A-Z][A-Za-z0-9_']*"
       }
     },
-    "doc_fragment_emph": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "PATTERN",
-        "value": "\\*[^*\\r\\n]([^*%\\r\\n]|\\*[^ \\r\\n\\t]|%[^*\\r\\n])*\\*"
-      }
-    },
-    "doc_fragment_bold": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "PATTERN",
-        "value": "\\*\\*([^*\\r\\n]|\\*\\*[^ \\r\\n\\t]|%[^*\\r\\n])+\\*\\*"
-      }
-    },
-    "doc_fragment_italic": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "PATTERN",
-        "value": "_([^_\\r\\n]|_[^ \\r\\n\\t])+_"
-      }
-    },
-    "doc_fragment_code": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "PATTERN",
-        "value": "`[^`\\r\\n]+`"
-      }
-    },
-    "doc_desc": {
-      "type": "REPEAT1",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "doc_fragment_bold"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "doc_fragment_emph"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "doc_fragment_italic"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "doc_fragment_code"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "doc_fragment_string"
-          }
-        ]
-      }
-    },
     "doc_args": {
       "type": "SEQ",
       "members": [
@@ -5540,7 +5484,7 @@
     },
     {
       "type": "SYMBOL",
-      "name": "doc_fragment_string"
+      "name": "doc_desc"
     },
     {
       "type": "SYMBOL",

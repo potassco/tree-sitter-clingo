@@ -243,17 +243,12 @@ this is a block comment
 Here is `some` documentation for the *predicate*.
 *%
 % ^ comment
-%         ^ markup.raw
-%                   ^ comment
-%                                        ^ markup.italic
 
 %*! some_predicate (A, B ,C )
 Maybe a *longer* one
 over _multiple_ lines
 *%
 % ^ comment
-%        ^ markup.italic
-%                ^ comment
 
 %*! some_predicate (A, B ,C )
 Args:
@@ -261,5 +256,3 @@ Args:
 % <- punctuation.delimiter
 % ^ markup.raw
 %  ^ punctuation.delimiter
-%       ^ markup.strong
-%                              ^ markup.italic

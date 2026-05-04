@@ -756,37 +756,6 @@
     }
   },
   {
-    "type": "doc_desc",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "doc_fragment_bold",
-          "named": true
-        },
-        {
-          "type": "doc_fragment_code",
-          "named": true
-        },
-        {
-          "type": "doc_fragment_emph",
-          "named": true
-        },
-        {
-          "type": "doc_fragment_italic",
-          "named": true
-        },
-        {
-          "type": "doc_fragment_string",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "doc_predicate",
     "named": true,
     "fields": {
@@ -2610,23 +2579,7 @@
     "named": true
   },
   {
-    "type": "doc_fragment_bold",
-    "named": true
-  },
-  {
-    "type": "doc_fragment_code",
-    "named": true
-  },
-  {
-    "type": "doc_fragment_emph",
-    "named": true
-  },
-  {
-    "type": "doc_fragment_italic",
-    "named": true
-  },
-  {
-    "type": "doc_fragment_string",
+    "type": "doc_desc",
     "named": true
   },
   {
