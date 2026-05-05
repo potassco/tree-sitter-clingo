@@ -32,7 +32,7 @@ module.exports = grammar({
     $.empty_pool_item,
     $.colon,
     $.block_comment,
-    $.doc_fragment_string,
+    $.doc_desc,
     $._doc_token_args,
     $._doc_token_paren,
     $._doc_token_minus,
@@ -130,23 +130,6 @@ module.exports = grammar({
       ),
 
     doc_var: (_) => token.immediate(variable_rgx),
-
-    doc_fragment_emph: (_) => token.immediate(/\*[^`%*_\r\n][^`*_\r\n]*\*/),
-    doc_fragment_bold: (_) => token.immediate(/\*\*[^`%*_\r\n][^`*_\r\n]*\*\*/),
-    doc_fragment_italic: (_) => token.immediate(/_[^`*_\r\n]+_/),
-    doc_fragment_code: (_) => token.immediate(/`[^`*_\r\n]+`/),
-
-    // NOTE: gobbles up trailing whitespace
-    doc_desc: ($) =>
-      repeat1(
-        choice(
-          $.doc_fragment_bold,
-          $.doc_fragment_emph,
-          $.doc_fragment_italic,
-          $.doc_fragment_code,
-          $.doc_fragment_string,
-        ),
-      ),
 
     // NOTE: gobbles up trailing whitespace
     doc_args: ($) =>
