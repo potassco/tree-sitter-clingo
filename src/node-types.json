@@ -644,6 +644,11 @@
     }
   },
   {
+    "type": "default_negation",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "defined",
     "named": true,
     "fields": {
@@ -780,6 +785,11 @@
         ]
       }
     }
+  },
+  {
+    "type": "double_default_negation",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "edge",
@@ -2006,6 +2016,11 @@
     }
   },
   {
+    "type": "theory_operator",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "theory_operator_arity",
     "named": true,
     "fields": {}
@@ -2575,15 +2590,7 @@
     "named": true
   },
   {
-    "type": "default_negation",
-    "named": true
-  },
-  {
     "type": "doc_desc",
-    "named": true
-  },
-  {
-    "type": "double_default_negation",
     "named": true
   },
   {
@@ -2640,6 +2647,10 @@
     "named": true
   },
   {
+    "type": "not",
+    "named": false
+  },
+  {
     "type": "number",
     "named": true
   },
@@ -2657,10 +2668,6 @@
   },
   {
     "type": "theory_atom_type",
-    "named": true
-  },
-  {
-    "type": "theory_operator",
     "named": true
   },
   {

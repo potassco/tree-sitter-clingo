@@ -512,7 +512,7 @@ module.exports = grammar({
       choice($.symbolic_atom, $.comparison, $.boolean_constant),
 
     default_negation: (_) => "not",
-    double_default_negation: (_) => "not not",
+    double_default_negation: (_) => seq("not", "not"),
 
     literal_sign: ($) => choice($.default_negation, $.double_default_negation),
 

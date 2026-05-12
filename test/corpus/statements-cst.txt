@@ -13,7 +13,7 @@ comments
 
 1:0 - 5:0   source_file
 1:0 - 1:5     line_comment `% foo`
-2:0 - 4:3     block_comment 
+2:0 - 4:3     block_comment
 2:0 - 2:4       `%* \n`
 3:0 - 3:7       ` * bar\n`
 4:0 - 4:3       ` *%`
@@ -507,7 +507,7 @@ def main(ctl):
 1:8  - 1:9        "("
 1:9  - 1:15       language: identifier `python`
 1:15 - 1:16       ")"
-1:16 - 6:0        code: code 
+1:16 - 6:0        code: code
 1:16 - 1:17         `\n`
 2:16 - 2:1          `\n`
 3:16 - 3:15         `def main(ctl):\n`

@@ -2851,8 +2851,17 @@
       "value": "not"
     },
     "double_default_negation": {
-      "type": "STRING",
-      "value": "not not"
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "not"
+        },
+        {
+          "type": "STRING",
+          "value": "not"
+        }
+      ]
     },
     "literal_sign": {
       "type": "CHOICE",

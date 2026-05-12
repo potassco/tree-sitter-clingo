@@ -363,7 +363,8 @@ theory unparsed
 1:35 - 1:36               ","
 1:37 - 1:42               theory_unparsed_term
 1:37 - 1:40                 theory_operators
-1:37 - 1:40                   theory_operator `not`
+1:37 - 1:40                   theory_operator
+1:37 - 1:40                     "not"
 1:41 - 1:42                 theory_function
 1:41 - 1:42                   name: identifier `f`
 1:43 - 1:44         "}"
