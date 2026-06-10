@@ -1,7 +1,6 @@
 ==================
 symbolic literals
 :cst
-:skip
 ==================
 
 :- p(X), not p(X), not not p(X), -p(X), not -p(X), not not -p(X).
@@ -77,7 +76,6 @@ symbolic literals
 ==================
 comparisons
 :cst
-:skip
 ==================
 
 :- X < Y < Z, -p(X) < X < Y, 1 <> 2.
@@ -121,7 +119,6 @@ comparisons
 ==================
 conditional literals
 :cst
-:skip
 ==================
 
 :- a, not b: p, c; p(X):; not not X < Y < Z: p(X); b:.
@@ -193,7 +190,6 @@ conditional literals
 ==================
 body set aggregates
 :cst
-:skip
 ==================
 
 :- not 1 { a; a: ; a: b; a: b, c } <= 3.
@@ -255,7 +251,6 @@ body set aggregates
 ==================
 body aggregates
 :cst
-:skip
 ==================
 
 :- not 1 #count { :; :a; a; a: ; a: b, c; a, b } <= 3.

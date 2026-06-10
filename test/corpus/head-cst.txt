@@ -1,7 +1,6 @@
 ==================
 symbolic literal
 :cst
-:skip
 ==================
 
 not p.
@@ -20,7 +19,6 @@ not p.
 ==================
 comparison
 :cst
-:skip
 ==================
 
 X < Y < Z.
@@ -41,7 +39,6 @@ X < Y < Z.
 ==================
 boolean
 :cst
-:skip
 ==================
 
 #true; #false.
@@ -61,7 +58,6 @@ boolean
 ==================
 disjunction
 :cst
-:skip
 ==================
 
 p; p: q, c; d: ; |X| < 10.
@@ -108,7 +104,6 @@ p; p: q, c; d: ; |X| < 10.
 ==================
 head set aggregate
 :cst
-:skip
 ==================
 
 1 <= { a; a: b, c } <= 2.
@@ -150,7 +145,6 @@ head set aggregate
 ==================
 head aggregate
 :cst
-:skip
 ==================
 
 1 <= #count { :a; 1:a:b,c; 1:a: } <= 2.
@@ -206,7 +200,6 @@ head aggregate
 ==================
 head theory
 :cst
-:skip
 ==================
 
 &p(;a;b;) < 1.
