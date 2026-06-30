@@ -242,13 +242,13 @@ this is a block comment
 %*! some_predicate (A, B ,C )
 Here is `some` documentation for the *predicate*.
 *%
-% ^ comment
+%   ^ comment
 
 %*! some_predicate (A, B ,C )
 Maybe a *longer* one
 over _multiple_ lines
 *%
-% ^ comment
+%   ^ comment
 
 %*! some_predicate (A, B ,C )
 Args:

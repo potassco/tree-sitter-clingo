@@ -1,5 +1,6 @@
 ==================
 comments
+:cst
 ==================
 
 % foo
@@ -9,12 +10,17 @@ comments
 
 ---
 
-(source_file
-  (line_comment)
-  (block_comment))
+1:0 - 5:0   source_file
+1:0 - 1:5     line_comment `% foo`
+2:0 - 4:3     block_comment
+2:0 - 2:4       `%* \n`
+3:0 - 3:7       ` * bar\n`
+4:0 - 4:3       ` *%`
+
 
 ==================
 line comments
+:cst
 ==================
 
 %
@@ -25,15 +31,16 @@ line comments
 
 ---
 
-(source_file
-  (line_comment)
-  (line_comment)
-  (line_comment)
-  (line_comment)
-  (line_comment))
+1:0 - 6:0   source_file
+1:0 - 1:1     line_comment `%`
+2:0 - 2:5     line_comment `% xyz`
+3:0 - 3:3     line_comment `%  `
+4:0 - 4:1     line_comment `%`
+5:0 - 5:1     line_comment `%`
 
 ==================
 rules
+:cst
 ==================
 
 head.
@@ -41,31 +48,26 @@ head :-  body.
 
 ---
 
-(source_file
-  (rule
-    head: (literal
-      atom: (symbolic_atom
-        name: (identifier))))
-  (rule
-    head: (literal
-      atom: (symbolic_atom
-        name: (identifier)))
-    body: (body
-      (body_literal
-        atom: (symbolic_atom
-          name: (identifier))))))
-
-==================
-rule error double arrow
-:error
-==================
-
-head :- body :- body.
-
----
+1:0  - 3:0    source_file
+1:0  - 1:5      rule
+1:0  - 1:4        head: literal
+1:0  - 1:4          atom: symbolic_atom
+1:0  - 1:4            name: identifier `head`
+1:4  - 1:5        "."
+2:0  - 2:14     rule
+2:0  - 2:4        head: literal
+2:0  - 2:4          atom: symbolic_atom
+2:0  - 2:4            name: identifier `head`
+2:5  - 2:7        ":-"
+2:9  - 2:13       body: body
+2:9  - 2:13         body_literal
+2:9  - 2:13           atom: symbolic_atom
+2:9  - 2:13             name: identifier `body`
+2:13 - 2:14       "."
 
 ==================
 constraints
+:cst
 ==================
 
 :- body.
@@ -73,16 +75,21 @@ constraints
 
 ---
 
-(source_file
-  (integrity_constraint
-    body: (body
-      (body_literal
-        atom: (symbolic_atom
-          name: (identifier)))))
-  (integrity_constraint))
+1:0 - 3:0   source_file
+1:0 - 1:8     integrity_constraint
+1:0 - 1:2       ":-"
+1:3 - 1:7       body: body
+1:3 - 1:7         body_literal
+1:3 - 1:7           atom: symbolic_atom
+1:3 - 1:7             name: identifier `body`
+1:7 - 1:8       "."
+2:0 - 2:4     integrity_constraint
+2:0 - 2:2       ":-"
+2:3 - 2:4       "."
 
 ==================
 weak constraint
+:cst
 ==================
 
 :~ a, b. [1@2,1,2,3]
@@ -90,78 +97,110 @@ weak constraint
 
 ---
 
-(source_file
-  (weak_constraint
-    body: (body
-      (body_literal
-        atom: (symbolic_atom
-          name: (identifier)))
-      (body_literal
-        atom: (symbolic_atom
-          name: (identifier))))
-    weight: (weight
-      term: (number)
-      priority: (number))
-    terms: (terms
-      (number)
-      (number)
-      (number)))
-  (weak_constraint
-    weight: (weight
-      term: (number))))
+1:0  - 3:0    source_file
+1:0  - 1:20     weak_constraint
+1:0  - 1:2        ":~"
+1:3  - 1:7        body: body
+1:3  - 1:4          body_literal
+1:3  - 1:4            atom: symbolic_atom
+1:3  - 1:4              name: identifier `a`
+1:4  - 1:5          ","
+1:6  - 1:7          body_literal
+1:6  - 1:7            atom: symbolic_atom
+1:6  - 1:7              name: identifier `b`
+1:7  - 1:8        "."
+1:9  - 1:10       "["
+1:10 - 1:13       weight: weight
+1:10 - 1:11         term: number `1`
+1:11 - 1:12         "@"
+1:12 - 1:13         priority: number `2`
+1:13 - 1:14       ","
+1:14 - 1:19       terms: terms
+1:14 - 1:15         number `1`
+1:15 - 1:16         ","
+1:16 - 1:17         number `2`
+1:17 - 1:18         ","
+1:18 - 1:19         number `3`
+1:19 - 1:20       "]"
+2:0  - 2:8      weak_constraint
+2:0  - 2:2        ":~"
+2:3  - 2:4        "."
+2:5  - 2:6        "["
+2:6  - 2:7        weight: weight
+2:6  - 2:7          term: number `0`
+2:7  - 2:8        "]"
 
 ==================
 minimize
+:cst
 ==================
 
 #minimize{ 1@3: a; 1: b; 2,3: b,c  }.
 
 ---
 
-(source_file
-  (minimize
-    elements: (optimize_elements
-      (optimize_element
-        weight: (weight
-          term: (number)
-          priority: (number))
-        condition: (condition
-          (literal
-            atom: (symbolic_atom
-              name: (identifier)))))
-      (optimize_element
-        weight: (weight
-          term: (number))
-        condition: (condition
-          (literal
-            atom: (symbolic_atom
-              name: (identifier)))))
-      (optimize_element
-        weight: (weight
-          term: (number))
-        terms: (terms
-          (number))
-        condition: (condition
-          (literal
-            atom: (symbolic_atom
-              name: (identifier)))
-          (literal
-            atom: (symbolic_atom
-              name: (identifier))))))))
+1:0  - 2:0    source_file
+1:0  - 1:37     minimize
+1:0  - 1:9        "#minimize"
+1:9  - 1:10       "{"
+1:11 - 1:33       elements: optimize_elements
+1:11 - 1:17         optimize_element
+1:11 - 1:14           weight: weight
+1:11 - 1:12             term: number `1`
+1:12 - 1:13             "@"
+1:13 - 1:14             priority: number `3`
+1:14 - 1:15           ":"
+1:16 - 1:17           condition: condition
+1:16 - 1:17             literal
+1:16 - 1:17               atom: symbolic_atom
+1:16 - 1:17                 name: identifier `a`
+1:17 - 1:18         ";"
+1:19 - 1:23         optimize_element
+1:19 - 1:20           weight: weight
+1:19 - 1:20             term: number `1`
+1:20 - 1:21           ":"
+1:22 - 1:23           condition: condition
+1:22 - 1:23             literal
+1:22 - 1:23               atom: symbolic_atom
+1:22 - 1:23                 name: identifier `b`
+1:23 - 1:24         ";"
+1:25 - 1:33         optimize_element
+1:25 - 1:26           weight: weight
+1:25 - 1:26             term: number `2`
+1:26 - 1:27           ","
+1:27 - 1:28           terms: terms
+1:27 - 1:28             number `3`
+1:28 - 1:29           ":"
+1:30 - 1:33           condition: condition
+1:30 - 1:31             literal
+1:30 - 1:31               atom: symbolic_atom
+1:30 - 1:31                 name: identifier `b`
+1:31 - 1:32             ","
+1:32 - 1:33             literal
+1:32 - 1:33               atom: symbolic_atom
+1:32 - 1:33                 name: identifier `c`
+1:35 - 1:36       "}"
+1:36 - 1:37       "."
 
 ==================
 maximize
+:cst
 ==================
 
 #maximize{ }.
 
 ---
 
-(source_file
-  (maximize))
+1:0  - 2:0    source_file
+1:0  - 1:13     maximize
+1:0  - 1:9        "#maximize"
+1:9  - 1:10       "{"
+1:11 - 1:12       "}"
+1:12 - 1:13       "."
 
 ==================
 show
+:cst
 ==================
 
 #show.
@@ -176,76 +215,105 @@ show
 
 ---
 
-(source_file
-  (show)
-  (show_signature
-    signature: (signature
-      name: (identifier)
-      arity: (number)))
-  (show_signature
-    signature: (signature
-      sign: (classical_negation)
-      name: (identifier)
-      arity: (number)))
-  (show_term
-    term: (binary_operation
-      left: (binary_operation
-        left: (function
-          name: (identifier))
-        right: (number))
-      right: (number)))
-  (show_term
-    term: (binary_operation
-      left: (binary_operation
-        left: (unary_operation
-          right: (function
-            name: (identifier)))
-        right: (number))
-      right: (number)))
-  (show_term
-    term: (unary_operation
-      right: (function
-        name: (identifier)
-        arguments: (terms
-          (variable))))
-    body: (body
-      (body_literal
-        atom: (symbolic_atom
-          name: (identifier)))
-      (body_literal
-        atom: (symbolic_atom
-          name: (identifier)
-          arguments: (terms
-            (variable))))))
-  (show_term
-    term: (function
-      name: (identifier)))
-  (show_signature
-    signature: (signature
-      name: (identifier)
-      arity: (number))
-    value: (boolean))
-  (show_signature
-    signature: (signature
-      name: (identifier)
-      arity: (number))
-    value: (boolean)))
-==================
-single show
-==================
-
-#show a/0.
-
----
-
-(source_file
-    (show_signature
-    (signature
-        (identifier)
-        (number))))
-
+1:0  - 10:0   source_file
+1:0  - 1:6      show
+1:0  - 1:5        "#show"
+1:5  - 1:6        "."
+2:0  - 2:10     show_signature
+2:0  - 2:5        "#show"
+2:6  - 2:9        signature: signature
+2:6  - 2:7          name: identifier `a`
+2:7  - 2:8          "/"
+2:8  - 2:9          arity: number `2`
+2:9  - 2:10       "."
+3:0  - 3:11     show_signature
+3:0  - 3:5        "#show"
+3:6  - 3:10       signature: signature
+3:6  - 3:7          sign: classical_negation `-`
+3:7  - 3:8          name: identifier `a`
+3:8  - 3:9          "/"
+3:9  - 3:10         arity: number `2`
+3:10 - 3:11       "."
+4:0  - 4:12     show_term
+4:0  - 4:5        "#show"
+4:6  - 4:11       term: binary_operation
+4:6  - 4:9          left: binary_operation
+4:6  - 4:7            left: function
+4:6  - 4:7              name: identifier `a`
+4:7  - 4:8            "/"
+4:8  - 4:9            right: number `2`
+4:9  - 4:10         "+"
+4:10 - 4:11         right: number `1`
+4:11 - 4:12       "."
+5:0  - 5:13     show_term
+5:0  - 5:5        "#show"
+5:6  - 5:12       term: binary_operation
+5:6  - 5:10         left: binary_operation
+5:6  - 5:8            left: unary_operation
+5:6  - 5:7              "-"
+5:7  - 5:8              right: function
+5:7  - 5:8                name: identifier `a`
+5:8  - 5:9            "/"
+5:9  - 5:10           right: number `2`
+5:10 - 5:11         "+"
+5:11 - 5:12         right: number `1`
+5:12 - 5:13       "."
+6:0  - 6:24     show_term
+6:0  - 6:5        "#show"
+6:6  - 6:11       term: unary_operation
+6:6  - 6:7          "-"
+6:7  - 6:11         right: function
+6:7  - 6:8            name: identifier `p`
+6:8  - 6:9            "("
+6:9  - 6:10           arguments: terms
+6:9  - 6:10             variable `X`
+6:10 - 6:11           ")"
+6:12 - 6:13       ":"
+6:14 - 6:23       body: body
+6:14 - 6:17         body_literal
+6:14 - 6:17           atom: symbolic_atom
+6:14 - 6:15             name: identifier `q`
+6:15 - 6:16             "("
+6:16 - 6:17             ")"
+6:17 - 6:18         ","
+6:19 - 6:23         body_literal
+6:19 - 6:23           atom: symbolic_atom
+6:19 - 6:20             name: identifier `c`
+6:20 - 6:21             "("
+6:21 - 6:22             arguments: terms
+6:21 - 6:22               variable `X`
+6:22 - 6:23             ")"
+6:23 - 6:24       "."
+7:0  - 7:8      show_term
+7:0  - 7:5        "#show"
+7:6  - 7:7        term: function
+7:6  - 7:7          name: identifier `a`
+7:7  - 7:8        "."
+8:0  - 8:17     show_signature
+8:0  - 8:5        "#show"
+8:6  - 8:9        signature: signature
+8:6  - 8:7          name: identifier `a`
+8:7  - 8:8          "/"
+8:8  - 8:9          arity: number `2`
+8:9  - 8:10       "."
+8:11 - 8:12       "["
+8:12 - 8:16       value: boolean
+8:12 - 8:16         "true"
+8:16 - 8:17       "]"
+9:0  - 9:18     show_signature
+9:0  - 9:5        "#show"
+9:6  - 9:9        signature: signature
+9:6  - 9:7          name: identifier `a`
+9:7  - 9:8          "/"
+9:8  - 9:9          arity: number `2`
+9:9  - 9:10       "."
+9:11 - 9:12       "["
+9:12 - 9:17       value: boolean
+9:12 - 9:17         "false"
+9:17 - 9:18       "]"
 ==================
 defined
+:cst
 ==================
 
 #defined a/2.
@@ -253,19 +321,44 @@ defined
 
 ---
 
-(source_file
-  (defined
-    signature: (signature
-      name: (identifier)
-      arity: (number)))
-  (defined
-    signature: (signature
-      sign: (classical_negation)
-      name: (identifier)
-      arity: (number))))
+1:0  - 3:0    source_file
+1:0  - 1:13     defined
+1:0  - 1:8        "#defined"
+1:9  - 1:12       signature: signature
+1:9  - 1:10         name: identifier `a`
+1:10 - 1:11         "/"
+1:11 - 1:12         arity: number `2`
+1:12 - 1:13       "."
+2:0  - 2:14     defined
+2:0  - 2:8        "#defined"
+2:9  - 2:13       signature: signature
+2:9  - 2:10         sign: classical_negation `-`
+2:10 - 2:11         name: identifier `a`
+2:11 - 2:12         "/"
+2:12 - 2:13         arity: number `2`
+2:13 - 2:14       "."
+
+==================
+single show
+:cst
+==================
+
+#show a/0.
+
+---
+
+1:0  - 2:0    source_file
+1:0  - 1:10     show_signature
+1:0  - 1:5        "#show"
+1:6  - 1:9        signature: signature
+1:6  - 1:7          name: identifier `a`
+1:7  - 1:8          "/"
+1:8  - 1:9          arity: number `0`
+1:9  - 1:10       "."
 
 ==================
 project
+:cst
 ==================
 
 #project a/2.
@@ -276,32 +369,47 @@ project
 
 ---
 
-(source_file
-  (project_signature
-    signature: (signature
-      name: (identifier)
-      arity: (number)))
-  (project_signature
-    signature: (signature
-      sign: (classical_negation)
-      name: (identifier)
-      arity: (number)))
-  (project_atom
-    atom: (symbolic_atom
-      name: (identifier)))
-  (project_atom
-    atom: (symbolic_atom
-      name: (identifier)))
-  (project_atom
-    atom: (symbolic_atom
-      name: (identifier))
-    body: (body
-      (body_literal
-        atom: (symbolic_atom
-          name: (identifier))))))
+1:0  - 6:0    source_file
+1:0  - 1:13     project_signature
+1:0  - 1:8        "#project"
+1:9  - 1:12       signature: signature
+1:9  - 1:10         name: identifier `a`
+1:10 - 1:11         "/"
+1:11 - 1:12         arity: number `2`
+1:12 - 1:13       "."
+2:0  - 2:14     project_signature
+2:0  - 2:8        "#project"
+2:9  - 2:13       signature: signature
+2:9  - 2:10         sign: classical_negation `-`
+2:10 - 2:11         name: identifier `a`
+2:11 - 2:12         "/"
+2:12 - 2:13         arity: number `2`
+2:13 - 2:14       "."
+3:0  - 3:11     project_atom
+3:0  - 3:8        "#project"
+3:9  - 3:10       atom: symbolic_atom
+3:9  - 3:10         name: identifier `a`
+3:10 - 3:11       "."
+4:0  - 4:14     project_atom
+4:0  - 4:8        "#project"
+4:9  - 4:10       atom: symbolic_atom
+4:9  - 4:10         name: identifier `a`
+4:11 - 4:12       ":"
+4:13 - 4:14       "."
+5:0  - 5:15     project_atom
+5:0  - 5:8        "#project"
+5:9  - 5:10       atom: symbolic_atom
+5:9  - 5:10         name: identifier `a`
+5:11 - 5:12       ":"
+5:13 - 5:14       body: body
+5:13 - 5:14         body_literal
+5:13 - 5:14           atom: symbolic_atom
+5:13 - 5:14             name: identifier `b`
+5:14 - 5:15       "."
 
 ==================
 const
+:cst
 ==================
 
 #const x = 1.
@@ -312,34 +420,63 @@ const
 
 ---
 
-(source_file
-  (const
-    name: (identifier)
-    value: (number))
-  (const
-    name: (identifier)
-    value: (function
-      name: (identifier)))
-  (const
-    name: (identifier)
-    value: (function
-      name: (identifier)
-      arguments: (terms
-        (tuple)
-        (abs
-          (function
-            name: (identifier))))))
-  (const
-    name: (identifier)
-    value: (number)
-    type: (const_type))
-  (const
-    name: (identifier)
-    value: (number)
-    type: (const_type)))
+1:0  - 6:0    source_file
+1:0  - 1:13     const
+1:0  - 1:6        "#const"
+1:7  - 1:8        name: identifier `x`
+1:9  - 1:10       "="
+1:11 - 1:12       value: number `1`
+1:12 - 1:13       "."
+2:0  - 2:15     const
+2:0  - 2:6        "#const"
+2:7  - 2:8        name: identifier `x`
+2:9  - 2:10       "="
+2:11 - 2:14       value: function
+2:11 - 2:12         name: identifier `f`
+2:12 - 2:13         "("
+2:13 - 2:14         ")"
+2:14 - 2:15       "."
+3:0  - 3:22     const
+3:0  - 3:6        "#const"
+3:7  - 3:8        name: identifier `x`
+3:9  - 3:10       "="
+3:11 - 3:21       value: function
+3:11 - 3:12         name: identifier `f`
+3:12 - 3:13         "("
+3:13 - 3:20         arguments: terms
+3:13 - 3:15           tuple
+3:13 - 3:14             "("
+3:14 - 3:15             ")"
+3:15 - 3:16           ","
+3:17 - 3:20           abs
+3:17 - 3:18             "|"
+3:18 - 3:19             function
+3:18 - 3:19               name: identifier `x`
+3:19 - 3:20             "|"
+3:20 - 3:21         ")"
+3:21 - 3:22       "."
+4:0  - 4:23     const
+4:0  - 4:6        "#const"
+4:7  - 4:8        name: identifier `x`
+4:9  - 4:10       "="
+4:11 - 4:12       value: number `1`
+4:12 - 4:13       "."
+4:14 - 4:15       "["
+4:15 - 4:22       type: const_type `default`
+4:22 - 4:23       "]"
+5:0  - 5:24     const
+5:0  - 5:6        "#const"
+5:7  - 5:8        name: identifier `x`
+5:9  - 5:10       "="
+5:11 - 5:12       value: number `2`
+5:12 - 5:13       "."
+5:14 - 5:15       "["
+5:15 - 5:23       type: const_type `override`
+5:23 - 5:24       "]"
 
 ==================
 script
+:cst
 ==================
 
 #script (python)
@@ -351,13 +488,24 @@ def main(ctl):
 
 ---
 
-(source_file
-  (script
-    language: (identifier)
-    code: (code)))
+1:0  - 7:0    source_file
+1:0  - 6:5      script
+1:0  - 1:7        "#script"
+1:8  - 1:9        "("
+1:9  - 1:15       language: identifier `python`
+1:15 - 1:16       ")"
+1:16 - 6:0        code: code
+1:16 - 1:17         `\n`
+2:16 - 2:1          `\n`
+3:16 - 3:15         `def main(ctl):\n`
+4:16 - 4:15         `  ctl.ground()\n`
+5:16 - 5:1          `\n`
+6:0  - 6:4        "#end"
+6:4  - 6:5        "."
 
 ==================
 include
+:cst
 ==================
 
 #include "a".
@@ -365,15 +513,24 @@ include
 
 ---
 
-(source_file
-  (include
-    (string
-      (string_fragment)))
-  (include
-    (identifier)))
+1:0  - 3:0    source_file
+1:0  - 1:13     include
+1:0  - 1:8        "#include"
+1:9  - 1:12       string
+1:9  - 1:10         "\""
+1:10 - 1:11         string_fragment `a`
+1:11 - 1:12         "\""
+1:12 - 1:13       "."
+2:0  - 2:13     include
+2:0  - 2:8        "#include"
+2:9  - 2:10       "<"
+2:10 - 2:11       identifier `b`
+2:11 - 2:12       ">"
+2:12 - 2:13       "."
 
 ==================
 program
+:cst
 ==================
 
 #program base.
@@ -382,19 +539,31 @@ program
 
 ---
 
-(source_file
-  (program
-    name: (identifier))
-  (program
-    name: (identifier))
-  (program
-    name: (identifier)
-    parameters: (parameters
-      (identifier)
-      (identifier))))
+1:0  - 4:0    source_file
+1:0  - 1:14     program
+1:0  - 1:8        "#program"
+1:9  - 1:13       name: identifier `base`
+1:13 - 1:14       "."
+2:0  - 2:16     program
+2:0  - 2:8        "#program"
+2:9  - 2:13       name: identifier `base`
+2:13 - 2:14       "("
+2:14 - 2:15       ")"
+2:15 - 2:16       "."
+3:0  - 3:20     program
+3:0  - 3:8        "#program"
+3:9  - 3:13       name: identifier `acid`
+3:13 - 3:14       "("
+3:14 - 3:18       parameters: parameters
+3:14 - 3:15         identifier `a`
+3:15 - 3:16         ","
+3:17 - 3:18         identifier `b`
+3:18 - 3:19       ")"
+3:19 - 3:20       "."
 
 ==================
 external
+:cst
 ==================
 
 #external a.
@@ -405,39 +574,59 @@ external
 
 ---
 
-(source_file
-  (external
-    atom: (symbolic_atom
-      name: (identifier)))
-  (external
-    atom: (symbolic_atom
-      sign: (classical_negation)
-      name: (identifier)))
-  (external
-    atom: (symbolic_atom
-      name: (identifier))
-    body: (body
-      (body_literal
-        atom: (symbolic_atom
-          name: (identifier)))))
-  (external
-    atom: (symbolic_atom
-      name: (identifier)))
-  (external
-    atom: (symbolic_atom
-      name: (identifier)
-      arguments: (terms
-        (variable)))
-    body: (body
-      (body_literal
-        atom: (symbolic_atom
-          name: (identifier)
-          arguments: (terms
-            (variable)))))
-    type: (variable)))
+1:0  - 6:0    source_file
+1:0  - 1:12     external
+1:0  - 1:9        "#external"
+1:10 - 1:11       atom: symbolic_atom
+1:10 - 1:11         name: identifier `a`
+1:11 - 1:12       "."
+2:0  - 2:13     external
+2:0  - 2:9        "#external"
+2:10 - 2:12       atom: symbolic_atom
+2:10 - 2:11         sign: classical_negation `-`
+2:11 - 2:12         name: identifier `a`
+2:12 - 2:13       "."
+3:0  - 3:16     external
+3:0  - 3:9        "#external"
+3:10 - 3:11       atom: symbolic_atom
+3:10 - 3:11         name: identifier `a`
+3:12 - 3:13       ":"
+3:14 - 3:15       body: body
+3:14 - 3:15         body_literal
+3:14 - 3:15           atom: symbolic_atom
+3:14 - 3:15             name: identifier `b`
+3:15 - 3:16       "."
+4:0  - 4:14     external
+4:0  - 4:9        "#external"
+4:10 - 4:11       atom: symbolic_atom
+4:10 - 4:11         name: identifier `a`
+4:11 - 4:12       ":"
+4:13 - 4:14       "."
+5:0  - 5:26     external
+5:0  - 5:9        "#external"
+5:10 - 5:14       atom: symbolic_atom
+5:10 - 5:11         name: identifier `a`
+5:11 - 5:12         "("
+5:12 - 5:13         arguments: terms
+5:12 - 5:13           variable `X`
+5:13 - 5:14         ")"
+5:15 - 5:16       ":"
+5:17 - 5:21       body: body
+5:17 - 5:21         body_literal
+5:17 - 5:21           atom: symbolic_atom
+5:17 - 5:18             name: identifier `p`
+5:18 - 5:19             "("
+5:19 - 5:20             arguments: terms
+5:19 - 5:20               variable `B`
+5:20 - 5:21             ")"
+5:21 - 5:22       "."
+5:23 - 5:24       "["
+5:24 - 5:25       type: variable `X`
+5:25 - 5:26       "]"
 
 ==================
 edge
+:cst
 ==================
 
 #edge (a,b).
@@ -446,42 +635,63 @@ edge
 
 ---
 
-(source_file
-  (edge
-    edge_pair: (edge_pair
-      (function
-        name: (identifier))
-      (function
-        name: (identifier))))
-  (edge
-    edge_pair: (edge_pair
-      (function
-        name: (identifier))
-      (function
-        name: (identifier)))
-    edge_pair: (edge_pair
-      (function
-        name: (identifier))
-      (function
-        name: (identifier))))
-  (edge
-    edge_pair: (edge_pair
-      (function
-        name: (identifier))
-      (function
-        name: (identifier)))
-    edge_pair: (edge_pair
-      (function
-        name: (identifier))
-      (function
-        name: (identifier)))
-    body: (body
-      (body_literal
-        atom: (symbolic_atom
-          name: (identifier))))))
+1:0  - 4:0    source_file
+1:0  - 1:12     edge
+1:0  - 1:5        "#edge"
+1:6  - 1:7        "("
+1:7  - 1:10       edge_pair: edge_pair
+1:7  - 1:8          function
+1:7  - 1:8            name: identifier `a`
+1:8  - 1:9          ","
+1:9  - 1:10         function
+1:9  - 1:10           name: identifier `b`
+1:10 - 1:11       ")"
+1:11 - 1:12       "."
+2:0  - 2:18     edge
+2:0  - 2:5        "#edge"
+2:6  - 2:7        "("
+2:7  - 2:10       edge_pair: edge_pair
+2:7  - 2:8          function
+2:7  - 2:8            name: identifier `a`
+2:8  - 2:9          ","
+2:9  - 2:10         function
+2:9  - 2:10           name: identifier `b`
+2:10 - 2:11       ";"
+2:12 - 2:16       edge_pair: edge_pair
+2:12 - 2:13         function
+2:12 - 2:13           name: identifier `b`
+2:13 - 2:14         ","
+2:15 - 2:16         function
+2:15 - 2:16           name: identifier `c`
+2:16 - 2:17       ")"
+2:17 - 2:18       "."
+3:0  - 3:22     edge
+3:0  - 3:5        "#edge"
+3:6  - 3:7        "("
+3:7  - 3:10       edge_pair: edge_pair
+3:7  - 3:8          function
+3:7  - 3:8            name: identifier `a`
+3:8  - 3:9          ","
+3:9  - 3:10         function
+3:9  - 3:10           name: identifier `b`
+3:10 - 3:11       ";"
+3:12 - 3:16       edge_pair: edge_pair
+3:12 - 3:13         function
+3:12 - 3:13           name: identifier `b`
+3:13 - 3:14         ","
+3:15 - 3:16         function
+3:15 - 3:16           name: identifier `c`
+3:16 - 3:17       ")"
+3:18 - 3:19       ":"
+3:20 - 3:21       body: body
+3:20 - 3:21         body_literal
+3:20 - 3:21           atom: symbolic_atom
+3:20 - 3:21             name: identifier `q`
+3:21 - 3:22       "."
 
 ==================
 heuristic
+:cst
 ==================
 
 #heuristic a(). [true,blub]
@@ -490,47 +700,76 @@ heuristic
 
 ---
 
-(source_file
-  (heuristic
-    atom: (symbolic_atom
-      name: (identifier))
-    weight: (weight
-      term: (function
-        name: (identifier)))
-    type: (function
-      name: (identifier)))
-  (heuristic
-    atom: (symbolic_atom
-      sign: (classical_negation)
-      name: (identifier))
-    weight: (weight
-      term: (function
-        name: (identifier))
-      priority: (number))
-    type: (function
-      name: (identifier)))
-  (heuristic
-    atom: (symbolic_atom
-      name: (identifier)
-      arguments: (terms
-        (variable)))
-    body: (body
-      (body_literal
-        atom: (symbolic_atom
-          name: (identifier)
-          arguments: (terms
-            (variable)))))
-    weight: (weight
-      term: (function
-        name: (identifier))
-      priority: (variable))
-    type: (function
-      name: (identifier)
-      arguments: (terms
-        (variable)))))
+1:0  - 4:0    source_file
+1:0  - 1:27     heuristic
+1:0  - 1:10       "#heuristic"
+1:11 - 1:14       atom: symbolic_atom
+1:11 - 1:12         name: identifier `a`
+1:12 - 1:13         "("
+1:13 - 1:14         ")"
+1:14 - 1:15       "."
+1:16 - 1:17       "["
+1:17 - 1:21       weight: weight
+1:17 - 1:21         term: function
+1:17 - 1:21           name: identifier `true`
+1:21 - 1:22       ","
+1:22 - 1:26       type: function
+1:22 - 1:26         name: identifier `blub`
+1:26 - 1:27       "]"
+2:0  - 2:31     heuristic
+2:0  - 2:10       "#heuristic"
+2:11 - 2:15       atom: symbolic_atom
+2:11 - 2:12         sign: classical_negation `-`
+2:12 - 2:13         name: identifier `a`
+2:13 - 2:14         "("
+2:14 - 2:15         ")"
+2:15 - 2:16       "."
+2:17 - 2:18       "["
+2:18 - 2:25       weight: weight
+2:18 - 2:22         term: function
+2:18 - 2:22           name: identifier `true`
+2:22 - 2:23         "@"
+2:23 - 2:25         priority: number `10`
+2:25 - 2:26       ","
+2:26 - 2:30       type: function
+2:26 - 2:30         name: identifier `blub`
+2:30 - 2:31       "]"
+3:0  - 3:40     heuristic
+3:0  - 3:10       "#heuristic"
+3:11 - 3:15       atom: symbolic_atom
+3:11 - 3:12         name: identifier `a`
+3:12 - 3:13         "("
+3:13 - 3:14         arguments: terms
+3:13 - 3:14           variable `X`
+3:14 - 3:15         ")"
+3:16 - 3:17       ":"
+3:18 - 3:22       body: body
+3:18 - 3:22         body_literal
+3:18 - 3:22           atom: symbolic_atom
+3:18 - 3:19             name: identifier `q`
+3:19 - 3:20             "("
+3:20 - 3:21             arguments: terms
+3:20 - 3:21               variable `X`
+3:21 - 3:22             ")"
+3:22 - 3:23       "."
+3:24 - 3:25       "["
+3:25 - 3:31       weight: weight
+3:25 - 3:29         term: function
+3:25 - 3:29           name: identifier `true`
+3:29 - 3:30         "@"
+3:30 - 3:31         priority: variable `X`
+3:31 - 3:32       ","
+3:32 - 3:39       type: function
+3:32 - 3:36         name: identifier `blub`
+3:36 - 3:37         "("
+3:37 - 3:38         arguments: terms
+3:37 - 3:38           variable `X`
+3:38 - 3:39         ")"
+3:39 - 3:40       "]"
 
 ==================
 doc comments
+:cst
 ==================
 
 %*! some_predicate (A, B ,C )
@@ -555,38 +794,68 @@ brief
 Args:
 
 *%
-
 ---
 
-(source_file
-  (doc_comment
-    (doc_predicate
-      (identifier)
-      (variables
-        (variable)
-        (variable)
-        (variable)))
-    (doc_desc)
-    (doc_args
-      (doc_arg
-        (variable)
-        (doc_desc))
-      (doc_arg
-        (variable)
-        (doc_desc))
-      (doc_arg
-        (variable)
-        (doc_desc))
-      (doc_arg
-        (variable))))
-  (doc_comment
-    (doc_predicate
-      (identifier))
-    (doc_desc)
-    (doc_args)))
+1:0   - 22:2    source_file
+1:0   - 14:2      doc_comment
+1:0   - 1:3         "%*!"
+1:4   - 2:0         predicate: doc_predicate
+1:4   - 1:18          name: identifier `some_predicate`
+1:19  - 1:20          "("
+1:20  - 1:28          variables: variables
+1:20  - 1:21            variable `A`
+1:21  - 1:22            ","
+1:23  - 1:24            variable `B`
+1:25  - 1:26            ","
+1:26  - 1:27            variable `C`
+1:28  - 1:29          ")"
+2:0   - 7:0         description: doc_desc
+2:0   - 2:48          `Here is \`some\` documentation for the predicate.\n`
+3:0   - 3:1           `\n`
+4:0   - 4:21          `Maybe a *longer* one\n`
+5:0   - 5:22          `over _multiple_ lines\n`
+6:0   - 6:1           `\n`
+7:0   - 14:0        arguments: doc_args
+7:0   - 7:5           "Args:"
+8:0   - 11:0          doc_arg
+8:0   - 8:1             "-"
+8:2   - 8:3             variable: variable `A`
+8:3   - 8:4             ":"
+8:5   - 11:0            description: doc_desc
+8:5   - 8:34              `**some** description for *A*\n`
+9:5   - 9:39              `     maybe also over _multiple_ lines?\n`
+10:5  - 10:29             `     and including - symbols\n`
+11:0  - 12:0          doc_arg
+11:0  - 11:1            "-"
+11:2  - 11:3            variable: variable `B`
+11:5  - 11:6            ":"
+11:7  - 12:0            description: doc_desc
+11:7  - 11:30             `some description for B\n`
+12:0  - 13:0          doc_arg
+12:0  - 12:1            "-"
+12:2  - 12:3            variable: variable `C`
+12:3  - 12:4            ":"
+12:5  - 13:0            description: doc_desc
+12:5  - 12:28             `some description for C\n`
+13:0  - 14:0          doc_arg
+13:0  - 13:1            "-"
+13:2  - 13:3            variable: variable `D`
+13:3  - 13:4            ":"
+14:0  - 14:2        "*%"
+16:0  - 22:2      doc_comment
+16:0  - 16:3        "%*!"
+16:4  - 18:0        predicate: doc_predicate
+16:4  - 16:18         name: identifier `some_predicate`
+18:0  - 20:0        description: doc_desc
+18:0  - 18:6          `brief\n`
+19:0  - 19:1          `\n`
+20:0  - 22:0        arguments: doc_args
+20:0  - 20:5          "Args:"
+22:0  - 22:2        "*%"
 
 ==================
 doc comments markdown
+:cst
 ==================
 
 %*! p(X)
@@ -598,11 +867,20 @@ p_x
 p _x_ _p_x_
 *%
 ---
-
-(source_file
-  (doc_comment
-    (doc_predicate
-      (identifier)
-      (variables
-        (variable)))
-    (doc_desc)))
+1:0  - 8:2    source_file
+1:0  - 8:2      doc_comment
+1:0  - 1:3        "%*!"
+1:4  - 2:0        predicate: doc_predicate
+1:4  - 1:5          name: identifier `p`
+1:5  - 1:6          "("
+1:6  - 1:7          variables: variables
+1:6  - 1:7            variable `X`
+1:7  - 1:8          ")"
+2:0  - 8:0        description: doc_desc
+2:0  - 2:24         `Description for \`p(X)\`.\n`
+3:0  - 3:1          `\n`
+4:0  - 4:15         `Not markdown *\n`
+5:0  - 5:11         `*markdown*\n`
+6:0  - 6:4          `p_x\n`
+7:0  - 7:12         `p _x_ _p_x_\n`
+8:0  - 8:2        "*%"
