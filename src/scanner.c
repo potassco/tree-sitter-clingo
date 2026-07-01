@@ -239,7 +239,7 @@ unsigned tree_sitter_clingo_external_scanner_serialize(void *payload,
 }
 
 void tree_sitter_clingo_external_scanner_deserialize(void *payload,
-                                                     char *buffer,
+                                                     char const *buffer,
                                                      unsigned length) {
   assert(payload != NULL);
   size_t n = sizeof(clingo_lexer_state_t);

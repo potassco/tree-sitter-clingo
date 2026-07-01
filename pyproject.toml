@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools>=62.4.0", "wheel"]
+requires = ["setuptools>=70.1"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "tree-sitter-clingo"
 description = "Clingo grammar for tree-sitter"
-version = "1.0.5"
+version = "1.0.6"
 keywords = ["incremental", "parsing", "tree-sitter", "clingo"]
 classifiers = [
   "Intended Audience :: Developers",
@@ -13,19 +13,16 @@ classifiers = [
   "Topic :: Text Processing :: Linguistic",
   "Typing :: Typed",
 ]
-authors = [
-  { name = "Roland Kaminski" },
-  { name = "Sven Thiele"}
-]
+authors = [{ name = "Roland Kaminski" }, { name = "Sven Thiele" }]
 requires-python = ">=3.10"
-license.text = "MIT"
+license = "MIT"
 readme = "README.md"
 
 [project.urls]
 Homepage = "https://github.com/potassco/tree-sitter-clingo"
 
 [project.optional-dependencies]
-core = ["tree-sitter~=0.25"]
+core = ["tree-sitter>=0.26"]
 
 [tool.cibuildwheel]
 build = "cp310-*"
