@@ -493,6 +493,10 @@
             "named": true
           },
           {
+            "type": "sort_aggregate",
+            "named": true
+          },
+          {
             "type": "theory_atom",
             "named": true
           }
@@ -1663,6 +1667,46 @@
     }
   },
   {
+    "type": "sort_aggregate",
+    "named": true,
+    "fields": {
+      "elements": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "body_aggregate_elements",
+            "named": true
+          }
+        ]
+      },
+      "function": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "#sort",
+            "named": false
+          }
+        ]
+      },
+      "left": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "=",
+            "named": false
+          },
+          {
+            "type": "term",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "root": true,
@@ -2442,6 +2486,10 @@
   },
   {
     "type": "#show",
+    "named": false
+  },
+  {
+    "type": "#sort",
     "named": false
   },
   {

@@ -32,7 +32,7 @@
 ;             d: d }.
 ; Also applies to nested aggregates and theory atoms. We do not treat the error
 ; node here. An editor that ensures balanced braces should help.
-([(minimize) (maximize) (set_aggregate) (body_aggregate) (head_aggregate) (theory_atom)] @indent.align
+([(minimize) (maximize) (set_aggregate) (body_aggregate) (sort_aggregate) (head_aggregate) (theory_atom)] @indent.align
   (#set! indent.open_delimiter "{")
   (#set! indent.close_delimiter "}")
   (#set! indent.increment 2))

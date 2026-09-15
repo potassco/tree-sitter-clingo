@@ -593,6 +593,15 @@ module.exports = grammar({
         optional(field("right", $.upper)),
       ),
 
+    sort_aggregate: ($) =>
+      seq(
+        field("left", seq($.term, "=")),
+        field("function", "#sort"),
+        "{",
+        optional(field("elements", $.body_aggregate_elements)),
+        "}",
+      ),
+
     body_literal: ($) =>
       seq(
         optional(field("sign", $.literal_sign)),
@@ -601,6 +610,7 @@ module.exports = grammar({
           choice(
             $.set_aggregate,
             $.body_aggregate,
+            $.sort_aggregate,
             $.theory_atom,
             $.simple_atom,
           ),

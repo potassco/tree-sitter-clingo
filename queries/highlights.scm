@@ -27,6 +27,7 @@
  (default_negation)
  (double_default_negation)
  (aggregate_function)
+ "#sort"
 ] @keyword.operator
 
 [
