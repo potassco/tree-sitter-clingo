@@ -503,7 +503,7 @@ module.exports = grammar({
     // so we leave things as is for now.
     symbolic_atom: ($) => seq($.atom_identifier, optional($._arg_pool)),
 
-    relation: (_) => token(choice(">", "<", ">=", "<=", "=", "!=", "<>")),
+    relation: (_) => choice("=", ">", "<", ">=", "<=", "!=", "<>"),
 
     comparison: ($) =>
       seq($.term, $.relation, $.term, repeat(seq($.relation, $.term))),

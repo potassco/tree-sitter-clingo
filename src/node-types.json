@@ -1445,6 +1445,11 @@
     "fields": {}
   },
   {
+    "type": "relation",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "rule",
     "named": true,
     "fields": {
@@ -2425,6 +2430,10 @@
     }
   },
   {
+    "type": "!=",
+    "named": false
+  },
+  {
     "type": "\"",
     "named": false
   },
@@ -2569,11 +2578,23 @@
     "named": false
   },
   {
+    "type": "<=",
+    "named": false
+  },
+  {
+    "type": "<>",
+    "named": false
+  },
+  {
     "type": "=",
     "named": false
   },
   {
     "type": ">",
+    "named": false
+  },
+  {
+    "type": ">=",
     "named": false
   },
   {
@@ -2700,10 +2721,6 @@
   },
   {
     "type": "number",
-    "named": true
-  },
-  {
-    "type": "relation",
     "named": true
   },
   {
